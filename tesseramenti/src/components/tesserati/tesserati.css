@@ -1,0 +1,16 @@
+.testo-centrale td{
+    vertical-align:middle;
+}
+
+.tabella-scorrevole {
+    height: 400px;
+    overflow-y: scroll;
+}
+    .tabella-scorrevole thead th {
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 1;
+    }
+
+

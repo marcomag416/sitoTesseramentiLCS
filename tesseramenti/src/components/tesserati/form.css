@@ -1,0 +1,18 @@
+fieldset{
+    border : none;
+    border-top : solid 1px grey;
+}
+legend{
+    padding: 0 10px 0 3px;
+}
+.dimensione-pannello{
+    width:80%;
+    min-width: 300px;
+}
+.posizione-pannello{
+    padding-top:4%;
+}
+.scrollabile{
+    overflow-y:scroll;
+    max-height:420px;
+}
