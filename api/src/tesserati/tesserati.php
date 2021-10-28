@@ -13,6 +13,7 @@ function leggiTesserati($token, $dbConnection){
 		$result[$cont++] = $row;
 	}
 	return $result;
+	//ciao prova prova
 	
 }
 
