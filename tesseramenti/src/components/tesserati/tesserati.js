@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import React from 'react';
 import './tesserati.css';
 import FormGiocatore from './formGiocatore.js';
+import {fetch, useFetch} from '../../functions/useFetch.js';
 /*import ReactDOM from 'react-dom';*/
 
 //import { MDCDataTable } from '@material/data-table';
@@ -10,23 +11,40 @@ import FormGiocatore from './formGiocatore.js';
 function Tesserati (props){
     const [form, setForm] = useState(0);
     const [search, setSearch] = useState("");
-    const [tesserati, setTesserati] = useState([
-        { id: 1, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero: 12, cm: 0, t: 0 },
-        { id: 2, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero: 12, cm: 1, t: 0 },
-        { id: 3, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero: 12, cm: 2, t: 0 },
-        { id: 4, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero: 12, cm: 3, t: 0 },
-        { id: 5, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero: 12, cm: 4, t: 0 },
-        { id: 6, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero: 12, cm: 3, t: 0 },
-        { id: 7, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero: 12, cm: 4, t: 0 },
-        { id: 8, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero: 12, cm: 3, t: 0 },
-        { id: 9, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero: 12, cm: 4, t: 0 },
-        { id: 10, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero: 12, cm: 4, t: 1 },
-        { id: 11, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero: 12, cm: 4, t: 1 },
-        { id: 1, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero: 12, cm: 5, t: 1 }
-    ]);
+    const sendToken = { token: props.token };
+    var data = useFetch("/elencoTesserati", sendToken);
+    const [tesserati, setTesserati] = useState([]);
+    /*const [tesserati, setTesserati] = useState([
+        { id: 1, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 0, t: 0 },
+        { id: 2, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 1, t: 0 },
+        { id: 3, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 2, t: 0 },
+        { id: 4, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 3, t: 0 },
+        { id: 5, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 4, t: 0 },
+        { id: 6, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 3, t: 0 },
+        { id: 7, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 4, t: 0 },
+        { id: 8, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 3, t: 0 },
+        { id: 9, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 4, t: 0 },
+        { id: 10, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 4, t: 1 },
+        { id: 11, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 4, t: 1 },
+        { id: 1, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 5, t: 1 }
+    ]);*/
 
-    const send = { token: props.token };
-    //const [tesserati] = useFetch("/elencoTesserati", send);
+    useEffect(() => {
+        if (data[0].status && data[0].vett != undefined) {
+            var vett = data[0].vett;
+            vett.forEach((x, index) => {
+                x.id = index;
+                x.cm = 1; /* cert med sempre valido */
+                x.t = 0; /* giocatore */
+            });
+            //console.log("tesserati: ", vett, tesserati);
+            setTesserati(vett);
+        }
+        else {
+            console.log("Errore caricamento tesserati", data[0]);
+
+        }
+    }, [data]);
 
     return (
         <div className="w3-container">
@@ -45,13 +63,10 @@ function Tesserati (props){
                 <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm('d')} >Aggiungi dirigente</button>
             </div>
         </div>
-        );
+    );
 
 }
 
-function caricaTesserati() {
-
-}
 
 function Tabella(props) {
     const tesserati = props.tesserati;
@@ -110,6 +125,8 @@ function Tesserato(props) {
             return (Giocatore(tesserato));
         case 1:
             return (Dirigente(tesserato));
+        default:
+            return null;
     }
 }
 
@@ -138,7 +155,7 @@ function Giocatore(giocatore) {
             <td>{giocatore.nome}</td>
             <td className="w3-tooltip">{IconaCertificatoMedico(giocatore.cm)}</td>
             <td>{giocatore.taglia}</td>
-            <td>{giocatore.numero}</td>
+            <td>{giocatore.numero_maglia}</td>
             <td className="w3-center"><button className="w3-button w3-small w3-blue w3-round ">Modifica</button></td>
             <td><button className="w3-button w3-red w3-round w3-padding-small"><i className="material-icons w3-large">delete</i></button></td>
         </tr>

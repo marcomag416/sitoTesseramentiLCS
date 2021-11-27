@@ -43,7 +43,7 @@ export async function fetch(url, sendData){
 	return data;
 }
 
-const useFetch = (url, sendData) => {
+export const useFetch = (url, sendData) => {
 	const [data, setData] = useState({status:true});
 
 	var path = API_BASE + url;
@@ -56,11 +56,12 @@ const useFetch = (url, sendData) => {
 			data: sendData
 		})
 			.then(result => {
-				//console.log("Use fetch...");
+				//console.log("Use fetch...", path);
 				if (result.data.status) {
 					setData(result.data);
 				}
 				else {
+					console.log("Errore:", result.data);
 					setData({
 						msg: result.data.msg,
 						err: true
@@ -80,7 +81,7 @@ const useFetch = (url, sendData) => {
 					console.log(error.response.headers, error.response.status, error.response.data);
 				}
 			});
-    }, [sendData]);
+    }, []);
 
     return [data];
 };

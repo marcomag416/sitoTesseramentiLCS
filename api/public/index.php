@@ -18,9 +18,15 @@ if($uri[1] == 'login'){
 	exit();
 }
 
+if($uri[1] == "prova"){
+	echo date("Europe");
+	echo " | Connectivity test ok";
+	exit();
+}
+
 http_response_code(200);
 /*LOGGED IN CONTROLS*/
-/*$token = leggiToken();
+$token = leggiToken();
 if($token == false){
 	echo json_encode(array("status" => false, "msg" => "Token non trovato"));
 	exit();
@@ -36,12 +42,12 @@ if($uri[1] == 'sessionCheck'){
 if($session['status'] == false){
 	echo json_encode(array("status" => false, "msg" =>"Sessione scaduta"));
 	exit();
-}*/
+}
 /*LOGGED IN FUNCTIONS*/
 
 if($uri[1] == 'elencoTesserati'){
 	//echo json_encode(leggiTesserati($session['squadra'], $session['stagione'], $dbConnection));
-	echo json_encode(leggiTesserati('$2y$10$ABD8ZfnaBUknAY4I7RwHp.AsBVCkIauSCFqyeXDeIw89p36C2CFaO', $dbConnection));
+	echo json_encode(leggiTesserati($token, $dbConnection));
 	exit();
 }
 
