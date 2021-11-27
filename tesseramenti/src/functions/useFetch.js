@@ -61,7 +61,7 @@ export const useFetch = (url, sendData) => {
 					setData(result.data);
 				}
 				else {
-					console.log("Errore:", result.data);
+					//console.log("Errore:", result.data);
 					setData({
 						msg: result.data.msg,
 						err: true
