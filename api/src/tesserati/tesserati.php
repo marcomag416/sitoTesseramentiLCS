@@ -11,6 +11,8 @@ function leggiTesserati($token, $dbConnection){
 	$cont = 0;
 	while( $row = $stm->fetch(PDO::FETCH_ASSOC)){
 		//$row['certificato'] = controllaScadenza($row['scadenza'], $row['fisico']);
+		$date = new DateTime($row['scadenza']);
+		$row['scadenza'] = date_timestamp_get($date);
 		$result[$cont++] = $row;
 	}
 	return array("status" => true, "vett" => $result);

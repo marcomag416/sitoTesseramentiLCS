@@ -12,7 +12,7 @@ function Tesserati (props){
     const [form, setForm] = useState(0);
     const [search, setSearch] = useState("");
     const sendToken = { token: props.token };
-    var data = useFetch("/elencoTesserati", sendToken);
+    var fetchGio = useFetch("/elencoTesserati", sendToken);
     const [tesserati, setTesserati] = useState([]);
     /*const [tesserati, setTesserati] = useState([
         { id: 1, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 0, t: 0 },
@@ -30,21 +30,44 @@ function Tesserati (props){
     ]);*/
 
     useEffect(() => {
-        if (data[0].status && data[0].vett != undefined) {
-            var vett = data[0].vett;
+        if (fetchGio[0].status && fetchGio[0].vett != undefined) {
+            var vett = fetchGio[0].vett;
+            let scadenza;
+            const dataOggi = Date.parse(new Date);
+            const gg10 = 864000000; /* millsec in 10 gg */
             vett.forEach((x, index) => {
                 x.id = index;
                 x.cm = 1; /* cert med sempre valido */
                 x.t = 0; /* giocatore */
+                if(x.scadenza < 0){
+                    x.cm = 4; /* cert mancante */
+                }
+                else{
+                    scadenza = x.scadenza * 1000;
+                    if(scadenza > dataOggi + gg10){
+                        if(x.fisico){
+                            x.cm = 0;  /* cartaceo */
+                        }
+                        else{
+                            x.cm = 1; /*valido*/
+                        }
+                    }
+                    else if(scadenza > dataOggi - gg10){
+                        x.cm = 2; /* in scadenza */
+                    }
+                    else if(scadenza < dataOggi - gg10){
+                        x.cm = 3; /* scaduto */
+                    }
+                }
             });
-            //console.log("tesserati: ", vett, tesserati);
+            //console.log("tesserati: ", vett);
             setTesserati(vett);
         }
         else {
-            console.log("Errore caricamento tesserati", data[0]);
+            console.log("Errore caricamento tesserati"/*, fetchGio[0]*/);
 
         }
-    }, [data]);
+    }, [fetchGio]);
 
     return (
         <div className="w3-container">
