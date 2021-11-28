@@ -1,4 +1,4 @@
-import { useEffect, useState, memo } from 'react';
+import { useEffect, useState, memo, useCallback } from 'react';
 import React from 'react';
 import './tesserati.css';
 import FormGiocatore from './formGiocatore.js';
@@ -28,6 +28,10 @@ function Tesserati (props){
         { id: 11, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 4, t: 1 },
         { id: 1, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 5, t: 1 }
     ]);*/
+
+    const closeForm = useCallback(() => {
+            setForm(0);
+        }, [form]);
 
     useEffect(() => {
         if (fetchGio[0].status && fetchGio[0].vett != undefined) {
@@ -72,7 +76,7 @@ function Tesserati (props){
     return (
         <div className="w3-container">
             <h2>Tesserati</h2>
-            <FormGiocatore onClose={() => setForm(0)} display={form == 'g'}/>
+            <FormGiocatore onClose={() => closeForm()} display={form == 'g'}/>
             <div className = "w3-white">
                 <div className="w3-bar w3-margin-top w3-margin-bottom w3-padding-large">
                     <input className="w3-input w3-quarter w3-right" type="text" placeholder="Cerca" value={search} onChange={(e) => { setSearch(e.target.value) } }/>

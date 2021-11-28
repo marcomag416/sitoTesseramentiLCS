@@ -1,8 +1,8 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState, memo} from 'react';
 
 import "./form.css";
 
-export default function FormGiocatore (props){
+function FormGiocatore (props){
     const [inputVal, setInputVal] = useState({
         cf : "",
         nome : "",
@@ -37,7 +37,9 @@ export default function FormGiocatore (props){
 
     const submitForm = (e) =>{
         e.preventDefault();
-        console.log("Submit", inputVal);
+        if(checkForm(inputVal)){
+            console.log("Submit:", inputVal);
+        }
     }
 
     const handleInputChange = (event) =>{
@@ -52,6 +54,8 @@ export default function FormGiocatore (props){
     }
 
     const d = new Date();
+    const d10y = new Date(Date.parse(d) - 315360000000);
+    console.log("form render");
     return(
         <div className="w3-modal posizione-pannello" style={displayStyle}>
             <div className="w3-modal-content w3-card-4 w3-animate-zoom  dimensione-pannello">
@@ -85,7 +89,7 @@ export default function FormGiocatore (props){
                             <div className="w3-row-padding">
                                 <div className="w3-third w3-margin-bottom">
                                     <label><b>Data di nascita*</b></label>
-                                    <input className="w3-input w3-border w3-round w3-light-grey" type="date" name="data_nascita"  value={getInputValue("data_nascita")} onChange={handleInputChange} min="2000-01-01" required/>
+                                    <input className="w3-input w3-border w3-round w3-light-grey" type="date" name="data_nascita"  value={getInputValue("data_nascita")} onChange={handleInputChange} max={d10y.toISOString().slice(0, 10)} required/>
                                 </div>
                                 <div className="w3-third w3-margin-bottom">
                                     <label><b>Comune di nascita</b></label>
@@ -136,7 +140,7 @@ export default function FormGiocatore (props){
                             <div className="w3-row-padding">
                                 <div className="w3-third w3-margin-bottom">
                                     <label><b>Scadenza certificato</b></label>
-                                    <input className="w3-input w3-border w3-round w3-light-grey" type="date" name="scadenza"  value={getInputValue("scadenza")} onChange={handleInputChange} min="2021-10-20" />
+                                    <input className="w3-input w3-border w3-round w3-light-grey" type="date" name="scadenza"  value={getInputValue("scadenza")} onChange={handleInputChange} min={d.toISOString().slice(0, 10)} />
                                 </div>
                                 <div className="w3-third w3-margin-bottom">
                                     <label><b>Carica certificato</b></label>
@@ -158,3 +162,33 @@ export default function FormGiocatore (props){
     
 }
 
+function checkForm(values){
+    /* cf*/
+    var pattern = /^[a-zA-Z]{6}[0-9]{2}[a-zA-Z][0-9]{2}[a-zA-Z][0-9]{3}[a-zA-Z]$/;
+    if (values.cf.search(pattern) == -1){
+        alert("Valore codice fiscale errato");
+        return false;
+    }
+    /* numero maglia */
+    if(values.numero != "" && (values.numero < 1 || values.numero > 99)){
+        alert("Numero maglia non valido")
+        return false;
+    }
+    const dataOggi = Date.parse(new Date);
+    var d = Date.parse(new Date(values.data_nascita));
+    /* meno di 10 anni*/
+    if(d + 315360000000 > dataOggi){  
+        alert("Data di nascita non valida");
+        return false;
+    }
+    if(values.scadenza != ""){
+        var d = Date.parse(new Date(values.scadenza));
+        if(d < dataOggi){
+            alert("Certificato medico scaduto");
+            return false;
+        }
+    }
+    return true;
+}
+
+export default memo(FormGiocatore);
