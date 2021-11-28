@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import "./form.css";
 
@@ -21,6 +21,20 @@ export default function FormGiocatore (props){
         displayStyle = { display: "block" };
     }
 
+    useEffect(() => {
+        var values = sessionStorage.getItem("dataFormGiocatore");
+        if(values != "" && values != null){
+            values = JSON.parse(values);
+            setInputVal(values);
+            console.log("stored data: ", values);
+        }
+    }, [])
+
+    useEffect(() => {
+        sessionStorage.setItem("dataFormGiocatore", JSON.stringify(inputVal));
+        //console.log(sessionStorage.getItem("dataFormGiocatore"));
+    }, [inputVal])
+
     const submitForm = (e) =>{
         e.preventDefault();
         console.log("Submit", inputVal);
@@ -30,7 +44,6 @@ export default function FormGiocatore (props){
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
-
         setInputVal((prev) => ({...prev, [name]: value}));
     }
 
