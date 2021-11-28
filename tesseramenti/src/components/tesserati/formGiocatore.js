@@ -2,9 +2,9 @@ import React from 'react';
 
 import "./form.css";
 
-function FormGiocatore (props){
+export default function FormGiocatore (props){
     var displayStyle = { display: "none" }
-    if (this.props.display) {
+    if (props.display) {
         displayStyle = { display: "block" };
     }
     const d = new Date();
@@ -13,7 +13,7 @@ function FormGiocatore (props){
             <div className="w3-modal-content w3-card-4 w3-animate-zoom  dimensione-pannello">
                 <div className="w3-container w3-teal w3-margin-bottom">
                     <h2>Aggiungi giocatore</h2>
-                    <span onClick={() => this.props.onClose()}
+                    <span onClick={() => props.onClose()}
                         className="w3-button w3-display-topright material-icons">close</span>
                 </div>
                 <form className="w3-container scrollabile">
@@ -101,7 +101,7 @@ function FormGiocatore (props){
 
                 </form>
                 <div className="w3-border w3-margin-top w3-padding-large">
-                    <button className="w3-button w3-round w3-red" onClick={() => this.props.onClose()}>Chiudi</button>
+                    <button className="w3-button w3-round w3-red" onClick={() => props.onClose()}>Chiudi</button>
                     <button className="w3-button w3-round w3-blue w3-right">Aggiungi</button>
                 </div>
             </div>
@@ -109,5 +109,3 @@ function FormGiocatore (props){
     );
 }
 
-
-export default FormGiocatore;
