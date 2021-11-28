@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import React from 'react';
 import './tesserati.css';
 import FormGiocatore from './formGiocatore.js';
@@ -12,7 +12,7 @@ function Tesserati (props){
     const [form, setForm] = useState(0);
     const [search, setSearch] = useState("");
     const sendToken = { token: props.token };
-    var fetchGio = useFetch("/elencoTesserati", sendToken);
+    const fetchGio = useFetch("/elencoTesserati", sendToken);
     const [tesserati, setTesserati] = useState([]);
     /*const [tesserati, setTesserati] = useState([
         { id: 1, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 0, t: 0 },
@@ -226,4 +226,4 @@ const Tooltip = (text) => {
 }
 
 
-export default Tesserati;
+export default memo(Tesserati);
