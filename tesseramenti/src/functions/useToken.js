@@ -3,7 +3,7 @@ import { fetch } from './useFetch';
 
 export default function useToken() {
     const getToken = () => {
-        const tokenString = sessionStorage.getItem('session');
+        const tokenString = localStorage.getItem('session');
         const session = JSON.parse(tokenString);
         if(session == null){
             return null;
@@ -21,7 +21,7 @@ export default function useToken() {
     const [token, setToken] = useState(getToken);
 
     const deleteToken = () => {
-        sessionStorage.removeItem("session");
+        localStorage.removeItem("session");
         const send = {token : token};
         setToken(null);
         fetch("/deleteSession", send);
@@ -37,7 +37,7 @@ export default function useToken() {
         var session = {};
         session.token = userToken;
         session.time = Date.parse(new Date);
-        sessionStorage.setItem('session', JSON.stringify(session));
+        localStorage.setItem('session', JSON.stringify(session));
         setToken(userToken);
     };
 

@@ -33,6 +33,7 @@ function Tesserati (props){
     const closeForm = useCallback(() => {
             setForm(0);
         }, [form]);
+    
 
     useEffect(() => {
         if (fetchGio[0].status && fetchGio[0].vett != undefined) {
@@ -87,8 +88,8 @@ function Tesserati (props){
                 </div>
             </div>
             <div className="w3-bar w3-right-align">
-                <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm('g')} >Aggiungi giocatore</button>
-                <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm('d')} >Aggiungi dirigente</button>
+                <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm('g')} {...() => {if(tesserati.lenght >= 20){return "disabled";}}}>Aggiungi giocatore</button>
+                <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm('d')} disabled>Aggiungi dirigente</button>
             </div>
         </div>
     );

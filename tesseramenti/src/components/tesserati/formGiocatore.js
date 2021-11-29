@@ -25,6 +25,7 @@ function FormGiocatore (props){
         var values = sessionStorage.getItem("dataFormGiocatore");
         if(values != "" && values != null){
             values = JSON.parse(values);
+            values.certificato = "";
             setInputVal(values);
             console.log("stored data: ", values);
         }
@@ -144,6 +145,7 @@ function FormGiocatore (props){
                                 </div>
                                 <div className="w3-third w3-margin-bottom">
                                     <label><b>Carica certificato</b></label>
+                                    <input type="hidden" name="MAX_FILE_SIZE" value="30000"/>
                                     <input className="w3-input" type="file" name="certificato"  value={getInputValue("certificato")} onChange={handleInputChange}/>
                                 </div>
                             </div>
