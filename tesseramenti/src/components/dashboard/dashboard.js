@@ -10,7 +10,7 @@ function Dashboard(props) {
     const [token, setToken, deleteToken] = useContext(sessionContext);
 
     function ValidaSessione() {
-        const send = { token: props.token };
+        const send = { token: token };
         const fetchData = async () => {
             let data = await fetch("/sessionCheck", send);
             //console.log(data);

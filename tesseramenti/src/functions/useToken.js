@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { fetch } from './useFetch';
 
 export default function useToken() {
     const getToken = () => {
@@ -11,6 +12,7 @@ export default function useToken() {
             return session.token;
         }
         else{
+            console.log("Sessione scaduta");
             deleteToken();
             return null;
         }
@@ -20,14 +22,15 @@ export default function useToken() {
 
     const deleteToken = () => {
         sessionStorage.removeItem("session");
+        const send = {token : token};
         setToken(null);
-        console.log("Sessione eliminata");
-        /* fetch delete */
+        fetch("/deleteSession", send);
+        //console.log("Sessione eliminata");
     }
 
     const updateToken = useEffect(() => {
         setToken(getToken)
-        //console.log("Update Token:", token);
+        console.log("Session update:", token);
     }, [token]);
 
     const saveToken = (userToken) => {

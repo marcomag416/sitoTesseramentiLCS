@@ -13,6 +13,7 @@ $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode( '/', $uri );
 
 //print_r ($uri);
+
 if($uri[1] == 'login'){
 	require("../src/login/login.php");
 	exit();
@@ -31,6 +32,12 @@ if($token == false){
 	echo json_encode(array("status" => false, "msg" => "Token non trovato"));
 	exit();
 }
+
+if($uri[1] == 'deleteSession'){
+	deleteSession($token, $dbConnection);
+	exit();
+}
+
 
 $session = sessionCheck($token, $dbConnection);
 

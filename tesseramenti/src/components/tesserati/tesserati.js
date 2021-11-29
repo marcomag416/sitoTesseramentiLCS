@@ -1,8 +1,9 @@
-import { useEffect, useState, memo, useCallback } from 'react';
+import { useEffect, useState, memo, useCallback, useContext } from 'react';
 import React from 'react';
 import './tesserati.css';
 import FormGiocatore from './formGiocatore.js';
 import {fetch, useFetch} from '../../functions/useFetch.js';
+import { sessionContext } from '../context';
 /*import ReactDOM from 'react-dom';*/
 
 //import { MDCDataTable } from '@material/data-table';
@@ -11,8 +12,8 @@ import {fetch, useFetch} from '../../functions/useFetch.js';
 function Tesserati (props){
     const [form, setForm] = useState(0);
     const [search, setSearch] = useState("");
-    const sendToken = { token: props.token };
-    const fetchGio = useFetch("/elencoTesserati", sendToken);
+    const [token, setToken, deleteToken] = useContext(sessionContext);
+    const fetchGio = useFetch("/elencoTesserati", {token : token});
     const [tesserati, setTesserati] = useState([]);
     /*const [tesserati, setTesserati] = useState([
         { id: 1, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 0, t: 0 },

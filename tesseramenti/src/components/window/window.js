@@ -88,10 +88,10 @@ function Window (){
 					<div className="w3-light-grey">
 						<Switch>
 							<Route exact path="/tesserati">
-								<Tesserati token={token}/>
+								<Tesserati/>
 							</Route>
 							<Route exact path="/">
-								<Dashboard token={token}/>
+								<Dashboard/>
 							</Route>
 						</Switch>
 					</div>

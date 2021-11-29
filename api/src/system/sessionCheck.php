@@ -31,4 +31,11 @@ function leggiToken(){
 	return $input['token'];
 }
 
+function deleteSession($token, $dbConnection){
+	$sql = "delete FROM `sessioni` WHERE `sessioni`.`token` = ?;";
+	$stm = $dbConnection -> prepare($sql);
+	$stm -> bindValue(1, $token);
+	$stm ->execute();
+}
+
 ?>
