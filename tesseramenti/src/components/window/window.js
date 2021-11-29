@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState, useEffect} from 'react';
 //import ReactDOM from 'react-dom';
 import { Route, Switch, Redirect } from "react-router-dom";
 import { API_BASE } from '../../config/config.js';
@@ -10,68 +10,20 @@ import Tesserati from '../tesserati/tesserati.js';
 import Sidebar from './sidebar.js';
 import Topbar from './topbar.js';
 import LoadIcon from '../elem/loadIcon.js';
+import useToken from '../../functions/useToken.js';
+import { sessionContext } from '../context.js';
 
-class Window extends React.Component {
-	constructor() {
-		super();
-		this.state = {
-			sidebar: true,
-			token: this.getToken(),
-			id:"",
-			nome:"",
-			squadra:"",
-			stagione:"",
-			lega: "",
-			loading: true
-		}
-	}
-	render() {
-		if (!this.state.token) {
-			return (
-				<Login setToken={this.setToken} />
-			);
-		}
-		if (this.state.loading) {
-			return (
-				<LoadIcon show={true}/>
-				);
-        }
-		return (
-			<div>
-				<Sidebar
-					hideSidebar={() => this.setState({ sidebar: false })}
-					display={this.state.sidebar}
-				/>
-				<div className="w3-main full-height" style={this.state.sidebar ? { marginLeft: "180px" } : { margiLeft: "0px" }} >
-					<Topbar
-						switchSidebar={() => this.setState({ sidebar: !this.state.sidebar })}
-						sidebarOn={this.state.sidebar}
-						title={"Pagina"}
-					/>
-					<div className="w3-light-grey">
-						<Switch>
-							<Route exact path="/tesserati">
-								<Tesserati token={this.state.token}/>
-							</Route>
-							<Route exact path="/">
-								<Dashboard token={this.state.token}/>
-							</Route>
-						</Switch>
-					</div>
-					
-				</div>
-            </div>
-        );
-	}
 
-	componentDidMount() {
-		this.validaSessione();
-    }
-
-	validaSessione() {
+function Window (){
+	const [sidebar, setSidebar] = useState(true);
+	const [token, setToken, deleteToken] = useToken();
+	const [loading, setLoading] = useState(true);
+	const [info, setInfo] = useState({});
+	
+	const validaSessione = useEffect(() => {
 		const path = API_BASE + "/sessionCheck";
 		const send = {
-			token: this.getToken()
+			token: token
 		}
 
 		axios({
@@ -82,20 +34,18 @@ class Window extends React.Component {
 		})
 			.then(result => {
 				if (result.data.status) {
-					this.setState({
-						loading: false,
+					setInfo({
 						id: result.data.id,
 						nome: result.data.mail,
 						squadra: result.data.squadra,
 						stagione: result.data.stagione,
 						lega: result.data.lega
 					});
+					setLoading(false);
 				}
 				else {
-					console.log(result.data.status, this.getToken());
-					this.setState({
-						token: null
-					});
+					//console.log(result.data.status, this.getToken());
+					deleteToken();
 				}
 			})
 			.catch(error => {
@@ -107,9 +57,52 @@ class Window extends React.Component {
 					console.log(error.response.headers, error.response.status, error.response.data);
 				}
 			});
-    }
+    }, [token]);
 
-	setToken = (token) => {
+
+	//console.log("Render window", token);
+	if (token == null) {
+		return (
+			<Login setToken={setToken} />
+		);
+	}
+	
+	if (loading) {
+		return (
+			<LoadIcon show={true}/>
+			);
+	}
+	return (
+		<div>
+			<sessionContext.Provider value = {[token, setToken, deleteToken]}>
+				<Sidebar
+					hideSidebar={() => setSidebar(false)}
+					display={sidebar}
+				/>
+				<div className="w3-main full-height" style={sidebar ? { marginLeft: "180px" } : { margiLeft: "0px" }} >
+					<Topbar
+						switchSidebar={() => setSidebar(!sidebar)}
+						sidebarOn={sidebar}
+						title={"Pagina"}
+					/>
+					<div className="w3-light-grey">
+						<Switch>
+							<Route exact path="/tesserati">
+								<Tesserati token={token}/>
+							</Route>
+							<Route exact path="/">
+								<Dashboard token={token}/>
+							</Route>
+						</Switch>
+					</div>
+					
+				</div>
+			</sessionContext.Provider>
+		</div>
+	);
+
+
+	/*setToken = (token) => {
 		localStorage.setItem('token', JSON.stringify(token));
 		this.setState({
 			token: token,
@@ -123,7 +116,7 @@ class Window extends React.Component {
 			return token;
 		}
 		return null;
-	}
+	}*/
 }
 
 

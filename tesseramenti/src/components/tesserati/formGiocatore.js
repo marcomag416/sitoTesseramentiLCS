@@ -55,7 +55,7 @@ function FormGiocatore (props){
 
     const d = new Date();
     const d10y = new Date(Date.parse(d) - 315360000000);
-    console.log("form render");
+    //console.log("form render");
     return(
         <div className="w3-modal posizione-pannello" style={displayStyle}>
             <div className="w3-modal-content w3-card-4 w3-animate-zoom  dimensione-pannello">

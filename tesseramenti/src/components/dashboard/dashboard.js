@@ -1,11 +1,13 @@
-import { React, useEffect, useState } from 'react';
+import { React, useContext, useState } from 'react';
 /*import axios from 'axios';
 import { API_BASE } from '../../config/config.js';*/
 import { fetch } from '../../functions/useFetch.js';
 /*import ReactDOM from 'react-dom';*/
+import { sessionContext } from '../context.js';
 
 function Dashboard(props) {
     const [recived, setRecived] = useState("");
+    const [token, setToken, deleteToken] = useContext(sessionContext);
 
     function ValidaSessione() {
         const send = { token: props.token };
@@ -22,6 +24,12 @@ function Dashboard(props) {
         fetchData();
     }
 
+    function logOut() {
+        console.log("Logut...");
+        deleteToken();
+        /*localStorage.removeItem('token');
+        window.location.reload();*/
+    }
 
     return (
         <div className="w3-container">
@@ -35,11 +43,7 @@ function Dashboard(props) {
 
 }
 
-function logOut() {
-    console.log("Logut...");
-    localStorage.removeItem('token');
-    window.location.reload();
-}
+
 
 
 export default Dashboard;
