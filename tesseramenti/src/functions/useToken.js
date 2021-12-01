@@ -2,6 +2,18 @@ import { useState, useEffect } from 'react';
 import { fetch } from './useFetch';
 
 export default function useToken() {
+
+    const [token, setToken] = useState();
+
+    
+    const deleteToken = () => {
+        localStorage.removeItem("session");
+        const send = {token : token};
+        setToken(null);
+        fetch("/deleteSession", send);
+        //console.log("Sessione eliminata");
+    }
+
     const getToken = () => {
         const tokenString = localStorage.getItem('session');
         const session = JSON.parse(tokenString);
@@ -16,16 +28,6 @@ export default function useToken() {
             deleteToken();
             return null;
         }
-    }
-
-    const [token, setToken] = useState(getToken);
-
-    const deleteToken = () => {
-        localStorage.removeItem("session");
-        const send = {token : token};
-        setToken(null);
-        fetch("/deleteSession", send);
-        //console.log("Sessione eliminata");
     }
 
     const updateToken = useEffect(() => {

@@ -27,6 +27,7 @@ function Window (){
 		}
 
 		axios({
+			mode : "no-cors",
 			method: 'post',
 			url: path,
 			headers: { 'content-type': 'application/json' },

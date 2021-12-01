@@ -25,11 +25,17 @@ if($uri[1] == "prova"){
 	exit();
 }
 
+/*if(isset($_POST['token'])){
+	echo json_encode(array("status" => false, "msg" => $_POST['token']));
+	http_response_code(202);
+	exit();
+}*/
 http_response_code(200);
 /*LOGGED IN CONTROLS*/
 $token = leggiToken();
 if($token == false){
-	echo json_encode(array("status" => false, "msg" => "Token non trovato"));
+	echo json_encode(array("status" => false, "msg" => "Token mancante"));
+	//http_response_code(400);
 	exit();
 }
 
@@ -55,6 +61,15 @@ if($session['status'] == false){
 if($uri[1] == 'elencoTesserati'){
 	//echo json_encode(leggiTesserati($session['squadra'], $session['stagione'], $dbConnection));
 	echo json_encode(leggiTesserati($token, $dbConnection));
+	exit();
+}
+
+if($uri[1] == 'uploadGiocatore'){
+	if (!isset($_FILES['userfile']) || !is_uploaded_file($_FILES['userfile']['tmp_name'])) {
+		echo json_encode(array("status" => false, "msg" => "Nessun file ricevuto"));
+		exit;    
+	  }
+	echo json_encode(array("status" => true, "msg" => $_POST));
 	exit();
 }
 
