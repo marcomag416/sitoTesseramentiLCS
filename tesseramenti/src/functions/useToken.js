@@ -1,11 +1,7 @@
 import { useState, useEffect } from 'react';
 import { fetch } from './useFetch';
 
-export default function useToken() {
-
-    const [token, setToken] = useState();
-
-    
+export default function useToken() {    
     const deleteToken = () => {
         localStorage.removeItem("session");
         const send = {token : token};
@@ -30,10 +26,14 @@ export default function useToken() {
         }
     }
 
+    const [token, setToken] = useState(getToken());
+
+
+
     const updateToken = useEffect(() => {
         setToken(getToken)
         //console.log("Session update:", token);
-    }, [token]);
+    }, []);
 
     const saveToken = (userToken) => {
         var session = {};

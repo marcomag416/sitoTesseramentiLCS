@@ -45,11 +45,11 @@ function Tesserati (props){
                 x.id = index;
                 x.cm = 1; /* cert med sempre valido */
                 x.t = 0; /* giocatore */
-                if(x.scadenza < 0){
+                if(x.scadenza == null){
                     x.cm = 4; /* cert mancante */
                 }
                 else{
-                    scadenza = x.scadenza * 1000;
+                    scadenza = Date.parse(new Date(x.scadenza));
                     if(scadenza > dataOggi + gg10){
                         if(x.fisico){
                             x.cm = 0;  /* cartaceo */
@@ -66,7 +66,7 @@ function Tesserati (props){
                     }
                 }
             });
-            //console.log("tesserati: ", vett);
+            console.log("tesserati: ", vett);
             setTesserati(vett);
         }
         else {

@@ -51,6 +51,7 @@ function Window (){
 			})
 			.catch(error => {
 				console.log("Errore connessione con il server");
+				deleteToken();
 				if (error.message) {
 					console.log(error.message);
 				}

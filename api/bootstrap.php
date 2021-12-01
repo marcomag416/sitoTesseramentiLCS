@@ -1,6 +1,6 @@
 <?php
 require_once 'src\system\databaseConnector.php';
-
+define('ROOTPATH', __DIR__);
 
 define("DB_HOST", "localhost");
 define("DB_PORT", "3306");
