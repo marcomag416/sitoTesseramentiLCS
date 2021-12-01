@@ -26,7 +26,12 @@ function leggiToken(){
 	$input = json_decode($rest_json, true);
 
 	if (empty($input['token'])){
-		return false;
+		if(isset($_POST['token'])){
+			return $_POST['token'];
+		}
+		else{
+			return false;
+		}
 	}
 	return $input['token'];
 }

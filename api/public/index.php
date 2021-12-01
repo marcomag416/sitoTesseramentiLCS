@@ -32,6 +32,7 @@ if($uri[1] == "prova"){
 }*/
 http_response_code(200);
 /*LOGGED IN CONTROLS*/
+//$token = '$2y$10$AvFoIBsxOY2aBspfAzD2tuYfkwCAod3xU0CGDN4nlyecpf6XQVdMG';
 $token = leggiToken();
 if($token == false){
 	echo json_encode(array("status" => false, "msg" => "Token mancante"));
