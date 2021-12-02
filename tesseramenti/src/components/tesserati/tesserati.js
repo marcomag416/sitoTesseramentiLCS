@@ -9,7 +9,7 @@ import { sessionContext } from '../context';
 //import { MDCDataTable } from '@material/data-table';
 /*const dataTable = new MDCDataTable(document.querySelector('.mdc-data-table'));*/
 
-const tesseratiContext = createContext();
+export const tesseratiContext = createContext();
 
 function Tesserati (props){
     const [form, setForm] = useState(0);
@@ -72,11 +72,11 @@ function Tesserati (props){
                     }
                 }
             });
-            console.log("tesserati: ", vett);
+            console.log("giocatori caricati: ", vett);
             setTesserati(vett);
         }
         else {
-            console.log("Errore caricamento tesserati"/*, fetchGio[0]*/);
+            console.log("Errore caricamento giocatori");
 
         }
     }, [fetchGio]);
@@ -95,6 +95,7 @@ function Tesserati (props){
                     </div>
                 </div>
                 <div className="w3-bar w3-right-align">
+                    <button className="w3-button w3-blue w3-round w3-margin w3-mobile w3-left" onClick={() => reloadTesserati()}>Ricarica</button>
                     <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm('g')} {...() => {if(tesserati.lenght >= 20){return "disabled";}}}>Aggiungi giocatore</button>
                     <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm('d')} disabled>Aggiungi dirigente</button>
                 </div>

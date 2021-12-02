@@ -2,10 +2,13 @@ import {useEffect, useState, memo, useContext} from 'react';
 import { sessionContext } from '../context';
 import { fetchPost } from '../../functions/useFetch';
 
+
 import "./form.css";
+import { tesseratiContext } from './tesserati';
 
 function FormGiocatore (props){
     const [token, setToken, deleteToken] = useContext(sessionContext);
+    const [reloadTesserati]=useContext(tesseratiContext);
     const defaultGioVal = {
         cf : "",
         nome : "",
@@ -45,6 +48,7 @@ function FormGiocatore (props){
                 console.log("Giocatore caricato con successo");
                 sessionStorage.removeItem("dataFormGiocatore");
                 setInputVal(defaultGioVal);
+                reloadTesserati();
             }
             else{
                 console.log("Errore caricamento giocatore:", result.msg);
