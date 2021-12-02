@@ -42,7 +42,7 @@ function Tesserati (props){
             const dataOggi = Date.parse(new Date);
             const gg10 = 864000000; /* millsec in 10 gg */
             vett.forEach((x, index) => {
-                x.id = index;
+                //x.id = index;
                 x.cm = 1; /* cert med sempre valido */
                 x.t = 0; /* giocatore */
                 if(x.scadenza == null){

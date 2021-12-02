@@ -66,11 +66,7 @@ if($uri[1] == 'elencoTesserati'){
 }
 
 if($uri[1] == 'uploadGiocatore'){
-	if (!isset($_FILES['userfile']) || !is_uploaded_file($_FILES['userfile']['tmp_name'])) {
-		echo json_encode(array("status" => false, "msg" => "Nessun file ricevuto"));
-		exit;    
-	  }
-	echo json_encode(array("status" => true, "msg" => $_POST));
+	echo json_encode(uploadGiocatore($session, $dbConnection));
 	exit();
 }
 

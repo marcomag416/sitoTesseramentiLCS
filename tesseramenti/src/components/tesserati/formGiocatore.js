@@ -1,9 +1,12 @@
-import {useEffect, useState, memo} from 'react';
+import {useEffect, useState, memo, useContext} from 'react';
+import { sessionContext } from '../context';
+import { fetchPost } from '../../functions/useFetch';
 
 import "./form.css";
 
 function FormGiocatore (props){
-    const [inputVal, setInputVal] = useState({
+    const [token, setToken, deleteToken] = useContext(sessionContext);
+    const defaultGioVal = {
         cf : "",
         nome : "",
         cognome : "",
@@ -13,19 +16,17 @@ function FormGiocatore (props){
         numero : "",
         taglia : "",
         ruolo : "",
-        scadenza : "",
-        certificato : ""
-    });
+    };
+    const [inputVal, setInputVal] = useState(defaultGioVal);
     var displayStyle = { display: "none" }
     if (props.display) {
         displayStyle = { display: "block" };
     }
 
-    useEffect(() => {
+    const loadInputVal = useEffect(() => {
         var values = sessionStorage.getItem("dataFormGiocatore");
         if(values != "" && values != null){
             values = JSON.parse(values);
-            values.certificato = "";
             setInputVal(values);
             console.log("stored data: ", values);
         }
@@ -36,18 +37,27 @@ function FormGiocatore (props){
         //console.log(sessionStorage.getItem("dataFormGiocatore"));
     }, [inputVal])
 
-    const submitForm = (e) =>{
+    const submitForm = async e =>{
         e.preventDefault();
         if(checkForm(inputVal)){
-            console.log("Submit:", inputVal);
+            var  result = await fetchPost('/uploadGiocatore', token, inputVal);
+            if(result.status){
+                console.log("Giocatore caricato con successo");
+                sessionStorage.removeItem("dataFormGiocatore");
+                setInputVal(defaultGioVal);
+            }
+            else{
+                console.log("Errore caricamento giocatore:", result.msg);
+            }
         }
     }
 
     const handleInputChange = (event) =>{
         const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const value = target.value;
         const name = target.name;
         setInputVal((prev) => ({...prev, [name]: value}));
+        //console.log(inputVal.certificato.name);
     }
 
     const getInputValue = (name) =>{
@@ -141,12 +151,12 @@ function FormGiocatore (props){
                             <div className="w3-row-padding">
                                 <div className="w3-third w3-margin-bottom">
                                     <label><b>Scadenza certificato</b></label>
-                                    <input className="w3-input w3-border w3-round w3-light-grey" type="date" name="scadenza"  value={getInputValue("scadenza")} onChange={handleInputChange} min={d.toISOString().slice(0, 10)} />
+                                    <input className="w3-input w3-border w3-round w3-light-grey" type="date" name="scadenza"  /*value={getInputValue("scadenza")} onChange={handleInputChange}*/ min={d.toISOString().slice(0, 10)} />
                                 </div>
                                 <div className="w3-third w3-margin-bottom">
                                     <label><b>Carica certificato</b></label>
-                                    <input type="hidden" name="MAX_FILE_SIZE" value="30000"/>
-                                    <input className="w3-input" type="file" name="certificato"  value={getInputValue("certificato")} onChange={handleInputChange}/>
+                                    <input type="hidden" name="MAX_FILE_SIZE" value="300000"/>
+                                    <input className="w3-input" type="file" name="certificato"/>
                                 </div>
                             </div>
                         </fieldset>
@@ -163,6 +173,7 @@ function FormGiocatore (props){
 
     
 }
+
 
 function checkForm(values){
     /* cf*/
