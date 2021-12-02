@@ -19,6 +19,18 @@ function leggiTesserati($token, $dbConnection){
 	
 }
 
+function deleteGiocatore($session, $dbConnection){
+	if(!isset($_POST['idgiocatore'])){
+		return array("status" => false, "msg" => "id giocatore non trovato");
+	}
+	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\moveGiocatoreToBin.sql");
+	$stm = $dbConnection -> prepare($sql);
+	$stm->bindValue(":idgiocatore", $_POST['idGiocatore'], PDO::PARAM_STR);
+	$stm->bindValue(":idsquadra", $session['idsquadra'], PDO::PARAM_STR);
+	$stm->execute();
+	return array("status" => true, "msg" => "Giocatore spostato nel cestino");
+}
+
 //function aggiungiGiocatore($token, )
 
 function controllaScadenza($scad, $cart){

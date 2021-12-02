@@ -70,4 +70,9 @@ if($uri[1] == 'uploadGiocatore'){
 	exit();
 }
 
+if($uri[1] == 'deleteGiocatore'){
+	echo json_encode(deleteGiocatore($session, $dbConnection));
+	exit();
+}
+
 ?>
