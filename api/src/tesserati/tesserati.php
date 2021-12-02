@@ -25,7 +25,7 @@ function deleteGiocatore($session, $dbConnection){
 	}
 	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\moveGiocatoreToBin.sql");
 	$stm = $dbConnection -> prepare($sql);
-	$stm->bindValue(":idgiocatore", $_POST['idGiocatore'], PDO::PARAM_STR);
+	$stm->bindValue(":idgiocatore", $_POST['idgiocatore'], PDO::PARAM_STR);
 	$stm->bindValue(":idsquadra", $session['idsquadra'], PDO::PARAM_STR);
 	$stm->execute();
 	return array("status" => true, "msg" => "Giocatore spostato nel cestino");
