@@ -7,4 +7,4 @@ left join certificati_med cmed on cmed.id_giocatore = gio.id,
 stagioni stag
 WHERE stag.id = gtess.id_stagione and stag.id = amm.id_stagione and stag.scadenza > CURRENT_DATE and gio.id_squadra = sq.id
 group by gio.id order by gio.id) tabA
-left join (select fisico, scadenza from certificati_med )cmed on cmed.scadenza = tabA.scadenza
+left join (select fisico, scadenza from certificati_med )cmed on cmed.scadenza = tabA.scadenza;
