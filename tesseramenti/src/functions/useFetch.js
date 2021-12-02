@@ -44,12 +44,13 @@ export async function fetch(url, sendData){
 	return data;
 }
 
-export const useFetch = (url, sendData) => {
+export const useFetch = (url, sendData, reload) => {
 	const [data, setData] = useState({status:true});
 
 	var path = API_BASE + url;
 
 	useEffect(() => {
+		console.log("Use fetch...", path);
 		axios({
 			mode: "no-cors",
 			method: 'post',
@@ -57,33 +58,33 @@ export const useFetch = (url, sendData) => {
 			headers: { 'content-type': 'application/json' },
 			data: sendData
 		})
-			.then(result => {
-				//console.log("Use fetch...", path);
-				if (result.data.status) {
-					setData(result.data);
-				}
-				else {
-					//console.log("Errore:", result.data);
-					setData({
-						msg: result.data.msg,
-						err: true
-					});
-				}
-			})
-			.catch(error => {
+		.then(result => {
+			//console.log("Use fetch...", path);
+			if (result.data.status) {
+				setData(result.data);
+			}
+			else {
+				//console.log("Errore:", result.data);
 				setData({
-					msg: "Errore connessione con il server",
+					msg: result.data.msg,
 					err: true
 				});
-
-				if (error.message) {
-					console.log(error.message);
-				}
-				if (error.response) {
-					console.log(error.response.headers, error.response.status, error.response.data);
-				}
+			}
+		})
+		.catch(error => {
+			setData({
+				msg: "Errore connessione con il server",
+				err: true
 			});
-    }, []);
+
+			if (error.message) {
+				console.log(error.message);
+			}
+			if (error.response) {
+				console.log(error.response.headers, error.response.status, error.response.data);
+			}
+		});
+    }, [reload]);
 
     return [data];
 };
@@ -97,9 +98,10 @@ export async function fetchPost(url, token, sendData, file){
 	}
 	formData.append("token", token);
 
-    formData.forEach((x, index) =>{console.log(index, x)});
+    //formData.forEach((x, index) =>{console.log(index, x)});
 
 	const data = new Promise(function (resolve) {
+		console.log("fetchPost...", path);
 		axios.post(path, formData).then(result => {
 				if (result.data.status) {
 					resolve(result.data);

@@ -1,19 +1,22 @@
-import { useEffect, useState, memo, useCallback, useContext } from 'react';
+import { useEffect, useState, memo, useCallback, useContext, createContext } from 'react';
 import React from 'react';
 import './tesserati.css';
 import FormGiocatore from './formGiocatore.js';
-import {fetch, useFetch} from '../../functions/useFetch.js';
+import {fetchPost, useFetch} from '../../functions/useFetch.js';
 import { sessionContext } from '../context';
 /*import ReactDOM from 'react-dom';*/
 
 //import { MDCDataTable } from '@material/data-table';
 /*const dataTable = new MDCDataTable(document.querySelector('.mdc-data-table'));*/
 
+const tesseratiContext = createContext();
+
 function Tesserati (props){
     const [form, setForm] = useState(0);
     const [search, setSearch] = useState("");
     const [token, setToken, deleteToken] = useContext(sessionContext);
-    const fetchGio = useFetch("/elencoTesserati", {token : token});
+    const [reload, setReload] = useState(true);
+    const fetchGio = useFetch("/elencoTesserati", {token : token}, reload);
     const [tesserati, setTesserati] = useState([]);
     /*const [tesserati, setTesserati] = useState([
         { id: 1, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 0, t: 0 },
@@ -32,8 +35,11 @@ function Tesserati (props){
 
     const closeForm = useCallback(() => {
             setForm(0);
-        }, [form]);
+        }, []);
     
+    const reloadTesserati = () =>{
+        setReload(!reload);
+    }
 
     useEffect(() => {
         if (fetchGio[0].status && fetchGio[0].vett != undefined) {
@@ -78,19 +84,21 @@ function Tesserati (props){
     return (
         <div className="w3-container">
             <h2>Tesserati</h2>
-            <FormGiocatore onClose={() => closeForm()} display={form == 'g'}/>
-            <div className = "w3-white">
-                <div className="w3-bar w3-margin-top w3-margin-bottom w3-padding-large">
-                    <input className="w3-input w3-quarter w3-right" type="text" placeholder="Cerca" value={search} onChange={(e) => { setSearch(e.target.value) } }/>
+            <tesseratiContext.Provider value={[reloadTesserati]}>
+                <FormGiocatore onClose={() => closeForm()} display={form == 'g'}/>
+                <div className = "w3-white">
+                    <div className="w3-bar w3-margin-top w3-margin-bottom w3-padding-large">
+                        <input className="w3-input w3-quarter w3-right" type="text" placeholder="Cerca" value={search} onChange={(e) => { setSearch(e.target.value) } }/>
+                    </div>
+                    <div className="w3-padding">
+                        <Tabella search={search} tesserati={tesserati} />
+                    </div>
                 </div>
-                <div className="w3-padding">
-                    <Tabella search={search} tesserati={tesserati} />
+                <div className="w3-bar w3-right-align">
+                    <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm('g')} {...() => {if(tesserati.lenght >= 20){return "disabled";}}}>Aggiungi giocatore</button>
+                    <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm('d')} disabled>Aggiungi dirigente</button>
                 </div>
-            </div>
-            <div className="w3-bar w3-right-align">
-                <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm('g')} {...() => {if(tesserati.lenght >= 20){return "disabled";}}}>Aggiungi giocatore</button>
-                <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm('d')} disabled>Aggiungi dirigente</button>
-            </div>
+            </tesseratiContext.Provider>
         </div>
     );
 
@@ -176,6 +184,8 @@ function Dirigente(dirigente) {
 }
 
 function Giocatore(giocatore) {
+    const [token, setToken, deleteToken] = useContext(sessionContext);
+    const [reloadTesserati] = useContext(tesseratiContext);
     return (
         <tr className="w3-hover-light-grey testo-centrale">
             <td className="w3-tooltip">{IconaTesserato(0)}</td>
@@ -186,7 +196,7 @@ function Giocatore(giocatore) {
             <td>{giocatore.taglia}</td>
             <td>{giocatore.numero_maglia}</td>
             <td className="w3-center"><button className="w3-button w3-small w3-blue w3-round ">Modifica</button></td>
-            <td><button className="w3-button w3-red w3-round w3-padding-small"><i className="material-icons w3-large">delete</i></button></td>
+            <td><button className="w3-button w3-red w3-round w3-padding-small" onClick={() => deleteGiocatore(giocatore.id, token, reloadTesserati)} ><i className="material-icons w3-large">delete</i></button></td>
         </tr>
         )
 }
@@ -229,6 +239,17 @@ const Tooltip = (text) => {
     }, []);*/
 
     return (def);
+}
+
+async function deleteGiocatore(id, token, onSuccess){
+    var  result = await fetchPost('/deleteGiocatore', token, {"idgiocatore" : id});
+    if(result.status){
+        console.log("Giocatore eliminato", id);
+        onSuccess();
+    }
+    else{
+        console.log("Errore eliminazione giocatore:", result);
+    }
 }
 
 
