@@ -2,8 +2,7 @@ import {useEffect, useState, memo, useContext} from 'react';
 import { sessionContext } from '../context';
 import { fetchPost } from '../../functions/useFetch';
 import Label from '../elem/label';
-
-
+import controllaCf from '../../functions/controlloCampi.js';
 import "./form.css";
 import { tesseratiContext } from './tesserati';
 
@@ -45,7 +44,8 @@ function FormGiocatore (props){
 
     const submitForm = async e =>{
         e.preventDefault();
-        if(checkForm(inputVal)){
+        setLabel({mode : "0", msg : ""});
+        if(checkForm(e.target, (txt) => {setLabel({mode : "r", msg : txt})})){
             var  result = await fetchPost('/uploadGiocatore', token, inputVal);
             if(result.status){
                 console.log("Giocatore caricato con successo");
@@ -187,29 +187,42 @@ function FormGiocatore (props){
 }
 
 
-function checkForm(values){
-    /* cf*/
-    var pattern = /^[a-zA-Z]{6}[0-9]{2}[a-zA-Z][0-9]{2}[a-zA-Z][0-9]{3}[a-zA-Z]$/;
-    if (values.cf.search(pattern) == -1){
-        alert("Valore codice fiscale errato");
+function checkForm(form, setMsg){
+    if(!controllaCf(form.cf, setMsg)){
         return false;
     }
     /* numero maglia */
-    if(values.numero != "" && (values.numero < 1 || values.numero > 99)){
-        alert("Numero maglia non valido")
+    if(form.numero != "" && (form.numero < 1 || form.numero > 99)){
+        form.numero.focus();
+        setMsg("Numero maglia non valido")
         return false;
     }
+    /* campi obbligatori */
+    const required_fields = [form.nome, form.cognome, form.data_nascita, form.classe, form.luogo_nascita];
+    for(let x in required_fields){
+        console.log(required_fields[x], x);
+        if(required_fields[x] == undefined || required_fields[x] == "" || required_fields[x] == null){
+            required_fields[x].focus();
+            setMsg("Campo necessario");
+            return false;
+        }
+    }
+    /* data nascita */
     const dataOggi = Date.parse(new Date);
-    var d = Date.parse(new Date(values.data_nascita));
+    var d = Date.parse(new Date(form.data_nascita));
     /* meno di 10 anni*/
     if(d + 315360000000 > dataOggi){  
-        alert("Data di nascita non valida");
+        form.data_nascita.focus();
+        setMsg("Data di nascita non valida");
         return false;
     }
-    if(values.scadenza != ""){
-        var d = Date.parse(new Date(values.scadenza));
+
+    /* data scedenza certificato med */
+    if(form.scadenza != ""){
+        var d = Date.parse(new Date(form.scadenza));
         if(d < dataOggi){
-            alert("Certificato medico scaduto");
+            form.scadenza.focus();
+            setMsg("Certificato medico scaduto");
             return false;
         }
     }
