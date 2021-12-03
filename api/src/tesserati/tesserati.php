@@ -51,7 +51,7 @@ function controllaScadenza($scad, $cart){
 
 function uploadGiocatore($session, $dbConnection){
 	/* controllo campi */
-	if(!isset($_POST['cf']) || !isset($_POST['nome']) ||!isset($_POST['cognome']) || !isset($_POST['data_nascita']) || !isset($_POST['classe'])){
+	if(!isset($_POST['cf']) || !isset($_POST['nome']) ||!isset($_POST['cognome']) || !isset($_POST['data_nascita']) || !isset($_POST['classe']) || !isset($_POST['luogo_nascita'])){
 		return array("status" => false, "msg" => "Campi obbligatori mancanti");
 	}
 
@@ -60,13 +60,13 @@ function uploadGiocatore($session, $dbConnection){
 		return array("status" => false, "msg" => "Codice fiscale non valido");
 	}
 
-	if(!is_numeric($_POST['numero']) || $_POST['numero'] > 99 || $_POST['numero'] < 1){
+	if(!isset($_POST['numero']) && (!is_numeric($_POST['numero']) || $_POST['numero'] > 99 || $_POST['numero'] < 1)){
 		return array("status" => false, "msg" => "Numero di maglia non valido");
 	}
 	$_POST['numero'] = (int)$_POST['numero'];
 
 	$_POST['taglia'] = strtoupper($_POST['taglia']);
-	if(!controllaTaglia($_POST['taglia'])){
+	if(!isset($_POST['taglia']) && !controllaTaglia($_POST['taglia'])){
 		return array("status" => false, "msg" => "Taglia non valida");
 	}
 
@@ -75,7 +75,7 @@ function uploadGiocatore($session, $dbConnection){
 	$_POST['cognome'] = ucwords(strtolower($_POST['cognome']));
 
 	$_POST['ruolo'] = ucfirst(strtolower($_POST['ruolo']));
-	if(!controllaRuolo($_POST['ruolo'])){
+	if(!isset($_POST['ruolo']) && !controllaRuolo($_POST['ruolo'])){
 		return array("status" => false, "msg" => "Ruolo giocatore non valido");
 	}
 
@@ -108,7 +108,7 @@ function uploadGiocatore($session, $dbConnection){
 
 function controllaTaglia($t){
 	$t = strtoupper($t);
-	$taglie = array("XS", "S", "M", "L", "XL");
+	$taglie = array("","XS", "S", "M", "L", "XL");
 	for($i = 0; $i < count($taglie); $i++){
 		if($t == $taglie[$i]){
 			return true;
@@ -119,7 +119,7 @@ function controllaTaglia($t){
 
 function controllaRuolo($r){
 	$r = strtoupper($r);
-	$taglie = array("ATT", "CEN", "DIF", "POR");
+	$taglie = array("","ATT", "CEN", "DIF", "POR");
 	for($i = 0; $i < count($taglie); $i++){
 		if($r == $taglie[$i]){
 			return true;

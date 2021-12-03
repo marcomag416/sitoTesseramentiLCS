@@ -107,8 +107,8 @@ function FormGiocatore (props){
                                     <input className="w3-input w3-border w3-round w3-light-grey" type="date" name="data_nascita"  value={getInputValue("data_nascita")} onChange={handleInputChange} max={d10y.toISOString().slice(0, 10)} required/>
                                 </div>
                                 <div className="w3-third w3-margin-bottom">
-                                    <label><b>Comune di nascita</b></label>
-                                    <input className="w3-input w3-border w3-round w3-light-grey" type="text" name="luogo_nascita"  value={getInputValue("luogo_nascita")} onChange={handleInputChange} placeholder="es. Torino" />
+                                    <label><b>Comune di nascita*</b></label>
+                                    <input className="w3-input w3-border w3-round w3-light-grey" type="text" name="luogo_nascita"  value={getInputValue("luogo_nascita")} onChange={handleInputChange} placeholder="es. Torino" required/>
                                 </div>
                             </div>
                         </fieldset>
