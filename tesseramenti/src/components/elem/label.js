@@ -16,11 +16,11 @@ function Label(props){
 
     return(
         <div className = {"w3-panel w3-display-container w3-margin " + getColorStyle}  style={props.mode != "0" ? { display: 'block' } : { display: 'none' }}>
-                        <span onClick={() => props.onClose()}
-                            className="w3-button w3-display-topright">&times;
-                        </span>
-                        <p><i>{props.msg}</i></p>
-                    </div>
+            <span onClick={() => props.onClose()}
+                className="w3-button w3-display-topright">&times;
+            </span>
+            <p><i>{props.msg}</i></p>
+        </div>
     );
 }
 
