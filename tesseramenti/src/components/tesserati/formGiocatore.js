@@ -1,6 +1,7 @@
 import {useEffect, useState, memo, useContext} from 'react';
 import { sessionContext } from '../context';
 import { fetchPost } from '../../functions/useFetch';
+import Label from '../elem/label';
 
 
 import "./form.css";
@@ -21,6 +22,8 @@ function FormGiocatore (props){
         ruolo : "",
     };
     const [inputVal, setInputVal] = useState(defaultGioVal);
+    const[label, setLabel] = useState({mode : "0", msg : ""});
+
     var displayStyle = { display: "none" }
     if (props.display) {
         displayStyle = { display: "block" };
@@ -46,12 +49,14 @@ function FormGiocatore (props){
             var  result = await fetchPost('/uploadGiocatore', token, inputVal);
             if(result.status){
                 console.log("Giocatore caricato con successo");
+                setLabel({mode : "g", msg : "Giocatore aggiunto"});
                 sessionStorage.removeItem("dataFormGiocatore");
                 setInputVal(defaultGioVal);
                 reloadTesserati();
             }
             else{
                 console.log("Errore caricamento giocatore:", result.msg);
+                setLabel({mode : "r", msg : result.msg + ". Giocatore non aggiunto"});
             }
         }
     }
@@ -166,6 +171,9 @@ function FormGiocatore (props){
                         </fieldset>
 
                     </div>
+
+                    <Label onClose = {(prev) => setLabel({msg : "", mode : "0"})} msg = {label.msg} mode = {label.mode} />
+
                     <div className="w3-border w3-margin-top w3-padding-large">
                         <button className="w3-button w3-round w3-red" onClick={(e) => {e.preventDefault(); props.onClose()}}>Chiudi</button>
                         <input className="w3-button w3-round w3-blue w3-right" type = "submit" value ="Aggiungi"/>
