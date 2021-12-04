@@ -1,4 +1,4 @@
-import {useEffect, useState, memo, useContext} from 'react';
+import {useEffect, useState, memo, useContext, useMemo} from 'react';
 import { sessionContext } from '../context';
 import { fetchPost } from '../../functions/useFetch';
 import Label from '../elem/label';
@@ -24,10 +24,16 @@ function FormGiocatore (props){
     const [inputCert, setInputCert] = useState("");
     const[label, setLabel] = useState({mode : "0", msg : ""});
 
-    var displayStyle = { display: "none" }
-    if (props.display) {
-        displayStyle = { display: "block" };
-    }
+    var displayStyle = useMemo(() =>{
+        if (props.display) {
+            return { display: "block" };
+        }
+        return { display: "none" }
+    }, [props.display]);
+
+    useEffect(() => {
+        setLabel({mode : "0", msg : ""});
+    }, [props.display]);
 
     const loadInputVal = useEffect(() => {
         var values = sessionStorage.getItem("dataFormGiocatore");
@@ -71,7 +77,7 @@ function FormGiocatore (props){
 
     const submitForm = async e =>{
         e.preventDefault();
-        console.log(e.target.scadenza, e.target.certificato.files[0]);
+        //console.log(e.target.scadenza, e.target.certificato.files[0]);
         setLabel({mode : "0", msg : ""});
         if(checkForm(e.target, (txt) => {setLabel({mode : "r", msg : txt})})){
             var  result = await fetchPost('/uploadGiocatore', token, inputVal);
@@ -199,7 +205,7 @@ function FormGiocatore (props){
                                 </div>
                                 <div className="w3-third w3-margin-bottom">
                                     <label><b>Carica certificato</b></label>
-                                    <input type="hidden" name="MAX_FILE_SIZE" value="200000"/>
+                                    <input type="hidden" name="MAX_FILE_SIZE" value="4194304"/>
                                     <input className="w3-input" type="file" name="certificato"/>
                                 </div>
                             </div>
@@ -235,7 +241,7 @@ function checkForm(form, setMsg){
     /* campi obbligatori */
     const required_fields = [form.nome, form.cognome, form.data_nascita, form.classe, form.luogo_nascita];
     for(let x in required_fields){
-        console.log(required_fields[x], x);
+        //console.log(required_fields[x], x);
         if(required_fields[x].value == undefined || required_fields[x].value == "" || required_fields[x].value == null){
             required_fields[x].focus();
             setMsg("Campo necessario");

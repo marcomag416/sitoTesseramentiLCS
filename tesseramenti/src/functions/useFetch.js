@@ -98,7 +98,7 @@ export async function fetchPost(url, token, sendData, file){
 	}
 	formData.append("token", token);
 
-    formData.forEach((x, index) =>{console.log(index, x)});
+    //formData.forEach((x, index) =>{console.log(index, x)});
 
 	const data = new Promise(function (resolve) {
 		console.log("fetchPost...", path);

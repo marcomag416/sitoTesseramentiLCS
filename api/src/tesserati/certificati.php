@@ -20,13 +20,20 @@ function caricaFileCertificato($session, $user){
         return array("status" => false, "msg" => "Estensione file non ammessa");
     }
 
-    $is_img = getimagesize($_FILES['fileCertificato']['tmp_name']);
+    /*$is_img = getimagesize($_FILES['fileCertificato']['tmp_name']);
     if (!$is_img) {
         return array("status" => false, "msg" => "File non valido");    
+    }*/
+
+    $allowed_types = array ( 'application/pdf', 'image/jpeg', 'image/png' );
+    $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
+    $detected_type = finfo_file( $fileInfo, $_FILES['fileCertificato']['tmp_name'] );
+    if ( !in_array($detected_type, $allowed_types) ) {
+        return array("status" => false, "msg" => "Il file deve essere un'immagine o pdf");
     }
     
     //percorso della cartella dove mettere i file caricati dagli utenti
-    $uploaddir = ROOTPATH.'\uploads\certificati\ ';
+    $uploaddir = ROOTPATH.'\uploads\certificati\\';
     
     //Recupero il percorso temporaneo del file
     $userfile_tmp = $_FILES['fileCertificato']['tmp_name'];
