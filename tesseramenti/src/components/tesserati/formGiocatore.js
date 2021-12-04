@@ -5,6 +5,7 @@ import Label from '../elem/label';
 import controllaCf from '../../functions/controlloCampi.js';
 import "./form.css";
 import { tesseratiContext } from './tesserati';
+import {MAX_FILE_SIZE, ALLOWED_FILE_TYPES} from '../../config/config.js'
 
 function FormGiocatore (props){
     const [token, setToken, deleteToken] = useContext(sessionContext);
@@ -205,7 +206,7 @@ function FormGiocatore (props){
                                 </div>
                                 <div className="w3-third w3-margin-bottom">
                                     <label><b>Carica certificato</b></label>
-                                    <input type="hidden" name="MAX_FILE_SIZE" value="4194304"/>
+                                    <input type="hidden" name="MAX_FILE_SIZE" value={MAX_FILE_SIZE}/>
                                     <input className="w3-input" type="file" name="certificato"/>
                                 </div>
                             </div>
@@ -259,6 +260,17 @@ function checkForm(form, setMsg){
     }
 
     if(form.certificato.files[0] != undefined){
+        /* controllo dimensione e tipo di file */
+        if(form.certificato.files[0].size > MAX_FILE_SIZE){
+            form.certificato.focus();
+            setMsg("Il file selezionato è troppo grande");
+        }
+
+        if(!form.certificato.files[0].type in ALLOWED_FILE_TYPES){
+            form.certificato.focus();
+            setMsg("Il file del certificato medico deve essere un'immagine o un PDF");
+        }
+
         /* data scedenza certificato med */
         if(form.scadenza.value == "" || form.scadenza.value == null){
             form.scadenza.focus();
