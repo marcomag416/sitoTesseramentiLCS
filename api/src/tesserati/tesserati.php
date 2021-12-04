@@ -67,7 +67,12 @@ function uploadGiocatore($session, $dbConnection){
 	if(!isset($_POST['numero']) && (!is_numeric($_POST['numero']) || $_POST['numero'] > 99 || $_POST['numero'] < 1)){
 		return array("status" => false, "msg" => "Numero di maglia non valido");
 	}
-	$_POST['numero'] = (int)$_POST['numero'];
+	if($_POST['numero'] == ""){
+		$_POST['numero'] = null;
+	}
+	else{
+		$_POST['numero'] = (int)$_POST['numero'];
+	}
 
 	$_POST['taglia'] = strtoupper($_POST['taglia']);
 	if(!isset($_POST['taglia']) && !controllaTaglia($_POST['taglia'])){
