@@ -51,9 +51,6 @@ export default function useToken() {
         }
     }
 
-
-
-
     const updateToken = useEffect(() => {
         setToken(getToken)
         //console.log("Session update:", token);

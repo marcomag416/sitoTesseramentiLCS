@@ -12,7 +12,7 @@ function Label(props){
             default:
                 return "";
         }
-    }, props.mode);
+    }, [props.mode]);
 
     return(
         <div className = {"w3-panel w3-display-container w3-margin " + getColorStyle}  style={props.mode != "0" ? { display: 'block' } : { display: 'none' }}>
