@@ -55,6 +55,10 @@ function uploadGiocatore($session, $dbConnection){
 		return array("status" => false, "msg" => "Campi obbligatori mancanti");
 	}
 
+	if($_POST['cf'] == "" || $_POST['nome'] == "" || $_POST['cognome'] == "" || $_POST['classe'] == "" || $_POST['luogo_nascita'] == ""){
+		return array("status" => false, "msg" => "Campi obbligatori mancanti");
+	}
+
 	$_POST['cf'] = strtoupper($_POST['cf']);
 	if(!controlloCodiceFiscale($_POST['cf'])){
 		return array("status" => false, "msg" => "Codice fiscale non valido");

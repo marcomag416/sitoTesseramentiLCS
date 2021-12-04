@@ -8,6 +8,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 require_once "../bootstrap.php";
 require_once "../src/system/sessionCheck.php";
 require_once "../src/tesserati/tesserati.php";
+require_once "../src/tesserati/certificati.php";
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode( '/', $uri );
@@ -73,6 +74,10 @@ if($uri[1] == 'uploadGiocatore'){
 if($uri[1] == 'deleteGiocatore'){
 	echo json_encode(deleteGiocatore($session, $dbConnection));
 	exit();
+}
+
+if($uri[1] == 'uploadCertificatoDati'){
+	echo json_encode(uploadCertificatoDati($session, $dbConnection));
 }
 
 ?>

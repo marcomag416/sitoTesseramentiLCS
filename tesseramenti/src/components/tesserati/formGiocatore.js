@@ -14,13 +14,14 @@ function FormGiocatore (props){
         nome : "",
         cognome : "",
         data_nascita : "",
-        comune_nascita : "",
+        luogo_nascita : "",
         classe : "",
         numero : "",
         taglia : "",
         ruolo : "",
     };
     const [inputVal, setInputVal] = useState(defaultGioVal);
+    const [inputCert, setInputCert] = useState("");
     const[label, setLabel] = useState({mode : "0", msg : ""});
 
     var displayStyle = { display: "none" }
@@ -35,6 +36,11 @@ function FormGiocatore (props){
             setInputVal(values);
             console.log("stored data: ", values);
         }
+        var valCert = sessionStorage.getItem("dataCertificato");
+        if(valCert != "" && valCert != null){
+            valCert = JSON.parse(valCert);
+            setInputCert(valCert);
+        }
     }, [])
 
     useEffect(() => {
@@ -42,16 +48,45 @@ function FormGiocatore (props){
         //console.log(sessionStorage.getItem("dataFormGiocatore"));
     }, [inputVal])
 
+    useEffect(() =>{
+        sessionStorage.setItem("dataCertificato", JSON.stringify(inputCert));
+    }, [inputCert]);
+
+    const inviaCertificato = async cert =>{
+        if(inputCert == null || inputCert == ""){
+            console.log("Data di scadenza certificato mancante");
+            return;
+        }
+        const sendData = {scadenza : inputCert, fileCertificato : cert.files[0], cf : inputVal.cf, nome : inputVal.nome, cognome : inputVal.cognome, data_nascita : inputVal.data_nascita};
+        var result = await fetchPost('/uploadCertificatoDati', token, sendData);
+        if(result.status){
+            console.log("Certificato caricato con successo");
+            setLabel({mode : "g", msg : label.msg + " Certificato medico caricato"});
+        }
+        else{
+            console.log("Errore caricamento certificato:", result.msg);
+            setLabel({mode : "r", msg : label.msg + " Errore caricamento certificato : giocatore aggiunto senza certificato medico"});
+        }
+    }
+
     const submitForm = async e =>{
         e.preventDefault();
+        console.log(e.target.scadenza, e.target.certificato.files[0]);
         setLabel({mode : "0", msg : ""});
         if(checkForm(e.target, (txt) => {setLabel({mode : "r", msg : txt})})){
             var  result = await fetchPost('/uploadGiocatore', token, inputVal);
             if(result.status){
                 console.log("Giocatore caricato con successo");
-                setLabel({mode : "g", msg : "Giocatore aggiunto"});
+                if(e.target.certificato.files[0] != undefined){
+                    setLabel({mode : "g", msg : "Giocatore aggiunto."});
+                    inviaCertificato(e.target.certificato);
+                }
+                else{
+                    setLabel({mode : "g", msg : "Giocatore aggiunto senza certificato medico"});
+                }
                 sessionStorage.removeItem("dataFormGiocatore");
                 setInputVal(defaultGioVal);
+                setInputCert("");
                 reloadTesserati();
             }
             else{
@@ -160,11 +195,11 @@ function FormGiocatore (props){
                             <div className="w3-row-padding">
                                 <div className="w3-third w3-margin-bottom">
                                     <label><b>Scadenza certificato</b></label>
-                                    <input className="w3-input w3-border w3-round w3-light-grey" type="date" name="scadenza"  /*value={getInputValue("scadenza")} onChange={handleInputChange}*/ min={d.toISOString().slice(0, 10)} />
+                                    <input className="w3-input w3-border w3-round w3-light-grey" type="date" name="scadenza"  value={inputCert} onChange={(e) => setInputCert(e.target.value)} min={d.toISOString().slice(0, 10)} />
                                 </div>
                                 <div className="w3-third w3-margin-bottom">
                                     <label><b>Carica certificato</b></label>
-                                    <input type="hidden" name="MAX_FILE_SIZE" value="300000"/>
+                                    <input type="hidden" name="MAX_FILE_SIZE" value="200000"/>
                                     <input className="w3-input" type="file" name="certificato"/>
                                 </div>
                             </div>
@@ -192,7 +227,7 @@ function checkForm(form, setMsg){
         return false;
     }
     /* numero maglia */
-    if(form.numero != "" && (form.numero < 1 || form.numero > 99)){
+    if(form.numero.value != "" && (form.numero.value < 1 || form.numero.value > 99)){
         form.numero.focus();
         setMsg("Numero maglia non valido")
         return false;
@@ -201,7 +236,7 @@ function checkForm(form, setMsg){
     const required_fields = [form.nome, form.cognome, form.data_nascita, form.classe, form.luogo_nascita];
     for(let x in required_fields){
         console.log(required_fields[x], x);
-        if(required_fields[x] == undefined || required_fields[x] == "" || required_fields[x] == null){
+        if(required_fields[x].value == undefined || required_fields[x].value == "" || required_fields[x].value == null){
             required_fields[x].focus();
             setMsg("Campo necessario");
             return false;
@@ -209,7 +244,7 @@ function checkForm(form, setMsg){
     }
     /* data nascita */
     const dataOggi = Date.parse(new Date);
-    var d = Date.parse(new Date(form.data_nascita));
+    var d = Date.parse(new Date(form.data_nascita.value));
     /* meno di 10 anni*/
     if(d + 315360000000 > dataOggi){  
         form.data_nascita.focus();
@@ -217,15 +252,21 @@ function checkForm(form, setMsg){
         return false;
     }
 
-    /* data scedenza certificato med */
-    if(form.scadenza != ""){
-        var d = Date.parse(new Date(form.scadenza));
+    if(form.certificato.files[0] != undefined){
+        /* data scedenza certificato med */
+        if(form.scadenza.value == "" || form.scadenza.value == null){
+            form.scadenza.focus();
+            setMsg("Inserisci la data di scadenza del certificato medico");
+            return false;
+        }
+        var d = Date.parse(new Date(form.scadenza.value));
         if(d < dataOggi){
             form.scadenza.focus();
-            setMsg("Certificato medico scaduto");
+            setMsg("Data di scadenza certificato medico non valida");
             return false;
         }
     }
+    
     return true;
 }
 
