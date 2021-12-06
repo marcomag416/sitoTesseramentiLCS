@@ -6,6 +6,7 @@ import controllaCf from '../../functions/controlloCampi.js';
 import "./form.css";
 import { tesseratiContext } from './tesserati';
 import {MAX_FILE_SIZE, ALLOWED_FILE_TYPES} from '../../config/config.js'
+import LoadIcon from '../elem/loadIcon';
 
 function FormGiocatore (props){
     const [token, setToken, deleteToken] = useContext(sessionContext);
@@ -24,6 +25,7 @@ function FormGiocatore (props){
     const [inputVal, setInputVal] = useState(defaultGioVal);
     const [inputCert, setInputCert] = useState("");
     const[label, setLabel] = useState({mode : "0", msg : ""});
+    const [loading, setLoading] = useState(false);
 
     var displayStyle = useMemo(() =>{
         if (props.display) {
@@ -68,7 +70,7 @@ function FormGiocatore (props){
         var result = await fetchPost('/uploadCertificatoDati', token, sendData);
         if(result.status){
             console.log("Certificato caricato con successo");
-            setLabel({mode : "g", msg : label.msg + " Certificato medico caricato"});
+            setLabel({mode : "g", msg : label.msg + " Giocatore aggiunto con certificato medico"});
         }
         else{
             console.log("Errore caricamento certificato:", result.msg);
@@ -80,6 +82,7 @@ function FormGiocatore (props){
         e.preventDefault();
         setLabel({mode : "0", msg : ""});
         if(checkForm(e.target, (txt) => {setLabel({mode : "r", msg : txt})})){
+            setLoading(true);
             var  result = await fetchPost('/uploadGiocatore', token, inputVal);
             if(result.status){
                 console.log("Giocatore caricato con successo");
@@ -99,6 +102,7 @@ function FormGiocatore (props){
                 console.log("Errore caricamento giocatore:", result.msg);
                 setLabel({mode : "r", msg : result.msg + ". Giocatore non aggiunto"});
             }
+            setLoading(false);
         }
     }
 
@@ -219,6 +223,7 @@ function FormGiocatore (props){
                         <button className="w3-button w3-round w3-red" onClick={(e) => {e.preventDefault(); props.onClose()}}>Chiudi</button>
                         <input className="w3-button w3-round w3-blue w3-right" type = "submit" value ="Aggiungi"/>
                     </div>
+                    {loading ? <LoadIcon show={true}/> : null}
                 </form>
             </div>
         </div>
