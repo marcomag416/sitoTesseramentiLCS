@@ -1,4 +1,4 @@
-select * from (Select gio.id, gio.cf as cf, gio.nome, gio.cognome, gio.classe, gio.data_nascita, gio.luogo_nascita, gio.ruolo, gio.taglia, gio.numero_maglia, max(cmed.scadenza)as scadenza FROM sessioni sess
+select distinct * from (Select gio.id, gio.cf as cf, gio.nome, gio.cognome, gio.classe, gio.data_nascita, gio.luogo_nascita, gio.ruolo, gio.taglia, gio.numero_maglia, max(cmed.scadenza)as scadenza FROM sessioni sess
 inner join amministratori amm on amm.id = sess.id_amministratore and sess.token = :token
 inner join squadre sq on amm.id_squadra = sq.id,
 g_tesserati gtess
