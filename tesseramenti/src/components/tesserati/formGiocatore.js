@@ -78,7 +78,6 @@ function FormGiocatore (props){
 
     const submitForm = async e =>{
         e.preventDefault();
-        //console.log(e.target.scadenza, e.target.certificato.files[0]);
         setLabel({mode : "0", msg : ""});
         if(checkForm(e.target, (txt) => {setLabel({mode : "r", msg : txt})})){
             var  result = await fetchPost('/uploadGiocatore', token, inputVal);
@@ -264,11 +263,13 @@ function checkForm(form, setMsg){
         if(form.certificato.files[0].size > MAX_FILE_SIZE){
             form.certificato.focus();
             setMsg("Il file selezionato è troppo grande");
+            return false;
         }
 
         if(!form.certificato.files[0].type in ALLOWED_FILE_TYPES){
             form.certificato.focus();
             setMsg("Il file del certificato medico deve essere un'immagine o un PDF");
+            return false;
         }
 
         /* data scedenza certificato med */
