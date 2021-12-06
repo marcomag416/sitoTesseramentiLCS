@@ -70,7 +70,8 @@ function FormGiocatore (props){
         var result = await fetchPost('/uploadCertificatoDati', token, sendData);
         if(result.status){
             console.log("Certificato caricato con successo");
-            setLabel({mode : "g", msg : label.msg + " Giocatore aggiunto con certificato medico"});
+            setLabel({mode : "g", msg : label.msg + " Giocatore aggiunto correttamente con certificato medico"});
+            cert.value = "";
         }
         else{
             console.log("Errore caricamento certificato:", result.msg);
