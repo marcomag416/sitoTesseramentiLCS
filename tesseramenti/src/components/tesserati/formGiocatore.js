@@ -224,7 +224,7 @@ function FormGiocatore (props){
                         <button className="w3-button w3-round w3-red" onClick={(e) => {e.preventDefault(); props.onClose()}}>Chiudi</button>
                         <input className="w3-button w3-round w3-blue w3-right" type = "submit" value ="Aggiungi"/>
                     </div>
-                    {loading ? <LoadIcon show={true}/> : null}
+                    <LoadIcon show={loading}/>
                 </form>
             </div>
         </div>
