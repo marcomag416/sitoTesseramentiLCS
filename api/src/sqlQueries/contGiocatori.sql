@@ -1,0 +1,1 @@
+select count(*) as cont from giocatori gio, stagioni stag inner join g_tesserati gtess on gtess.id_stagione = stag.id and stag.id = :idstagione where gio.id_squadra = :idsquadra and gio.id = gtess.id_giocatore group by gio.id_squadra;
