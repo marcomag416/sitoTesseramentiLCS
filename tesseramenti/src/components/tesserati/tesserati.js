@@ -4,7 +4,7 @@ import './tesserati.css';
 import FormGiocatore from './formGiocatore.js';
 import {fetchPost, useFetch} from '../../functions/useFetch.js';
 import { sessionContext } from '../context';
-/*import ReactDOM from 'react-dom';*/
+import LoadIcon from '../elem/loadIcon';
 
 //import { MDCDataTable } from '@material/data-table';
 /*const dataTable = new MDCDataTable(document.querySelector('.mdc-data-table'));*/
@@ -13,6 +13,7 @@ export const tesseratiContext = createContext();
 
 function Tesserati (props){
     const [form, setForm] = useState(0);
+    const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState("");
     const [token, setToken, deleteToken] = useContext(sessionContext);
     const [reload, setReload] = useState(true);
@@ -42,6 +43,7 @@ function Tesserati (props){
     }
 
     useEffect(() => {
+        setLoading(true);
         if (fetchGio[0].status && fetchGio[0].vett != undefined) {
             var vett = fetchGio[0].vett;
             let scadenza;
@@ -49,7 +51,6 @@ function Tesserati (props){
             const gg10 = 864000000; /* millsec in 10 gg */
             vett.forEach((x, index) => {
                 //x.id = index;
-                x.cm = 1; /* cert med sempre valido */
                 x.t = 0; /* giocatore */
                 if(x.scadenza == null){
                     x.cm = 4; /* cert mancante */
@@ -57,7 +58,7 @@ function Tesserati (props){
                 else{
                     scadenza = Date.parse(new Date(x.scadenza));
                     if(scadenza > dataOggi + gg10){
-                        if(x.fisico){
+                        if(x.fisico == 1){
                             x.cm = 0;  /* cartaceo */
                         }
                         else{
@@ -72,13 +73,16 @@ function Tesserati (props){
                     }
                 }
             });
-            console.log("giocatori caricati: ", vett);
+            console.log(vett.length, "giocatori caricati: ", vett);
             setTesserati(vett);
+            if(tesserati.length >= 20){
+                setForm(0);
+            }
         }
         else {
             console.log("Errore caricamento giocatori");
-
         }
+        setLoading(false);
     }, [fetchGio]);
 
     return (
@@ -91,15 +95,16 @@ function Tesserati (props){
                         <input className="w3-input w3-quarter w3-right" type="text" placeholder="Cerca" value={search} onChange={(e) => { setSearch(e.target.value) } }/>
                     </div>
                     <div className="w3-padding">
-                        <Tabella search={search} tesserati={tesserati} />
+                        <Tabella search={search} tesserati={tesserati}/>
                     </div>
                 </div>
                 <div className="w3-bar w3-right-align">
                     <button className="w3-button w3-blue w3-round w3-margin w3-mobile w3-left" onClick={() => reloadTesserati()}>Ricarica</button>
-                    <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm('g')} {...() => {if(tesserati.lenght >= 20){return "disabled";}}}>Aggiungi giocatore</button>
-                    <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm('d')} disabled>Aggiungi dirigente</button>
+                    <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm('g')} disabled = {tesserati.length >= 20 ? true : false}>Aggiungi giocatore</button>
+                    <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm('d')} disabled = {true}>Aggiungi dirigente</button>
                 </div>
             </tesseratiContext.Provider>
+            <LoadIcon show={loading} />
         </div>
     );
 
