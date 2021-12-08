@@ -57,8 +57,8 @@ function ModificaGiocatore (props){
         props.onClose();
     }
 
-    const inviaCertificato = async (cert, idgiocatore) =>{
-        if(inputCert == null || inputCert == ""){
+    const inviaCertificato = async e =>{
+        if(!checkCertificato(e.target, (txt) => {setLabel({mode : "r", msg : txt})} )){
             console.log("Data di scadenza certificato mancante");
             return;
         }
@@ -254,35 +254,43 @@ function checkForm(form, setMsg){
         setMsg("Data di nascita non valida");
         return false;
     }
-
-    if(form.certificato.files[0] != undefined){
-        /* controllo dimensione e tipo di file */
-        if(form.certificato.files[0].size > MAX_FILE_SIZE){
-            form.certificato.focus();
-            setMsg("Il file selezionato è troppo grande");
-            return false;
-        }
-
-        if(!form.certificato.files[0].type in ALLOWED_FILE_TYPES){
-            form.certificato.focus();
-            setMsg("Il file del certificato medico deve essere un'immagine o un PDF");
-            return false;
-        }
-
-        /* data scedenza certificato med */
-        if(form.scadenza.value == "" || form.scadenza.value == null){
-            form.scadenza.focus();
-            setMsg("Inserisci la data di scadenza del certificato medico");
-            return false;
-        }
-        var d = Date.parse(new Date(form.scadenza.value));
-        if(d < dataOggi){
-            form.scadenza.focus();
-            setMsg("Data di scadenza certificato medico non valida");
-            return false;
-        }
-    }
     
+    return true;
+}
+
+function checkCertificato(form, setMsg){
+    if(form.certificato.files[0] == undefined){
+        form.certificato.focus();
+        setMsg("Seleziona un file");
+        return false;
+    }
+
+    /* controllo dimensione e tipo di file */
+    if(form.certificato.files[0].size > MAX_FILE_SIZE){
+        form.certificato.focus();
+        setMsg("Il file selezionato è troppo grande");
+        return false;
+    }
+
+    if(!form.certificato.files[0].type in ALLOWED_FILE_TYPES){
+        form.certificato.focus();
+        setMsg("Il file del certificato medico deve essere un'immagine o un PDF");
+        return false;
+    }
+
+    /* data scedenza certificato med */
+    if(form.scadenza.value == "" || form.scadenza.value == null){
+        form.scadenza.focus();
+        setMsg("Inserisci la data di scadenza del certificato medico");
+        return false;
+    }
+    var d = Date.parse(new Date(form.scadenza.value));
+    if(d < dataOggi){
+        form.scadenza.focus();
+        setMsg("Data di scadenza certificato medico non valida");
+        return false;
+    }
+
     return true;
 }
 
