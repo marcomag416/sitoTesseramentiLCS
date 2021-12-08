@@ -6,7 +6,8 @@ function contaTesserati($session, $dbConnection){
 	$stm->bindValue(":idstagione", $session['idstagione'], PDO::PARAM_INT);
 	$stm->execute();
 
-	
+	$row = $stm->fetch(PDO::FETCH_ASSOC);
+	return $row['cont'];
 }
 
 function leggiTesserati($token, $dbConnection){
@@ -104,6 +105,10 @@ function uploadGiocatore($session, $dbConnection){
 
 	if(strlen($_POST['classe']) > 8){
 		return array("status" => false, "msg" => "Classe non valida");
+	}
+
+	if(contaTesserati($session, $dbConnection) >= 20){
+		return array("status" => false, "msg" => "Raggiunto il numero massimo di giocatori");
 	}
 
 
