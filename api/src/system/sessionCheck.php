@@ -1,9 +1,10 @@
 <?php
 
 function sessionCheck($token, $dbConnection){
-	$stm = $dbConnection -> prepare("select amm.id, amm.mail, sq.nome as squadra, sq.id as idsquadra, stag.nome as stagione, stag.id as idstagione, leghe.nome as lega  from amministratori as amm, sessioni as sess, squadre as sq, stagioni as stag, leghe where amm.id_squadra = sq.id and amm.id_stagione = stag.id and sq.id_lega = leghe.id and stag.scadenza > CURRENT_DATE and sess.id_amministratore = amm.id and (sess.ultimo_accesso + ?) > CURRENT_TIMESTAMP and sess.token = ? order by amm.id");
-	$stm->bindValue(1, 2000000);
-	$stm->bindValue(2, $token);
+	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\selectSessionInfo.sql");
+	$stm = $dbConnection -> prepare($sql);
+	$stm->bindValue(":scadenzaSess", 2000000);
+	$stm->bindValue(":token", $token);
 	$stm->execute();
 
 	if($stm->rowCount() == 1){

@@ -1,4 +1,14 @@
 <?php
+function contaTesserati($session, $dbConnection){
+	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\contGiocatori.sql");
+	$stm = $dbConnection -> prepare($sql);
+	$stm->bindValue(":idsquadra", $session['idsquadra'], PDO::PARAM_INT);
+	$stm->bindValue(":idstagione", $session['idstagione'], PDO::PARAM_INT);
+	$stm->execute();
+
+	
+}
+
 function leggiTesserati($token, $dbConnection){
 	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\selectGiocatori.sql");
 	$stm = $dbConnection -> prepare($sql);
