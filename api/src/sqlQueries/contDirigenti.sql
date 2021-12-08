@@ -1,0 +1,1 @@
+select count(*) as cont from dirigenti dir, stagioni stag inner join d_tesserati dtess on dtess.id_stagione = stag.id and stag.id = :idstagione where dir.id_squadra = :idsquadra and dir.id = dtess.id_giocatore group by dir.id_squadra;
