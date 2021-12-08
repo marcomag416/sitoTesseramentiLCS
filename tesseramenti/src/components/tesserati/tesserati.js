@@ -92,6 +92,7 @@ function Tesserati (props){
                 <FormGiocatore onClose={() => closeForm()} display={form == 'g'}/>
                 <div className = "w3-white">
                     <div className="w3-bar w3-margin-top w3-margin-bottom w3-padding-large">
+                        <button className="w3-button w3-light-grey w3-round w3-margin-left w3-right" onClick={() => reloadTesserati()} ><i className="material-icons w3-large">refresh</i></button>
                         <input className="w3-input w3-quarter w3-right" type="text" placeholder="Cerca" value={search} onChange={(e) => { setSearch(e.target.value) } }/>
                     </div>
                     <div className="w3-padding">
@@ -99,7 +100,6 @@ function Tesserati (props){
                     </div>
                 </div>
                 <div className="w3-bar w3-right-align">
-                    <button className="w3-button w3-blue w3-round w3-margin w3-mobile w3-left" onClick={() => reloadTesserati()}>Ricarica</button>
                     <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm('g')} disabled = {tesserati.length >= 20 ? true : false}>Aggiungi giocatore</button>
                     <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm('d')} disabled = {true}>Aggiungi dirigente</button>
                 </div>
@@ -120,11 +120,12 @@ function Tabella(props) {
                     <tr >
                         <th></th>
                         <th>Codice Fiscale</th>
-                        <th>Cognome</th>
                         <th>Nome</th>
+                        <th>Cognome</th>
                         <th>Certificato Medico</th>
                         <th>Taglia</th>
                         <th>N. Maglia</th>
+                        <th>Ruolo</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -178,8 +179,9 @@ function Dirigente(dirigente) {
         <tr className="w3-hover-light-grey testo-centrale">
             <td className="w3-tooltip">{IconaTesserato(1)}</td>
             <td>{dirigente.cf}</td>
-            <td>{dirigente.cognome}</td>
             <td>{dirigente.nome}</td>
+            <td>{dirigente.cognome}</td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -196,15 +198,27 @@ function Giocatore(giocatore) {
         <tr className="w3-hover-light-grey testo-centrale">
             <td className="w3-tooltip">{IconaTesserato(0)}</td>
             <td>{giocatore.cf}</td>
-            <td>{giocatore.cognome}</td>
             <td>{giocatore.nome}</td>
-            <td className="w3-tooltip">{IconaCertificatoMedico(giocatore.cm)}</td>
+            <td>{giocatore.cognome}</td>
+            <td className="w3-tooltip">{IconaCertificatoMedico(giocatore.cm)}{StampaScadenza(giocatore.scadenza)}</td>
             <td>{giocatore.taglia}</td>
             <td>{giocatore.numero_maglia}</td>
+            <td>{giocatore.ruolo}</td>
             <td className="w3-center"><button className="w3-button w3-small w3-blue w3-round ">Modifica</button></td>
             <td><button className="w3-button w3-red w3-round w3-padding-small" onClick={() => deleteGiocatore(giocatore.id, token, reloadTesserati)} ><i className="material-icons w3-large">delete</i></button></td>
         </tr>
         )
+}
+
+function StampaScadenza(scadenza){
+    if(scadenza == null){
+        return(null);
+    }
+    return(
+        <h7 style ={{paddingLeft : '5px'}} >
+            {scadenza.slice(8, 10)}/{scadenza.slice(5, 7)}/{scadenza.slice(0, 4)}
+        </h7>
+    );
 }
 
 function IconaCertificatoMedico(cm) {
