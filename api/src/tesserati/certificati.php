@@ -57,6 +57,7 @@ function caricaFileCertificato($session, $user){
 }
 
 function uploadCertificatoDati($session, $dbConnection){
+    /* Controllo preliminare dati caricati */
     if(!isset($_POST['cf']) || !isset($_POST['nome']) ||!isset($_POST['cognome']) || !isset($_POST['data_nascita'])){
 		return array("status" => false, "msg" => "Dati Giocatore mancanti");
 	}
@@ -64,18 +65,21 @@ function uploadCertificatoDati($session, $dbConnection){
         return array("status" => false, "msg" => "Dati Giocatore mancanti");
     }
 
+    /* Manipolazione dati giocatore */
     $_POST['nome'] = ucwords(strtolower($_POST['nome']));
 	$_POST['cognome'] = ucwords(strtolower($_POST['cognome']));
     $_POST['cf'] = strtoupper($_POST['cf']);
 
     $user = array("cf" => $_POST['cf'], "nome" => $_POST['nome'], "cognome" => $_POST['cognome'], "data_nascita" => $_POST['data_nascita']);
 
+    /* Carico file certificato */
     $fileStatus = caricaFileCertificato($session, $user);
 
     if(!$fileStatus['status']){
         return $fileStatus;
     }
 
+    /* Inserisco certificato nel database */
     $sql = file_get_contents(ROOTPATH."\src\sqlQueries\insertCertificatoFromData.sql");
 	$stm = $dbConnection -> prepare($sql);
 	$stm->bindValue(":cf", $user['cf'], PDO::PARAM_STR);
@@ -85,7 +89,64 @@ function uploadCertificatoDati($session, $dbConnection){
     $stm->bindValue(":idsquadra", $session['idsquadra'], PDO::PARAM_INT);
 	$stm->bindValue(":nomefile", $fileStatus['filename'], PDO::PARAM_STR);
 	$stm->bindValue(":scadenza", $_POST['scadenza'], PDO::PARAM_STR);
-	$stm->execute();
+    try{
+		$stm->execute();
+	}catch (\PDOException $e) {
+		$errmsg = $e->getMessage();
+		return array("status" => false, "msg" => "Errore sql : $errmsg");
+	}
+
+    return array("status" => true, "msg" => "Certificato medico aggiunto");
+}
+
+function uploadCertificatoID($session, $dbConnection){
+    /* Controllo preliminare dati caricati */
+    if(!isset($_POST['idgiocatore']) || $_POST['idgiocatore'] == ""){
+        return array("status" => false, "msg" => "Id giocatore mancante");
+    }
+
+    /* Recupero informazioni giocatore  */
+    $sql = file_get_contents(ROOTPATH."\src\sqlQueries\selectGiocatoreById.sql");
+	$stm = $dbConnection -> prepare($sql);
+	$stm->bindValue(":idgiocatore", $_POST['idgiocatore'], PDO::PARAM_INT);
+    $stm->bindValue(":idsquadra", $session['idsquadra'], PDO::PARAM_INT);
+    $stm->bindValue(":idstagione", $session['idstagione'], PDO::PARAM_INT);
+    try{
+		$stm->execute();
+	}catch (\PDOException $e) {
+		$errmsg = $e->getMessage();
+		return array("status" => false, "msg" => "Errore sql : $errmsg");
+	}
+
+    if($stm->rowCount() != 1){
+        return array("status" => false, "msg" => "Autorizzazione negata");
+    }
+
+    $tmp = $stm->fetch(PDO::FETCH_ASSOC);
+    $user['cf'] = $tmp['cf'];
+    $user['nome'] = $tmp['nome'];
+    $user['cognome'] = $tmp['cognome'];
+    $user['data_nascita'] = $tmp['data_nascita'];
+
+    /* Carico file certificato */
+    $fileStatus = caricaFileCertificato($session, $user);
+
+    if(!$fileStatus['status']){
+        return $fileStatus;
+    }
+
+    /* Inserisco certificato nel database */
+    $sql = file_get_contents(ROOTPATH."\src\sqlQueries\insertCertificatoFromId.sql");
+	$stm = $dbConnection -> prepare($sql);
+    $stm->bindValue(":idgiocatore", $_POST['idgiocatore'], PDO::PARAM_INT);
+	$stm->bindValue(":nomefile", $fileStatus['filename'], PDO::PARAM_STR);
+	$stm->bindValue(":scadenza", $_POST['scadenza'], PDO::PARAM_STR);
+    try{
+		$stm->execute();
+	}catch (\PDOException $e) {
+		$errmsg = $e->getMessage();
+		return array("status" => false, "msg" => "Errore sql 2 : $errmsg");
+	}
 
     return array("status" => true, "msg" => "Certificato medico aggiunto");
 }

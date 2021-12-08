@@ -80,4 +80,8 @@ if($uri[1] == 'uploadCertificatoDati'){
 	echo json_encode(uploadCertificatoDati($session, $dbConnection));
 }
 
+if($uri[1] == 'uploadCertificatoId'){
+	echo json_encode(uploadCertificatoId($session, $dbConnection));
+}
+
 ?>

@@ -125,9 +125,15 @@ function uploadGiocatore($session, $dbConnection){
 	$stm->bindValue(":ruolo", $_POST['ruolo'], PDO::PARAM_STR);
 	$stm->bindValue(":luogo_nascita", $_POST['luogo_nascita'], PDO::PARAM_STR);
 	$stm->bindValue(":data_nascita", $_POST['data_nascita'], PDO::PARAM_STR);
-	$stm->execute();
+	try{
+		$stm->execute();
+	}catch (\PDOException $e) {
+		$errmsg = $e->getMessage();
+		return array("status" => false, "msg" => "Errore sql : $errmsg");
+	}
+	$lastId = $dbConnection->lastInsertId();
 
-	return array("status" => true, "msg" => "Giocatore inserito");
+	return array("status" => true, "msg" => "Giocatore inserito", "idgiocatore" => $lastId);
 }
 
 function controllaTaglia($t){

@@ -61,17 +61,16 @@ function FormGiocatore (props){
         sessionStorage.setItem("dataCertificato", JSON.stringify(inputCert));
     }, [inputCert]);
 
-    const inviaCertificato = async cert =>{
+    const inviaCertificato = async (cert, idgiocatore) =>{
         if(inputCert == null || inputCert == ""){
             console.log("Data di scadenza certificato mancante");
             return;
         }
-        const sendData = {scadenza : inputCert, fileCertificato : cert.files[0], cf : inputVal.cf, nome : inputVal.nome, cognome : inputVal.cognome, data_nascita : inputVal.data_nascita};
-        var result = await fetchPost('/uploadCertificatoDati', token, sendData);
+        const sendData = {scadenza : inputCert, fileCertificato : cert.files[0], idgiocatore : idgiocatore};
+        var result = await fetchPost('/uploadCertificatoId', token, sendData);
         if(result.status){
             console.log("Certificato caricato con successo");
             setLabel({mode : "g", msg : label.msg + " Giocatore aggiunto correttamente con certificato medico"});
-            cert.value = "";
         }
         else{
             console.log("Errore caricamento certificato:", result.msg);
@@ -86,10 +85,10 @@ function FormGiocatore (props){
             setLoading(true);
             var  result = await fetchPost('/uploadGiocatore', token, inputVal);
             if(result.status){
-                console.log("Giocatore caricato con successo");
+                console.log("Giocatore caricato con successo", result.idgiocatore);
                 if(e.target.certificato.files[0] != undefined){
                     setLabel({mode : "g", msg : "Giocatore aggiunto."});
-                    inviaCertificato(e.target.certificato);
+                    await inviaCertificato(e.target.certificato, result.idgiocatore);
                 }
                 else{
                     setLabel({mode : "g", msg : "Giocatore aggiunto senza certificato medico"});
@@ -97,6 +96,7 @@ function FormGiocatore (props){
                 sessionStorage.removeItem("dataFormGiocatore");
                 setInputVal(defaultGioVal);
                 setInputCert("");
+                e.target.certificato.value = "";
                 reloadTesserati();
             }
             else{
