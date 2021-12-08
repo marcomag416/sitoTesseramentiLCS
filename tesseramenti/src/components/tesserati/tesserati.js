@@ -2,6 +2,7 @@ import { useEffect, useState, memo, useCallback, useContext, createContext } fro
 import React from 'react';
 import './tesserati.css';
 import FormGiocatore from './formGiocatore.js';
+import ModificaGiocatore from './modificaGiocatore.js';
 import {fetchPost, useFetch} from '../../functions/useFetch.js';
 import { sessionContext } from '../context';
 import LoadIcon from '../elem/loadIcon';
@@ -12,7 +13,7 @@ import LoadIcon from '../elem/loadIcon';
 export const tesseratiContext = createContext();
 
 function Tesserati (props){
-    const [form, setForm] = useState(0);
+    const [form, setForm] = useState({m : 0, value : null});
     const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState("");
     const [token, setToken, deleteToken] = useContext(sessionContext);
@@ -35,7 +36,7 @@ function Tesserati (props){
     ]);*/
 
     const closeForm = useCallback(() => {
-            setForm(0);
+            setForm({m : 0, value : null});
         }, []);
     
     const reloadTesserati = () =>{
@@ -88,8 +89,9 @@ function Tesserati (props){
     return (
         <div className="w3-container">
             <h2>Tesserati</h2>
-            <tesseratiContext.Provider value={[reloadTesserati]}>
-                <FormGiocatore onClose={() => closeForm()} display={form == 'g'}/>
+            <tesseratiContext.Provider value={[reloadTesserati, setForm]}>
+                <FormGiocatore onClose={() => closeForm()} display={form.m == 'g'}/>
+                <ModificaGiocatore onClose={() => closeForm()} display={form.m == 'mg'} giocatore = {form.value}/>
                 <div className = "w3-white">
                     <div className="w3-bar w3-margin-top w3-margin-bottom w3-padding-large">
                         <button className="w3-button w3-light-grey w3-round w3-margin-left w3-right" onClick={() => reloadTesserati()} ><i className="material-icons w3-large">refresh</i></button>
@@ -100,8 +102,8 @@ function Tesserati (props){
                     </div>
                 </div>
                 <div className="w3-bar w3-right-align">
-                    <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm('g')} disabled = {tesserati.length >= 20 ? true : false}>Aggiungi giocatore</button>
-                    <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm('d')} disabled = {true}>Aggiungi dirigente</button>
+                    <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm({m : 'g', value: null})} disabled = {tesserati.length >= 20 ? true : false}>Aggiungi giocatore</button>
+                    <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm({m : 'd', value: null})} disabled = {true}>Aggiungi dirigente</button>
                 </div>
             </tesseratiContext.Provider>
             <LoadIcon show={loading} />
@@ -193,7 +195,7 @@ function Dirigente(dirigente) {
 
 function Giocatore(giocatore) {
     const [token, setToken, deleteToken] = useContext(sessionContext);
-    const [reloadTesserati] = useContext(tesseratiContext);
+    const [reloadTesserati, setForm] = useContext(tesseratiContext);
     return (
         <tr className="w3-hover-light-grey testo-centrale">
             <td className="w3-tooltip">{IconaTesserato(0)}</td>
@@ -204,7 +206,7 @@ function Giocatore(giocatore) {
             <td>{giocatore.taglia}</td>
             <td>{giocatore.numero_maglia}</td>
             <td>{giocatore.ruolo}</td>
-            <td className="w3-center"><button className="w3-button w3-small w3-blue w3-round ">Modifica</button></td>
+            <td className="w3-center"><button className="w3-button w3-small w3-blue w3-round" onClick={() => setForm({m : "mg", value : giocatore})} >Modifica</button></td>
             <td><button className="w3-button w3-red w3-round w3-padding-small" onClick={() => deleteGiocatore(giocatore.id, token, reloadTesserati)} ><i className="material-icons w3-large">delete</i></button></td>
         </tr>
         )
@@ -215,9 +217,9 @@ function StampaScadenza(scadenza){
         return(null);
     }
     return(
-        <h7 style ={{paddingLeft : '5px'}} >
+        <font style ={{paddingLeft : '5px'}} >
             {scadenza.slice(8, 10)}/{scadenza.slice(5, 7)}/{scadenza.slice(0, 4)}
-        </h7>
+        </font>
     );
 }
 
