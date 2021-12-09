@@ -18,8 +18,7 @@ class Login extends React.Component {
                 <div className="w3-card-4 w3-content w3-container" style={{width:"25%", minWidth:"300px"}}>
 
                     <div className="w3-center"><br/>
-                        <img src="logoMolecup.png" alt="Logo" style={{ width: "30%" , maxWidth:"150px"}} className="w3-circle w3-margin-top"/>
-                        <img src="logoMolecup.png" alt="Logo" style={{ width: "30%" , maxWidth: "150px" }} className="w3-circle w3-margin-top"/>
+                        <img src="logoMolecup.png" alt="Logo Molecup" style={{ width: "35%" , maxWidth:"150px"}} className="w3-circle w3-margin-top"/>
                     </div>
 
                     <form className="w3-container" onSubmit={(event) => this.submitLogin(event)} >
