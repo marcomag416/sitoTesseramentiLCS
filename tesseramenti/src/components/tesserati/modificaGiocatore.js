@@ -54,36 +54,45 @@ function ModificaGiocatore (props){
     const close = (e) =>{
         e.preventDefault();
         setInputVal(null);
+        reloadTesserati();
         props.onClose();
     }
 
     const inviaCertificato = async e =>{
-        if(!checkCertificato(e.target, (txt) => {setLabel({mode : "r", msg : txt})} )){
+        e.preventDefault();
+        const form = document.forms.modificaGio;
+        //console.log("Invio form certificato", form);
+        if(!checkCertificato(form, (txt) => {setLabel({mode : "r", msg : txt})} )){
             console.log("Data di scadenza certificato mancante");
             return;
         }
-        const sendData = {scadenza : inputCert, fileCertificato : cert.files[0], idgiocatore : idgiocatore};
+        const sendData = {scadenza : inputCert, fileCertificato : form.certificato.files[0], idgiocatore : props.giocatore.id};
+        setLoading(true);
         var result = await fetchPost('/uploadCertificatoId', token, sendData);
         if(result.status){
             console.log("Certificato caricato con successo");
-            setLabel({mode : "g", msg : label.msg + " Giocatore aggiunto correttamente con certificato medico"});
+            setLabel({mode : "g", msg : label.msg + "Certificato medico caricato correttamente"});
         }
         else{
             console.log("Errore caricamento certificato:", result.msg);
-            setLabel({mode : "r", msg : label.msg + " Errore caricamento certificato : giocatore aggiunto senza certificato medico"});
+            setLabel({mode : "r", msg : label.msg + " Errore caricamento certificato : certificato medico non inserito"});
         }
+        setLoading(false);
+        setInputCert("");
+        form.certificato.value = "";
     }
 
     const submitForm = async e =>{
         e.preventDefault();
+        const form = document.forms.modificaGio;
+        console.log("Invio form modifica giocatore");
         setLabel({mode : "0", msg : ""});
-        if(checkForm(e.target, (txt) => {setLabel({mode : "r", msg : txt})})){
+        if(checkForm(form, (txt) => {setLabel({mode : "r", msg : txt})})){
             setLoading(true);
             var  result = await fetchPost('/updateGiocatore', token, {...inputVal, idgiocatore : props.giocatore.id});
             if(result.status){
                 console.log("Giocatore modificato con successo", result.idgiocatore);
                 setLabel({mode : "g", msg : "Giocatore modificato."});
-                reloadTesserati();
             }
             else{
                 console.log("Errore modifica giocatore:", result.msg);
@@ -97,7 +106,8 @@ function ModificaGiocatore (props){
         const target = event.target;
         const value = target.value;
         const name = target.name;
-        if(!name in disabledFields){
+        console.log(disabledFields);
+        if(disabledFields.every((value) => {return value != name})){
             setInputVal((prev) => ({...prev, [name]: value}));
         }
         //console.log(inputVal.certificato.name);
@@ -121,7 +131,7 @@ function ModificaGiocatore (props){
                     <span onClick={(e) => close(e)}
                         className="w3-button w3-display-topright material-icons">close</span>
                 </div>
-                <form onSubmit = {(e) => submitForm(e)}>
+                <form name="modificaGio">
                     <div className="w3-container scrollabile" >
                         <fieldset>
                             <legend>
@@ -204,6 +214,9 @@ function ModificaGiocatore (props){
                                     <input type="hidden" name="MAX_FILE_SIZE" value={MAX_FILE_SIZE}/>
                                     <input className="w3-input" type="file" name="certificato"/>
                                 </div>
+                                <div className="w3-third w3-margin-bottom">
+                                    <button className="w3-button w3-round w3-blue w3-right" onClick={(e) => inviaCertificato(e)} >Carica Certificato</button>
+                                </div>
                             </div>
                         </fieldset>
 
@@ -213,7 +226,7 @@ function ModificaGiocatore (props){
 
                     <div className="w3-border w3-margin-top w3-padding-large">
                         <button className="w3-button w3-round w3-red" onClick={(e) => close(e)}>Chiudi</button>
-                        <input className="w3-button w3-round w3-blue w3-right" type = "submit" value ="Modifica"/>
+                        <button className="w3-button w3-round w3-blue w3-right" onClick={(e) => submitForm(e)} >Modifica</button>
                     </div>
                     <LoadIcon show={loading}/>
                 </form>
@@ -223,7 +236,6 @@ function ModificaGiocatore (props){
 
     
 }
-
 
 function checkForm(form, setMsg){
     if(!controllaCf(form.cf, setMsg)){
@@ -284,6 +296,7 @@ function checkCertificato(form, setMsg){
         setMsg("Inserisci la data di scadenza del certificato medico");
         return false;
     }
+    const dataOggi = Date.parse(new Date);
     var d = Date.parse(new Date(form.scadenza.value));
     if(d < dataOggi){
         form.scadenza.focus();

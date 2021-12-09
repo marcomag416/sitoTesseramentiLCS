@@ -6,6 +6,9 @@ function contaTesserati($session, $dbConnection){
 	$stm->bindValue(":idstagione", $session['idstagione'], PDO::PARAM_INT);
 	$stm->execute();
 
+	if($stm->rowCount() == 0){
+		return 0;
+	}
 	$row = $stm->fetch(PDO::FETCH_ASSOC);
 	return $row['cont'];
 }
@@ -108,10 +111,10 @@ function updateGiocatore($session, $dbConnection){
 		return array("status" => false, "msg" => "Classe non valida");
 	}
 
-	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\updateGiocatori.sql");
+	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\updateGiocatore.sql");
 	$stm = $dbConnection -> prepare($sql);
 	$stm->bindValue(":idgiocatore", $_POST['idgiocatore'], PDO::PARAM_INT);
-	$stm->bindValue(":cf", strtoupper($_POST['cf']), PDO::PARAM_STR);
+	$stm->bindValue(":cf", $_POST['cf'], PDO::PARAM_STR);
 	$stm->bindValue(":nome", $_POST['nome'], PDO::PARAM_STR);
 	$stm->bindValue(":cognome", $_POST['cognome'], PDO::PARAM_STR);
 	$stm->bindValue(":classe", $_POST['classe'], PDO::PARAM_STR);
@@ -188,7 +191,7 @@ function uploadGiocatore($session, $dbConnection){
 	$stm = $dbConnection -> prepare($sql);
 	$stm->bindValue(":idsquadra", $session['idsquadra'], PDO::PARAM_INT);
 	$stm->bindValue(":idstagione", $session['idstagione'], PDO::PARAM_INT);
-	$stm->bindValue(":cf", strtoupper($_POST['cf']), PDO::PARAM_STR);
+	$stm->bindValue(":cf", $_POST['cf'], PDO::PARAM_STR);
 	$stm->bindValue(":nome", $_POST['nome'], PDO::PARAM_STR);
 	$stm->bindValue(":cognome", $_POST['cognome'], PDO::PARAM_STR);
 	$stm->bindValue(":classe", $_POST['classe'], PDO::PARAM_STR);

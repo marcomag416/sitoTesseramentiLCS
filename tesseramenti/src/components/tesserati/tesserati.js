@@ -76,8 +76,8 @@ function Tesserati (props){
             });
             console.log(vett.length, "giocatori caricati: ", vett);
             setTesserati(vett);
-            if(tesserati.length >= 20){
-                setForm(0);
+            if(tesserati.length >= 20 && form.m == "g"){
+                setForm({m : "0", value : ""});
             }
         }
         else {
