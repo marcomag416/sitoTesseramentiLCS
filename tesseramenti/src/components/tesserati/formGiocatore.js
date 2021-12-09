@@ -101,7 +101,7 @@ function FormGiocatore (props){
             }
             else{
                 console.log("Errore caricamento giocatore:", result.msg);
-                setLabel({mode : "r", msg : result.msg + "Errore inserimento gioatore : giocatore non aggiunto"});
+                setLabel({mode : "r", msg : result.msg + "Errore inserimento giocatore : giocatore non aggiunto"});
             }
             setLoading(false);
         }
