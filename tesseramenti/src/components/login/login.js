@@ -1,8 +1,6 @@
 import React from 'react';
 import { fetch } from '../../functions/useFetch.js';
-import { API_BASE } from '../../config/config.js';
 import { NavLink } from 'react-router-dom';
-//import ReactDOM from 'react-dom';
 
 class Login extends React.Component {
     constructor(props) {

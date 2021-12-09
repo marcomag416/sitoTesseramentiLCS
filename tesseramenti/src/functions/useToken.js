@@ -8,7 +8,7 @@ export default function useToken() {
         if(session == null){
             return null;
         }
-        else if(session.time + 14400000 > Date.parse(new Date)){
+        else if(session.time + 14400000 > Date.parse(new Date())){
             return session.token;
         }
         else{
@@ -41,7 +41,7 @@ export default function useToken() {
         if(session == null){
             return null;
         }
-        else if(session.time + 14400000 > Date.parse(new Date)){
+        else if(session.time + 14400000 > Date.parse(new Date())){
             return session.token;
         }
         else{
@@ -51,15 +51,15 @@ export default function useToken() {
         }
     }
 
-    const updateToken = useEffect(() => {
+    useEffect(() => {
         setToken(getToken)
         //console.log("Session update:", token);
-    }, []);
+    });
 
     const saveToken = (userToken) => {
         var session = {};
         session.token = userToken;
-        session.time = Date.parse(new Date);
+        session.time = Date.parse(new Date());
         localStorage.setItem('session', JSON.stringify(session));
         setToken(userToken);
     };

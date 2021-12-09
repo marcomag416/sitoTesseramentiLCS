@@ -77,7 +77,7 @@ function Tesserati (props){
                     }
                 }
             });
-            console.log(vett.length, "giocatori caricati: ", vett);
+            //console.log(vett.length, "giocatori caricati: ", vett);
             setTesserati(vett);
             if(vett.length >= 20 && form.m == "g"){
                 setForm({m : "0", value : null});
@@ -96,7 +96,7 @@ function Tesserati (props){
             vett.forEach((x) => {
                 x.t = 1;
             })
-            console.log(vett.length, "dirigenti caricati: ", vett);
+            //console.log(vett.length, "dirigenti caricati: ", vett);
             setDirigenti(vett);
         }
         else{
