@@ -60,6 +60,77 @@ function controllaScadenza($scad, $cart){
 	} 
 }
 
+function updateGiocatore($session, $dbConnection){
+	/* controllo campi */
+	if(!isset($_POST['idgiocatore']) || !isset($_POST['cf']) || !isset($_POST['nome']) ||!isset($_POST['cognome']) || !isset($_POST['data_nascita']) || !isset($_POST['classe']) || !isset($_POST['luogo_nascita'])){
+		return array("status" => false, "msg" => "Campi obbligatori mancanti");
+	}
+
+	if($_POST['idgiocatore'] == "" || $_POST['cf'] == "" || $_POST['nome'] == "" || $_POST['cognome'] == "" || $_POST['classe'] == "" || $_POST['luogo_nascita'] == ""){
+		return array("status" => false, "msg" => "Campi obbligatori mancanti");
+	}
+
+	$_POST['cf'] = strtoupper($_POST['cf']);
+	if(!controlloCodiceFiscale($_POST['cf'])){
+		return array("status" => false, "msg" => "Codice fiscale non valido");
+	}
+
+	if(!isset($_POST['numero']) && (!is_numeric($_POST['numero']) || $_POST['numero'] > 99 || $_POST['numero'] < 1)){
+		return array("status" => false, "msg" => "Numero di maglia non valido");
+	}
+	if($_POST['numero'] == ""){
+		$_POST['numero'] = null;
+	}
+	else{
+		$_POST['numero'] = (int)$_POST['numero'];
+	}
+
+	$_POST['taglia'] = strtoupper($_POST['taglia']);
+	if(!isset($_POST['taglia']) && !controllaTaglia($_POST['taglia'])){
+		return array("status" => false, "msg" => "Taglia non valida");
+	}
+
+	$_POST['luogo_nascita'] = ucwords(strtolower($_POST['luogo_nascita']));
+	$_POST['nome'] = ucwords(strtolower($_POST['nome']));
+	$_POST['cognome'] = ucwords(strtolower($_POST['cognome']));
+	$_POST['classe'] = strtoupper($_POST['classe']);
+
+	$_POST['ruolo'] = ucfirst(strtolower($_POST['ruolo']));
+	if(!isset($_POST['ruolo']) && !controllaRuolo($_POST['ruolo'])){
+		return array("status" => false, "msg" => "Ruolo giocatore non valido");
+	}
+
+	if(!ControlloData($_POST['data_nascita'])){
+		return array("status" => false, "msg" => "Data di nascita non valida");
+	}
+
+	if(strlen($_POST['classe']) > 8){
+		return array("status" => false, "msg" => "Classe non valida");
+	}
+
+	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\updateGiocatori.sql");
+	$stm = $dbConnection -> prepare($sql);
+	$stm->bindValue(":idgiocatore", $_POST['idgiocatore'], PDO::PARAM_INT);
+	$stm->bindValue(":cf", strtoupper($_POST['cf']), PDO::PARAM_STR);
+	$stm->bindValue(":nome", $_POST['nome'], PDO::PARAM_STR);
+	$stm->bindValue(":cognome", $_POST['cognome'], PDO::PARAM_STR);
+	$stm->bindValue(":classe", $_POST['classe'], PDO::PARAM_STR);
+	$stm->bindValue(":numero", $_POST['numero'], PDO::PARAM_INT);
+	$stm->bindValue(":taglia", $_POST['taglia'], PDO::PARAM_STR);
+	$stm->bindValue(":ruolo", $_POST['ruolo'], PDO::PARAM_STR);
+	$stm->bindValue(":luogo_nascita", $_POST['luogo_nascita'], PDO::PARAM_STR);
+	$stm->bindValue(":data_nascita", $_POST['data_nascita'], PDO::PARAM_STR);
+	try{
+		$stm->execute();
+	}catch (\PDOException $e) {
+		$errmsg = $e->getMessage();
+		return array("status" => false, "msg" => "Errore sql : $errmsg");
+	}
+	$lastId = $dbConnection->lastInsertId();
+
+	return array("status" => true, "msg" => "Giocatore inserito", "idgiocatore" => $lastId);
+}
+
 function uploadGiocatore($session, $dbConnection){
 	/* controllo campi */
 	if(!isset($_POST['cf']) || !isset($_POST['nome']) ||!isset($_POST['cognome']) || !isset($_POST['data_nascita']) || !isset($_POST['classe']) || !isset($_POST['luogo_nascita'])){
@@ -93,6 +164,7 @@ function uploadGiocatore($session, $dbConnection){
 	$_POST['luogo_nascita'] = ucwords(strtolower($_POST['luogo_nascita']));
 	$_POST['nome'] = ucwords(strtolower($_POST['nome']));
 	$_POST['cognome'] = ucwords(strtolower($_POST['cognome']));
+	$_POST['classe'] = strtoupper($_POST['classe']);
 
 	$_POST['ruolo'] = ucfirst(strtolower($_POST['ruolo']));
 	if(!isset($_POST['ruolo']) && !controllaRuolo($_POST['ruolo'])){

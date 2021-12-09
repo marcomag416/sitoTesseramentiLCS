@@ -84,4 +84,8 @@ if($uri[1] == 'uploadCertificatoId'){
 	echo json_encode(uploadCertificatoId($session, $dbConnection));
 }
 
+if($uri[1] == 'updateGiocatore'){
+	echo json_encode(updateGiocatore($session, $dbConnection));
+}
+
 ?>
