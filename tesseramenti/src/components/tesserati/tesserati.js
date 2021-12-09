@@ -3,6 +3,7 @@ import React from 'react';
 import './tesserati.css';
 import FormGiocatore from './formGiocatore.js';
 import ModificaGiocatore from './modificaGiocatore.js';
+import FormDirigente from './formDirigente.js';
 import {fetchPost, useFetch} from '../../functions/useFetch.js';
 import { sessionContext } from '../context';
 import LoadIcon from '../elem/loadIcon';
@@ -79,7 +80,7 @@ function Tesserati (props){
             console.log(vett.length, "giocatori caricati: ", vett);
             setTesserati(vett);
             if(vett.length >= 20 && form.m == "g"){
-                setForm({m : "0", value : ""});
+                setForm({m : "0", value : null});
             }
         }
         else {
@@ -110,6 +111,7 @@ function Tesserati (props){
             <tesseratiContext.Provider value={[reloadTesserati, setForm]}>
                 <FormGiocatore onClose={() => closeForm()} display={form.m == 'g'}/>
                 <ModificaGiocatore onClose={() => closeForm()} display={form.m == 'mg'} giocatore = {form.value}/>
+                <FormDirigente onClose={() => closeForm()} display={form.m == 'd'}/>
                 <div className = "w3-white">
                     <div className="w3-bar w3-margin-top w3-margin-bottom w3-padding-large">
                         <button className="w3-button w3-light-grey w3-round w3-margin-left w3-right" onClick={() => reloadTesserati()} ><i className="material-icons w3-large">refresh</i></button>
@@ -121,7 +123,7 @@ function Tesserati (props){
                 </div>
                 <div className="w3-bar w3-right-align">
                     <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm({m : 'g', value: null})} disabled = {tesserati.length >= 20 ? true : false}>Aggiungi giocatore</button>
-                    <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm({m : 'd', value: null})} disabled = {true}>Aggiungi dirigente</button>
+                    <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm({m : 'd', value: null})} >Aggiungi dirigente</button>
                 </div>
             </tesseratiContext.Provider>
             <LoadIcon show={loading} />

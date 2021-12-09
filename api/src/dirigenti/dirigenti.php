@@ -65,7 +65,7 @@ function uploadDirigente($session, $dbConnection){
 	$_POST['cognome'] = ucwords(strtolower($_POST['cognome']));
 
 
-	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\insertGiocatori.sql");
+	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\insertDirigente.sql");
 	$stm = $dbConnection -> prepare($sql);
 	$stm->bindValue(":idsquadra", $session['idsquadra'], PDO::PARAM_INT);
 	$stm->bindValue(":idstagione", $session['idstagione'], PDO::PARAM_INT);
