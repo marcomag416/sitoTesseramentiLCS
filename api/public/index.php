@@ -9,6 +9,7 @@ require_once "../bootstrap.php";
 require_once "../src/system/sessionCheck.php";
 require_once "../src/tesserati/tesserati.php";
 require_once "../src/tesserati/certificati.php";
+require_once "../src/dirigenti/dirigenti.php";
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode( '/', $uri );
@@ -86,6 +87,18 @@ if($uri[1] == 'uploadCertificatoId'){
 
 if($uri[1] == 'updateGiocatore'){
 	echo json_encode(updateGiocatore($session, $dbConnection));
+}
+
+if($uri[1] == 'deleteDirigente'){
+	echo json_encode(deleteDirigente($session, $dbConnection));
+}
+
+if($uri[1] == 'elencoDirigenti'){
+	echo json_encode(leggiDirigenti($session, $dbConnection));
+}
+
+if($uri[1] == 'uploadDirigente'){
+	echo json_encode(uploadDirigente($session, $dbConnection));
 }
 
 ?>
