@@ -19,7 +19,9 @@ function Tesserati (props){
     const [token, setToken, deleteToken] = useContext(sessionContext);
     const [reload, setReload] = useState(true);
     const fetchGio = useFetch("/elencoTesserati", {token : token}, reload);
+    const fetchDir = useFetch("/elencoDirigenti", {token : token}, reload);
     const [tesserati, setTesserati] = useState([]);
+    const [dirigenti, setDirigenti] = useState([]);
     /*const [tesserati, setTesserati] = useState([
         { id: 1, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 0, t: 0 },
         { id: 2, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 1, t: 0 },
@@ -46,7 +48,7 @@ function Tesserati (props){
     useEffect(() => {
         setLoading(true);
         if (fetchGio[0].status && fetchGio[0].vett != undefined) {
-            var vett = fetchGio[0].vett;
+            const vett = fetchGio[0].vett;
             let scadenza;
             const dataOggi = Date.parse(new Date);
             const gg10 = 864000000; /* millsec in 10 gg */
@@ -76,15 +78,31 @@ function Tesserati (props){
             });
             console.log(vett.length, "giocatori caricati: ", vett);
             setTesserati(vett);
-            if(tesserati.length >= 20 && form.m == "g"){
+            if(vett.length >= 20 && form.m == "g"){
                 setForm({m : "0", value : ""});
             }
         }
         else {
             console.log("Errore caricamento giocatori");
-        }
+        }        
         setLoading(false);
     }, [fetchGio]);
+
+    useEffect(() =>{
+        setLoading(true);
+        if (fetchDir[0].status && fetchDir[0].vett != undefined) {
+            const vett = fetchDir[0].vett;
+            vett.forEach((x) => {
+                x.t = 1;
+            })
+            console.log(vett.length, "dirigenti caricati: ", vett);
+            setDirigenti(vett);
+        }
+        else{
+            console.log("Errore caricamento dirigenti")
+        }
+        setLoading(false);
+    }, [fetchDir])
 
     return (
         <div className="w3-container">
@@ -98,7 +116,7 @@ function Tesserati (props){
                         <input className="w3-input w3-quarter w3-right" type="text" placeholder="Cerca" value={search} onChange={(e) => { setSearch(e.target.value) } }/>
                     </div>
                     <div className="w3-padding">
-                        <Tabella search={search} tesserati={tesserati}/>
+                        <Tabella search={search} tesserati={tesserati.concat(dirigenti)}/>
                     </div>
                 </div>
                 <div className="w3-bar w3-right-align">
@@ -177,6 +195,8 @@ function Tesserato(props) {
 }
 
 function Dirigente(dirigente) {
+    const [token, setToken, deleteToken] = useContext(sessionContext);
+    const [reloadTesserati, setForm] = useContext(tesseratiContext);
     return (
         <tr className="w3-hover-light-grey testo-centrale">
             <td className="w3-tooltip">{IconaTesserato(1)}</td>
@@ -187,8 +207,8 @@ function Dirigente(dirigente) {
             <td></td>
             <td></td>
             <td></td>
-            <td className="w3-center"><button className="w3-button w3-small w3-blue w3-round ">Modifica</button></td>
-            <td><button className="w3-button w3-red w3-round w3-padding-small"><i className="material-icons w3-large">delete</i></button></td>
+            <td></td>
+            <td><button className="w3-button w3-red w3-round w3-padding-small" onClick={() => deleteDirigente(dirigente.id, token, reloadTesserati)}><i className="material-icons w3-large">delete</i></button></td>
         </tr>
     )
 }
@@ -271,6 +291,17 @@ async function deleteGiocatore(id, token, onSuccess){
     }
     else{
         console.log("Errore eliminazione giocatore:", result);
+    }
+}
+
+async function deleteDirigente(id, token, onSuccess){
+    var  result = await fetchPost('/deleteDirigente', token, {"iddirigente" : id});
+    if(result.status){
+        console.log("Dirigente eliminato", id);
+        onSuccess();
+    }
+    else{
+        console.log("Errore eliminazione dirigente:", result);
     }
 }
 

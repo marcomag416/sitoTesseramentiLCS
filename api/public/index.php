@@ -94,7 +94,7 @@ if($uri[1] == 'deleteDirigente'){
 }
 
 if($uri[1] == 'elencoDirigenti'){
-	echo json_encode(leggiDirigenti($session, $dbConnection));
+	echo json_encode(leggiDirigenti($token, $dbConnection));
 }
 
 if($uri[1] == 'uploadDirigente'){
