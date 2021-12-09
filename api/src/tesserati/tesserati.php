@@ -114,6 +114,7 @@ function updateGiocatore($session, $dbConnection){
 	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\updateGiocatore.sql");
 	$stm = $dbConnection -> prepare($sql);
 	$stm->bindValue(":idgiocatore", $_POST['idgiocatore'], PDO::PARAM_INT);
+	$stm->bindValue(":idsquadra", $session['idsquadra'], PDO::PARAM_INT);
 	$stm->bindValue(":cf", $_POST['cf'], PDO::PARAM_STR);
 	$stm->bindValue(":nome", $_POST['nome'], PDO::PARAM_STR);
 	$stm->bindValue(":cognome", $_POST['cognome'], PDO::PARAM_STR);
