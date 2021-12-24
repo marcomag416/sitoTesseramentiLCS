@@ -1,17 +1,30 @@
-import {memo, useState} from 'react';
+import {memo, useState, useContext} from 'react';
+import { sessionContext } from '../context';
 import LoadIcon from '../elem/loadIcon.js';
 import Label from '../elem/label.js';
+import { fetchPost } from '../../functions/useFetch';
 
 function CambioPsw(props){
+    const [token, setToken, deleteToken] = useContext(sessionContext);
     const errDef = {err : "0", msg : ""};
     const formDataDef = {pswVecchia : "", psw1 : "", psw2 : ""};
     const [formData, setFormData] = useState(formDataDef);
     const [err, setErr] = useState(errDef);
 
-    const submitForm = e => {
+    const submitForm = async e => {
         e.preventDefault();
-        if(!controllaFormPsw(e.target, (txt) => {setErr({err : "r", msg : txt})})){
-            return;
+        if(controllaFormPsw(e.target, (txt) => {setErr({err : "r", msg : txt})})){
+            setErr({err : "loading", msg: ""});
+            var  result = await fetchPost('/updatePassword', token, {pswOld : formData.pswVecchia, psw : formData.psw1});
+            if(result.status){
+                console.log("Password modificata con successo", result.msg);
+                setErr({err : "g", msg : "Password modificata"});
+                setFormData(formDataDef);
+            }
+            else{
+                console.log("Errore aggiornamento password:", result.msg);
+                setErr({err : "r", msg : result.msg});
+            }
         }
     }
 

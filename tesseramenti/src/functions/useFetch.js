@@ -89,7 +89,7 @@ export const useFetch = (url, sendData, reload) => {
     return [data];
 };
 
-export async function fetchPost(url, token, sendData, file){
+export async function fetchPost(url, token, sendData){
 	var path = API_BASE + url;
 
 	const formData = new FormData();

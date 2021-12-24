@@ -10,6 +10,7 @@ require_once "../src/system/sessionCheck.php";
 require_once "../src/tesserati/tesserati.php";
 require_once "../src/tesserati/certificati.php";
 require_once "../src/dirigenti/dirigenti.php";
+require_once "../src/amministratori/amministratori.php";
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode( '/', $uri );
@@ -99,6 +100,10 @@ if($uri[1] == 'elencoDirigenti'){
 
 if($uri[1] == 'uploadDirigente'){
 	echo json_encode(uploadDirigente($session, $dbConnection));
+}
+
+if($uri[1] == 'updatePassword'){
+	echo json_encode(updatePsw($session, $dbConnection));
 }
 
 ?>
