@@ -14,8 +14,19 @@ function Label(props){
         }
     }, [props.mode]);
 
+    const getShow = useMemo(() => {
+        switch(props.mode){
+            case "r":
+            case "b":
+            case "g":
+                return true;
+            default:
+                return false;
+        }
+    }, [props.mode]);
+
     return(
-        <div className = {"w3-panel w3-display-container w3-margin " + getColorStyle}  style={props.mode != "0" ? { display: 'block' } : { display: 'none' }}>
+        <div className = {"w3-panel w3-display-container w3-margin " + getColorStyle}  style={getShow ? { display: 'block' } : { display: 'none' }}>
             <span onClick={() => props.onClose()}
                 className="w3-button w3-display-topright">&times;
             </span>

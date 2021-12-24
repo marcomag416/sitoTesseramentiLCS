@@ -7,6 +7,7 @@ import './window.css';
 import Login from '../login/login.js';
 import Dashboard from '../dashboard/dashboard.js';
 import Tesserati from '../tesserati/tesserati.js';
+import CambioPsw from '../psw-reset/cambio-psw.js';
 import Sidebar from './sidebar.js';
 import Topbar from './topbar.js';
 import LoadIcon from '../elem/loadIcon.js';
@@ -91,6 +92,9 @@ function Window (){
 						<Switch>
 							<Route exact path="/tesserati">
 								<Tesserati/>
+							</Route>
+							<Route exact path="/cambio-psw">
+								<CambioPsw/>
 							</Route>
 							<Route exact path="/">
 								<Dashboard/>
