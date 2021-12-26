@@ -27,7 +27,7 @@ function Sidebar(props){
                 <NavLink className="w3-bar-item w3-button" activeClassName="w3-border-right w3-dark-grey w3-border-red" exact to="/">Dashboard</NavLink>
                 <NavLink className="w3-bar-item w3-button" activeClassName="w3-border-right w3-dark-grey w3-border-red" exact to="/tesserati">Tesserati</NavLink>
                 <NavLink className="w3-bar-item w3-button" activeClassName="w3-border-right w3-dark-grey w3-border-red" exact to="/cambio-psw">Gestione password</NavLink>
-                <button className=" w3-button w3-bottom w3-grey w3-text-red text-left" style={displayStyle} onClick={() => logOut()}>Log out<i className="material-icons w3-large"></i></button>
+                <button className=" w3-button w3-bottom w3-text-red text-left" style={displayStyle} onClick={() => logOut()}>Log out<i className="material-icons w3-large"></i></button>
             </div>
         </div>
     );

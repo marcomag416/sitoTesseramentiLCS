@@ -36,10 +36,12 @@ function CambioPsw(props){
     }
 
     return(
-        <div className='w3-container w3-white'>
+        <div className='w3-container' style = {{height : "700px"}}>
             <h2>Gestione password</h2>
+            <div className='w3-white'>
                 <div className="w3-container w3-content w3-padding" style = {{width : "50%"}}>
                     <form onSubmit={(event) => submitForm(event)} >
+                        <h3 className='w3-center'>Aggiorna password</h3>
                         <div className="w3-row-padding">
                             <div className="w3-margin-bottom">
                                 <label><b>Vecchia password</b></label>
@@ -56,13 +58,14 @@ function CambioPsw(props){
                         </div>
 
                         <div className="w3-padding-large w3-center">
-                            <button className="w3-button w3-round w3-blue" style = {{width : "80%"}} type="submit">Aggiorna password</button>
+                            <button className="w3-button w3-round w3-blue" style = {{width : "50%"}} type="submit">Aggiorna password</button>
                         </div>
                         <LoadIcon show={err.err == "loading"}/>
 
                         <Label onClose = {(prev) => setErr({msg : "", err : "0"})} msg = {err.msg} mode = {err.err} />
                     </form>
                 </div>
+            </div>
         </div>
     );
 }
