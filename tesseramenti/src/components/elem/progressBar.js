@@ -6,7 +6,7 @@ function ProgressBar(props){
     const lay1 = props.blue / (props.blue + props.red) * 100;
 
     return (
-        <div class="holdbar w3-light-grey w3-round">
+        <div class="w3-light-grey w3-round" style = {props.style}>
             <div class="bar w3-round w3-red" style={{width : lay3 + "%"}}>
                 <div class="bar w3-round w3-green" style={{width : lay2 + "%"}}>
                     <div class="bar w3-round w3-blue" style={{width : lay1 + "%"}}></div>
