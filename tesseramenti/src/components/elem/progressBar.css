@@ -1,0 +1,13 @@
+.bar{
+    display: block;
+    height : 8px;
+}
+
+.secondbar{
+    margin-left : -4px;
+    display: inline-block;
+}
+
+.holdbar{
+    /*height: 8px;*/
+}
