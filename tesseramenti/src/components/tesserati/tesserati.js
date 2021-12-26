@@ -72,7 +72,7 @@ function Tesserati (props){
                     else if(scadenza > dataOggi - gg10){
                         x.cm = 2; /* in scadenza */
                     }
-                    else if(scadenza < dataOggi - gg10){
+                    else if(scadenza < dataOggi){
                         x.cm = 3; /* scaduto */
                     }
                 }
