@@ -1,4 +1,3 @@
-
 function Alert(props){
     var modeStyle;
 
