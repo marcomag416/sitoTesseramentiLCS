@@ -23,20 +23,6 @@ function Tesserati (props){
     const fetchDir = useFetch("/elencoDirigenti", {token : token}, reload);
     const [tesserati, setTesserati] = useState([]);
     const [dirigenti, setDirigenti] = useState([]);
-    /*const [tesserati, setTesserati] = useState([
-        { id: 1, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 0, t: 0 },
-        { id: 2, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 1, t: 0 },
-        { id: 3, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 2, t: 0 },
-        { id: 4, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 3, t: 0 },
-        { id: 5, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 4, t: 0 },
-        { id: 6, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 3, t: 0 },
-        { id: 7, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 4, t: 0 },
-        { id: 8, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 3, t: 0 },
-        { id: 9, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 4, t: 0 },
-        { id: 10, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 4, t: 1 },
-        { id: 11, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 4, t: 1 },
-        { id: 1, cf: "WLLSMT02F16F335P", cognome: "Smith", nome: "Will", taglia: "M", numero_maglia: 12, cm: 5, t: 1 }
-    ]);*/
 
     const closeForm = useCallback(() => {
             setForm({m : 0, value : null});
@@ -109,16 +95,29 @@ function Tesserati (props){
         <div className="w3-container">
             <h2>Tesserati</h2>
             <tesseratiContext.Provider value={[reloadTesserati, setForm]}>
-                <FormGiocatore onClose={() => closeForm()} display={form.m == 'g'}/>
-                <ModificaGiocatore onClose={() => closeForm()} display={form.m == 'mg'} giocatore = {form.value}/>
-                <FormDirigente onClose={() => closeForm()} display={form.m == 'd'}/>
+                <FormGiocatore 
+                    onClose={() => closeForm()} 
+                    display={form.m == 'g'}
+                />
+                <ModificaGiocatore 
+                    onClose={() => closeForm()} 
+                    display={form.m == 'mg'} 
+                    giocatore = {form.value}
+                />
+                <FormDirigente 
+                    onClose={() => closeForm()} 
+                    display={form.m == 'd'}
+                />
                 <div className = "w3-white">
                     <div className="w3-bar w3-margin-top w3-margin-bottom w3-padding-large">
                         <button className="w3-button w3-light-grey w3-round w3-margin-left w3-right" onClick={() => reloadTesserati()} ><i className="material-icons w3-large">refresh</i></button>
                         <input className="w3-input w3-quarter w3-right" type="text" placeholder="Cerca" value={search} onChange={(e) => { setSearch(e.target.value) } }/>
                     </div>
                     <div className="w3-padding">
-                        <Tabella search={search} tesserati={tesserati.concat(dirigenti)}/>
+                        <Tabella 
+                            search={search} 
+                            tesserati={tesserati.concat(dirigenti)}
+                        />
                     </div>
                 </div>
                 <div className="w3-bar w3-right-align">
@@ -153,7 +152,13 @@ function Tabella(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {tesserati.map((tesserato) => < Tesserato tesserato={tesserato} search={props.search} key={getId(tesserato)} /> )}
+                    {tesserati.map((tesserato) => 
+                        <Tesserato 
+                            tesserato={tesserato} 
+                            search={props.search} 
+                            key={getId(tesserato)} 
+                        /> 
+                    )}
                 </tbody>
             </table>
         </div>
@@ -210,7 +215,10 @@ function Dirigente(dirigente) {
             <td></td>
             <td></td>
             <td></td>
-            <td><button className="w3-button w3-red w3-round w3-padding-small" onClick={() => deleteDirigente(dirigente.id, token, reloadTesserati)}><i className="material-icons w3-large">delete</i></button></td>
+            <td><button className="w3-button w3-red w3-round w3-padding-small" 
+                    onClick={() => deleteDirigente(dirigente.id, token, reloadTesserati)}>
+                        <i className="material-icons w3-large">delete</i>
+                </button></td>
         </tr>
     )
 }

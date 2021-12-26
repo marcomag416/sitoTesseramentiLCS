@@ -106,23 +106,6 @@ function Window (){
 			</sessionContext.Provider>
 		</div>
 	);
-
-
-	/*setToken = (token) => {
-		localStorage.setItem('token', JSON.stringify(token));
-		this.setState({
-			token: token,
-			loading : false
-		});
-	}
-	getToken() {
-		const stringToken = localStorage.getItem('token');
-		const token = JSON.parse(stringToken);
-		if (token) {
-			return token;
-		}
-		return null;
-	}*/
 }
 
 
