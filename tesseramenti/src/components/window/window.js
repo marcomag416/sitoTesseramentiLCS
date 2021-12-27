@@ -103,7 +103,7 @@ function Window (props){
 								<CambioPsw/>
 							</Route>
 							<Route exact path="/">
-								<Dashboard/>
+								<Dashboard info = {info}/>
 							</Route>
 							<Route>
 								<NotFound/>

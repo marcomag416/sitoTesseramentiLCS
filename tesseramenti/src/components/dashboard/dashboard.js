@@ -22,8 +22,18 @@ function Dashboard(props) {
 
     return (
         <div className="w3-container">
-            <div className='w3-container w3-white w3-margin-top'>
-                <div className='w3-padding-large'>
+            <div className='w3-container w3-white w3-margin'>
+
+                <div className = "w3-container  w3-margin">
+                    <h4>Benvenuto, <b> {props.info.nome} </b> </h4>
+                    <div className = "w3-padding">
+                        <h6>Campionato : <b> {props.info.lega} </b> </h6>
+                        <h6>Squadra : <b> {props.info.squadra} </b> </h6>
+                        <h6>Stagione : <b> {props.info.stagione} </b> </h6>
+                    </div>
+                </div>
+
+                <div className='w3-padding-large w3-container'>
                     <div className='w3-container w3-half'>
                         <h4>Panoramica giocatori</h4>
                         <ProgressBar 
@@ -34,7 +44,8 @@ function Dashboard(props) {
                             <h6>Tesserati : {gioTot} / 20</h6>
                             <h6>Giocatori completi : {gioValidi} / 20</h6>
                         </div>
-
+                    </div>
+                    <div className = "w3-container w3-half">
                         <h4>Certificati medici</h4>
                         <ProgressBar 
                             style = {{width : "80%" }} 
