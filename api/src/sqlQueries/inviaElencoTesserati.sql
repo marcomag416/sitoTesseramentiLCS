@@ -1,0 +1,1 @@
+insert into elenchi_inviati(id_squadra, id_stagione) values (:idsquadra, :idstagione);

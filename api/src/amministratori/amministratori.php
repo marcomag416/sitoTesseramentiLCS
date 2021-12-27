@@ -29,4 +29,19 @@
         return array("status" => true, "msg" => "Password aggiornata");
 
     }
+
+    function inviaElenco($session, $dbConnection){
+        $sql = file_get_contents(ROOTPATH."\src\sqlQueries\inviaElencoTesserati.sql");
+        $stm = $dbConnection -> prepare($sql);
+        $stm->bindParam(":idsquadra", $session['idsquadra']);
+        $stm->bindParam(":idstagione", $session['idstagione']);
+        try{
+            $stm->execute();
+        }catch (\PDOException $e) {
+            $errmsg = $e->getMessage();
+            return array("status" => false, "msg" => "Errore sql : $errmsg");
+        }
+    
+        return array("status" => true, "msg" => "Elenco inviato");
+    }
 ?>

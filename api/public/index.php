@@ -106,4 +106,8 @@ if($uri[1] == 'updatePassword'){
 	echo json_encode(updatePsw($session, $dbConnection));
 }
 
+if($uri[1] == 'inviaElenco'){
+	echo json_encode(inviaElenco($session, $dbConnection));
+}
+
 ?>
