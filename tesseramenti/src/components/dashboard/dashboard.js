@@ -22,8 +22,7 @@ function Dashboard(props) {
 
     return (
         <div className="w3-container">
-            <h2>Dashboard</h2>
-            <div className='w3-container w3-white'>
+            <div className='w3-container w3-white w3-margin-top'>
                 <div className='w3-padding-large'>
                     <div className='w3-container w3-half'>
                         <h4>Panoramica giocatori</h4>

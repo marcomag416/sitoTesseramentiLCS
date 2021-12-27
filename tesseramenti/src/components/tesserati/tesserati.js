@@ -96,7 +96,6 @@ function Tesserati (props){
 
     return (
         <div className="w3-container">
-            <h2>Tesserati</h2>
             <tesseratiContext.Provider value={[reloadTesserati, setForm]}>
                 <FormGiocatore 
                     onClose={() => closeForm()} 

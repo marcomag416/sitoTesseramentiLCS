@@ -1,12 +1,13 @@
 import {useState, useEffect} from 'react';
 //import ReactDOM from 'react-dom';
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch, useLocation } from "react-router-dom";
 import { API_BASE } from '../../config/config.js';
 import axios from 'axios';
 import './window.css';
 import Login from '../login/login.js';
 import Dashboard from '../dashboard/dashboard.js';
 import Tesserati from '../tesserati/tesserati.js';
+import NotFound from '../not-found/notFound.js';
 import CambioPsw from '../psw-reset/cambio-psw.js';
 import Sidebar from './sidebar.js';
 import Topbar from './topbar.js';
@@ -15,11 +16,12 @@ import useToken from '../../functions/useToken.js';
 import { sessionContext } from '../context.js';
 
 
-function Window (){
+function Window (props){
 	const [sidebar, setSidebar] = useState(true);
 	const [token, setToken, deleteToken] = useToken();
 	const [loading, setLoading] = useState(true);
 	const [info, setInfo] = useState({});
+	const location = useLocation();
 	
 	const validaSessione = useEffect(() => {
 		const path = API_BASE + "/sessionCheck";
@@ -62,6 +64,10 @@ function Window (){
 			});
     }, [token]);
 
+	const pageTitles = [{url : "/", title : "Dashboard"}, {url : "/tesserati", title : "Tesserati"}, {url : "/cambio-psw", title : "Gestione password"}];
+	const titolo = pageTitles.filter((x) =>{
+		return location.pathname === x.url;
+	})[0];
 
 	//console.log("Render window", token);
 	if (token == null) {
@@ -86,7 +92,7 @@ function Window (){
 					<Topbar
 						switchSidebar={() => setSidebar(!sidebar)}
 						sidebarOn={sidebar}
-						title={"Pagina"}
+						title={titolo != null ? titolo.title : "Not found"}
 					/>
 					<div className="w3-light-grey">
 						<Switch>
@@ -98,6 +104,9 @@ function Window (){
 							</Route>
 							<Route exact path="/">
 								<Dashboard/>
+							</Route>
+							<Route>
+								<NotFound/>
 							</Route>
 						</Switch>
 					</div>
