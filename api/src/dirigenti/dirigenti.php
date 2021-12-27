@@ -16,6 +16,9 @@ function contaDirigenti($session, $dbConnection){
 }
 
 function deleteDirigente($session, $dbConnection){
+	if($session['elInviato']){
+		return array("status" => false, "msg" => "impossibile modificare un elenco tesserati inviato");
+	}
 	if(!isset($_POST['iddirigente'])){
 		return array("status" => false, "msg" => "id dirigente non trovato");
 	}
@@ -47,6 +50,9 @@ function leggiDirigenti($token, $dbConnection){
 }
 
 function uploadDirigente($session, $dbConnection){
+	if($session['elInviato']){
+		return array("status" => false, "msg" => "impossibile modificare un elenco tesserati inviato");
+	}
 	/* controllo campi */
 	if(!isset($_POST['cf']) || !isset($_POST['nome']) ||!isset($_POST['cognome']) ){
 		return array("status" => false, "msg" => "Campi obbligatori mancanti");

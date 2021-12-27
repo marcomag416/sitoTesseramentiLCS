@@ -37,6 +37,9 @@ function deleteGiocatore($session, $dbConnection){
 	if(!isset($_POST['idgiocatore'])){
 		return array("status" => false, "msg" => "id giocatore non trovato");
 	}
+	if($session['elInviato']){
+		return array("status" => false, "msg" => "impossibile modificare un elenco tesserati inviato");
+	}
 	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\moveGiocatoreToBin.sql");
 	$stm = $dbConnection -> prepare($sql);
 	$stm->bindValue(":idgiocatore", $_POST['idgiocatore'], PDO::PARAM_STR);
@@ -64,6 +67,9 @@ function controllaScadenza($scad, $cart){
 }
 
 function updateGiocatore($session, $dbConnection){
+	if($session['elInviato']){
+		return array("status" => false, "msg" => "impossibile modificare un elenco tesserati inviato");
+	}
 	/* controllo campi */
 	if(!isset($_POST['idgiocatore']) || !isset($_POST['cf']) || !isset($_POST['nome']) ||!isset($_POST['cognome']) || !isset($_POST['data_nascita']) || !isset($_POST['classe']) || !isset($_POST['luogo_nascita'])){
 		return array("status" => false, "msg" => "Campi obbligatori mancanti");
@@ -136,6 +142,9 @@ function updateGiocatore($session, $dbConnection){
 }
 
 function uploadGiocatore($session, $dbConnection){
+	if($session['elInviato']){
+		return array("status" => false, "msg" => "impossibile modificare un elenco tesserati inviato");
+	}
 	/* controllo campi */
 	if(!isset($_POST['cf']) || !isset($_POST['nome']) ||!isset($_POST['cognome']) || !isset($_POST['data_nascita']) || !isset($_POST['classe']) || !isset($_POST['luogo_nascita'])){
 		return array("status" => false, "msg" => "Campi obbligatori mancanti");
