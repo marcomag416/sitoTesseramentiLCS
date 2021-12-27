@@ -19,10 +19,10 @@ function ProgressBar(props){
     })
 
     return (
-        <div class="holdbar w3-light-grey w3-round" style = {props.style}>
-            <div class="bar w3-round w3-red" style={{width : rate * lay3 + "%"}}>
-                <div class="bar w3-round w3-green" style={{width : rate * lay2 + "%"}}>
-                    <div class="bar w3-round w3-blue" style={{width : rate * lay1 + "%"}}></div>
+        <div className="holdbar w3-light-grey w3-round" style = {props.style}>
+            <div className="bar w3-round w3-red" style={{width : rate * lay3 + "%"}}>
+                <div className="bar w3-round w3-green" style={{width : rate * lay2 + "%"}}>
+                    <div className="bar w3-round w3-blue" style={{width : rate * lay1 + "%"}}></div>
                 </div>
             </div>
         </div>
