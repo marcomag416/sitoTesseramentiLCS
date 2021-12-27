@@ -42,7 +42,7 @@ function Dashboard(props) {
                         />
                         <div className='w3-padding'>
                             <h6>Tesserati : {gioTot} / 20</h6>
-                            <h6>Giocatori completi : {gioValidi} / 20</h6>
+                            <h6>Giocatori completati : {gioValidi} / 20</h6>
                         </div>
                     </div>
                     <div className = "w3-container w3-half">
@@ -62,13 +62,15 @@ function Dashboard(props) {
                             style = {{width : "80%" }} 
                             blue = {dirTot / 4 * 100} green = {0} red = {0} 
                         />
-                        <h6>Tesserati : {dirTot} / 4</h6>
+                        <div className = "w3-padding">
+                            <h6>Tesserati : {dirTot} / 4</h6>
+                        </div>
                     </div>
                 </div>
                 
                 <div className='w3-container w3-padding-large w3-margin'>
                     <h4>Invia elenco tesserati</h4>
-                    <p>Inviando l'elenco tesserati le informazioni relative a giocatori e dirigenti non potranno più essere modificate. Sarai comunque in grado di aggiungere nuovi certificati medici</p>
+                    <p>Inviando l'elenco tesserati le informazioni relative a giocatori e dirigenti non potranno più essere modificate. Sarai comunque in grado di aggiungere nuovi certificati medici e visualizzare quelli esistenti.</p>
                     <Alert 
                         mode = {"info"} 
                         msg = {"L'elenco tesserati deve essere inviato entro il 10/2/2022."}
@@ -76,10 +78,10 @@ function Dashboard(props) {
                     {invioOk ? null : 
                         <Alert 
                             mode={"alert"} 
-                            msg={"Tutti i giocatori devono essere completi per poter inviare l'elenco tesserati."}
+                            msg={"Tutte le informazioni relative a giocatori e dirigenti devono essere complete per poter inviare l'elenco tesserati."}
                         />
                     }
-                    <button className='w3-button w3-blue w3-round' disabled = {!invioOk} >Invia elenco</button>
+                    <button className='w3-button w3-blue w3-round w3-right w3-margin-right' disabled = {!invioOk} >Invia elenco</button>
                 </div>
             </div>
         </div>
@@ -91,7 +93,6 @@ function calcolaStatGio(fetchGio) {
     var certTot = 0, certValidi = 0, gioTot = 0, gioValidi = 0;
     if (fetchGio[0].status && fetchGio[0].vett != undefined) {
         const vett = fetchGio[0].vett;
-        console.log(vett);
         let scadenza;
         const dataOggi = Date.parse(new Date);
         vett.forEach((x) => {

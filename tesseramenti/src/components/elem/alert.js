@@ -17,7 +17,7 @@ function Alert(props){
     }
 
     return (
-        <div class= {modeStyle + "w3-panel w3-leftbar"} style = {{width : "95%"}}>
+        <div class= {modeStyle + "w3-panel w3-leftbar"} >
             <p>{props.msg}</p>
         </div>
     );
