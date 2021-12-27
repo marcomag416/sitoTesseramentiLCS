@@ -17,6 +17,8 @@ function sessionCheck($token, $dbConnection){
 		$return['idstagione'] = $utente['idstagione'];
 	    $return['lega'] = $utente['lega'];
 		$return['status'] = true;
+
+		$return['elInviato'] = controlloInvioElenco($utente['idsquadra'], $utente['idstagione'], $dbConnection);
 	}
 	else{
 		$return['status'] = false;
@@ -44,6 +46,20 @@ function deleteSession($token, $dbConnection){
 	$stm = $dbConnection -> prepare($sql);
 	$stm -> bindValue(1, $token);
 	$stm ->execute();
+}
+
+function controlloInvioElenco($idsquadra, $idstagione, $dbConnection){
+	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\controlloElencoInviato.sql");
+	$stm = $dbConnection -> prepare($sql);
+	$stm->bindValue(":idsquadra", $idsquadra);
+	$stm->bindValue(":idstagione", $idstagione);
+	$stm->execute();
+
+	if($stm->rowCount() == 1){
+		$ele = $stm->fetch(PDO::FETCH_ASSOC);
+		return $ele['elencoInviato'];
+	}
+	return 0;
 }
 
 ?>

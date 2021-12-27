@@ -1,0 +1,1 @@
+select exists (select * from elenchi_inviati ele where ele.id_squadra = :idsquadra and ele.id_stagione = :idstagione) as elencoInviato;
