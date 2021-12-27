@@ -1,8 +1,5 @@
 import { React, useContext, useState, useMemo } from 'react';
-/*import axios from 'axios';
-import { API_BASE } from '../../config/config.js';*/
 import { useFetch, fetchPost } from '../../functions/useFetch.js';
-/*import ReactDOM from 'react-dom';*/
 import { sessionContext } from '../context.js';
 import ProgressBar from '../elem/progressBar.js';
 import Alert from '../elem/alert.js';
