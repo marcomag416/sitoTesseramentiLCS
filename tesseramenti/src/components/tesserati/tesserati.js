@@ -84,6 +84,9 @@ function Tesserati (props){
             })
             //console.log(vett.length, "dirigenti caricati: ", vett);
             setDirigenti(vett);
+            if(vett.length >= 4 && form.m == "d"){
+                setForm({m : "0", value : null});
+            }
         }
         else{
             console.log("Errore caricamento dirigenti")
@@ -121,8 +124,8 @@ function Tesserati (props){
                     </div>
                 </div>
                 <div className="w3-bar w3-right-align">
-                    <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm({m : 'g', value: null})} disabled = {tesserati.length >= 20 ? true : false}>Aggiungi giocatore</button>
-                    <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm({m : 'd', value: null})} >Aggiungi dirigente</button>
+                    <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm({m : 'g', value: null})} disabled = {tesserati.length >= 20}>Aggiungi giocatore</button>
+                    <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm({m : 'd', value: null})} disabled = {dirigenti.length >= 4}>Aggiungi dirigente</button>
                 </div>
             </tesseratiContext.Provider>
             <LoadIcon show={loading} />
