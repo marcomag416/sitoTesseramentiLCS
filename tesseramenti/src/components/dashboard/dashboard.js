@@ -1,16 +1,18 @@
 import { React, useContext, useState, useMemo } from 'react';
 /*import axios from 'axios';
 import { API_BASE } from '../../config/config.js';*/
-import { useFetch } from '../../functions/useFetch.js';
+import { useFetch, fetchPost } from '../../functions/useFetch.js';
 /*import ReactDOM from 'react-dom';*/
 import { sessionContext } from '../context.js';
 import ProgressBar from '../elem/progressBar.js';
 import Alert from '../elem/alert.js';
+import Label from '../elem/label.js';
 
 function Dashboard(props) {
     const [token, setToken, deleteToken] = useContext(sessionContext);
     const fetchGio = useFetch("/elencoTesserati", {token : token}, null);
     const fetchDir = useFetch("/elencoDirigenti", {token : token}, null);
+    const [msg, setMsg] = useState({mode : "", msg : ""});
 
     const [certTot, certValidi, gioTot, gioValidi] = useMemo(() => calcolaStatGio(fetchGio), fetchGio);
     const dirTot = useMemo(() => calcolaStatDir(fetchDir), fetchDir);
@@ -18,6 +20,20 @@ function Dashboard(props) {
     var invioOk = false;
     if(gioValidi === 20 && dirTot <= 4 && dirTot >= 1){
         invioOk = true;
+    }
+
+    const inviaElenco = async e => {
+        e.preventDefault();
+        setMsg({mode : "0", msg : ""});
+        var resp = await fetchPost("/inviaElenco", token, []);
+        if (resp.status){
+            console.log("Elenco tesserati inviato con successo");
+            window.location.reload();
+        }
+        else{
+            console.log("Errore invio elenco tesserati", resp.msg);
+            setMsg({mode : "r", msg : "Si è verificato un errore durante l'invio dell'elenco tesserati"});
+        }
     }
 
     return (
@@ -71,8 +87,16 @@ function Dashboard(props) {
                 <div className='w3-container w3-padding-large w3-margin'>
                     {props.info.elInviato == 1
                         ? <SezioneElencoInviato/>
-                        : <SezioneInviaElenco invioOk = {invioOk}/> 
+                        : <SezioneInviaElenco invioOk = {invioOk} onClick = {inviaElenco}/> 
                     }
+                </div>
+                
+                <div className='w3-container'>
+                    <Label 
+                        mode = {msg.mode} 
+                        msg = {msg.msg} 
+                        onClose = {() => setMsg({mode : "0", msg : ""})}
+                    />
                 </div>
             </div>
         </div>
@@ -82,7 +106,7 @@ function Dashboard(props) {
 
 function SezioneInviaElenco(props){
     return(
-        <>
+        <div>
             <h4>Invia elenco tesserati</h4>
             <p>Inviando l'elenco tesserati le informazioni relative a giocatori e dirigenti non potranno più essere modificate. Sarai comunque in grado di aggiungere nuovi certificati medici e visualizzare quelli esistenti.</p>
             <Alert 
@@ -95,20 +119,20 @@ function SezioneInviaElenco(props){
                     msg={"Tutte le informazioni relative a giocatori e dirigenti devono essere complete per poter inviare l'elenco tesserati."}
                 />
             }
-            <button className='w3-button w3-blue w3-round w3-right w3-margin-right' disabled = {!props.invioOk} >Invia elenco</button>
-        </> 
+            <button className='w3-button w3-blue w3-round w3-right w3-margin-right' onClick = {(e) => props.onClick(e)} disabled = {!props.invioOk} >Invia elenco</button>
+        </div> 
     );
 }
 
 function SezioneElencoInviato(props){
     return(
-        <>
+        <div>
             <h4>Elenco tesserati inviato</h4>
             <Alert 
                 mode = {"info"}
                 msg = {"L'elenco dei tesserati è stato inviato correttamente. In caso d'errore contatta via mail il nostro staff"}
             />
-        </>
+        </div>
     );
 }
 
