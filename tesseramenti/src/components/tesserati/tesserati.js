@@ -96,19 +96,25 @@ function Tesserati (props){
 
     return (
         <div className="w3-container">
-            <tesseratiContext.Provider value={[reloadTesserati, setForm]}>
-                <FormGiocatore 
-                    onClose={() => closeForm()} 
-                    display={form.m == 'g'}
-                />
+            <tesseratiContext.Provider value={[reloadTesserati, setForm, props.info]}>
+                {props.info.elInviato == 0 ?
+                    <>
+                        <FormDirigente 
+                        onClose={() => closeForm()} 
+                        display={form.m == 'd'}
+                        />
+                        <FormGiocatore 
+                            onClose={() => closeForm()} 
+                            display={form.m == 'g'}
+                        />
+                    </>  
+                    :null
+                }
                 <ModificaGiocatore 
                     onClose={() => closeForm()} 
                     display={form.m == 'mg'} 
                     giocatore = {form.value}
-                />
-                <FormDirigente 
-                    onClose={() => closeForm()} 
-                    display={form.m == 'd'}
+                    info = {props.info}
                 />
                 <div className = "w3-white">
                     <div className="w3-bar w3-margin-top w3-margin-bottom w3-padding-large">
@@ -122,10 +128,12 @@ function Tesserati (props){
                         />
                     </div>
                 </div>
-                <div className="w3-bar w3-right-align">
-                    <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm({m : 'g', value: null})} disabled = {tesserati.length >= 20}>Aggiungi giocatore</button>
-                    <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm({m : 'd', value: null})} disabled = {dirigenti.length >= 4}>Aggiungi dirigente</button>
-                </div>
+                {props.info.elInviato == 0 ?
+                    <div className="w3-bar w3-right-align">
+                        <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm({m : 'g', value: null})} disabled = {tesserati.length >= 20}>Aggiungi giocatore</button>
+                        <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm({m : 'd', value: null})} disabled = {dirigenti.length >= 4}>Aggiungi dirigente</button>
+                    </div>
+                : null }
             </tesseratiContext.Provider>
             <LoadIcon show={loading} />
         </div>
@@ -205,7 +213,7 @@ function Tesserato(props) {
 
 function Dirigente(dirigente) {
     const [token, setToken, deleteToken] = useContext(sessionContext);
-    const [reloadTesserati, setForm] = useContext(tesseratiContext);
+    const [reloadTesserati, setForm, info] = useContext(tesseratiContext);
     return (
         <tr className="w3-hover-light-grey testo-centrale">
             <td className="w3-tooltip">{IconaTesserato(1)}</td>
@@ -217,17 +225,22 @@ function Dirigente(dirigente) {
             <td></td>
             <td></td>
             <td></td>
-            <td><button className="w3-button w3-red w3-round w3-padding-small" 
-                    onClick={() => deleteDirigente(dirigente.id, token, reloadTesserati)}>
-                        <i className="material-icons w3-large">delete</i>
-                </button></td>
+            <td>
+                {info.elInviato == 0 ?
+                    <button className="w3-button w3-red w3-round w3-padding-small" 
+                        onClick={() => deleteDirigente(dirigente.id, token, reloadTesserati)}>
+                            <i className="material-icons w3-large">delete</i>
+                    </button>
+                    :null
+                }
+            </td>
         </tr>
     )
 }
 
 function Giocatore(giocatore) {
     const [token, setToken, deleteToken] = useContext(sessionContext);
-    const [reloadTesserati, setForm] = useContext(tesseratiContext);
+    const [reloadTesserati, setForm, info] = useContext(tesseratiContext);
     return (
         <tr className="w3-hover-light-grey testo-centrale">
             <td className="w3-tooltip">{IconaTesserato(0)}</td>
@@ -239,7 +252,15 @@ function Giocatore(giocatore) {
             <td>{giocatore.numero_maglia}</td>
             <td>{giocatore.ruolo}</td>
             <td className="w3-center"><button className="w3-button w3-small w3-blue w3-round" onClick={() => setForm({m : "mg", value : giocatore})} >Modifica</button></td>
-            <td><button className="w3-button w3-red w3-round w3-padding-small" onClick={() => deleteGiocatore(giocatore.id, token, reloadTesserati)} ><i className="material-icons w3-large">delete</i></button></td>
+            <td>
+                {info.elInviato == 0 ?
+                    <button className="w3-button w3-red w3-round w3-padding-small" 
+                        onClick={() => deleteGiocatore(giocatore.id, token, reloadTesserati)} >
+                            <i className="material-icons w3-large">delete</i>
+                    </button>
+                    : null
+                }
+            </td>
         </tr>
         )
 }

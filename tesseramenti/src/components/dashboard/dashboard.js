@@ -69,24 +69,47 @@ function Dashboard(props) {
                 </div>
                 
                 <div className='w3-container w3-padding-large w3-margin'>
-                    <h4>Invia elenco tesserati</h4>
-                    <p>Inviando l'elenco tesserati le informazioni relative a giocatori e dirigenti non potranno più essere modificate. Sarai comunque in grado di aggiungere nuovi certificati medici e visualizzare quelli esistenti.</p>
-                    <Alert 
-                        mode = {"info"} 
-                        msg = {"L'elenco tesserati deve essere inviato entro il 10/2/2022."}
-                    />
-                    {invioOk ? null : 
-                        <Alert 
-                            mode={"alert"} 
-                            msg={"Tutte le informazioni relative a giocatori e dirigenti devono essere complete per poter inviare l'elenco tesserati."}
-                        />
+                    {props.info.elInviato == 1
+                        ? <SezioneElencoInviato/>
+                        : <SezioneInviaElenco invioOk = {invioOk}/> 
                     }
-                    <button className='w3-button w3-blue w3-round w3-right w3-margin-right' disabled = {!invioOk} >Invia elenco</button>
                 </div>
             </div>
         </div>
         );
 
+}
+
+function SezioneInviaElenco(props){
+    return(
+        <>
+            <h4>Invia elenco tesserati</h4>
+            <p>Inviando l'elenco tesserati le informazioni relative a giocatori e dirigenti non potranno più essere modificate. Sarai comunque in grado di aggiungere nuovi certificati medici e visualizzare quelli esistenti.</p>
+            <Alert 
+                mode = {"info"} 
+                msg = {"L'elenco tesserati deve essere inviato entro il 10/2/2022."}
+            />
+            {props.invioOk ? null : 
+                <Alert 
+                    mode={"alert"} 
+                    msg={"Tutte le informazioni relative a giocatori e dirigenti devono essere complete per poter inviare l'elenco tesserati."}
+                />
+            }
+            <button className='w3-button w3-blue w3-round w3-right w3-margin-right' disabled = {!props.invioOk} >Invia elenco</button>
+        </> 
+    );
+}
+
+function SezioneElencoInviato(props){
+    return(
+        <>
+            <h4>Elenco tesserati inviato</h4>
+            <Alert 
+                mode = {"info"}
+                msg = {"L'elenco dei tesserati è stato inviato correttamente. In caso d'errore contatta via mail il nostro staff"}
+            />
+        </>
+    );
 }
 
 function calcolaStatGio(fetchGio) {

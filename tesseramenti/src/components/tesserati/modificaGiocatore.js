@@ -123,6 +123,13 @@ function ModificaGiocatore (props){
     if(inputVal == null){
         return null;
     }
+
+    var disabled = false;
+    var disabledClass = "";
+    if(props.info.elInviato == 1){
+        disabled = true;
+        disabledClass = " w3-disabled";
+    }
     return(
         <div className="w3-modal posizione-pannello" style={displayStyle}>
             <div className="w3-modal-content w3-card-4 w3-animate-zoom  dimensione-pannello">
@@ -175,11 +182,11 @@ function ModificaGiocatore (props){
                                 </div>
                                 <div className="w3-quarter w3-margin-bottom">
                                     <label><b>Numero maglia</b></label>
-                                    <input className="w3-input w3-border w3-round w3-light-grey" type="number" name="numero"  value={getInputValue("numero")} onChange={handleInputChange} placeholder="es. 10" min="1" max="99"/>
+                                    <input className={"w3-input w3-border w3-round w3-light-grey"+disabledClass} type="number" name="numero"  value={getInputValue("numero")} onChange={handleInputChange} placeholder="es. 10" min="1" max="99" disabled = {disabled}/>
                                 </div>
                                 <div className="w3-quarter w3-margin-bottom">
                                     <label><b>Taglia divisa</b></label>
-                                    <select className="w3-select w3-border w3-round w3-light-grey" name="taglia" value={getInputValue("taglia")} onChange={handleInputChange}>
+                                    <select className={"w3-select w3-border w3-round w3-light-grey"+disabledClass} name="taglia" value={getInputValue("taglia")} onChange={handleInputChange} disabled = {disabled}>
                                         <option value="" disabled>Seleziona taglia</option>
                                         <option value="xs">XS</option>
                                         <option value="s">S</option>
@@ -190,7 +197,7 @@ function ModificaGiocatore (props){
                                 </div>
                                 <div className="w3-quarter w3-margin-bottom">
                                     <label><b>Ruolo</b></label>
-                                    <select className="w3-select w3-border w3-round w3-light-grey" name="ruolo"  value={getInputValue("ruolo")} onChange={handleInputChange}>
+                                    <select className={"w3-select w3-border w3-round w3-light-grey"+disabledClass} name="ruolo"  value={getInputValue("ruolo")} onChange={handleInputChange} disabled = {disabled}>
                                         <option value="" disabled>Seleziona ruolo</option>
                                         <option value="por">POR</option>
                                         <option value="dif">DIF</option>
@@ -226,7 +233,9 @@ function ModificaGiocatore (props){
 
                     <div className="w3-border w3-margin-top w3-padding-large">
                         <button className="w3-button w3-round w3-red" onClick={(e) => close(e)}>Chiudi</button>
-                        <button className="w3-button w3-round w3-blue w3-right" onClick={(e) => submitForm(e)} >Modifica</button>
+                        {disabled ? null :
+                            <button className="w3-button w3-round w3-blue w3-right" onClick={(e) => submitForm(e)} >Modifica</button>
+                        }
                     </div>
                     <LoadIcon show={loading}/>
                 </form>

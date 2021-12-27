@@ -43,8 +43,10 @@ function Window (props){
 						nome: result.data.mail,
 						squadra: result.data.squadra,
 						stagione: result.data.stagione,
-						lega: result.data.lega
+						lega: result.data.lega,
+						elInviato: result.data.elInviato
 					});
+					console.log("fetched info :", info);
 					setLoading(false);
 				}
 				else {
@@ -62,7 +64,7 @@ function Window (props){
 					console.log(error.response.headers, error.response.status, error.response.data);
 				}
 			});
-    }, [token]);
+    }, [token, location]);
 
 	const pageTitles = [{url : "/", title : "Dashboard"}, {url : "/tesserati", title : "Tesserati"}, {url : "/cambio-psw", title : "Gestione password"}];
 	const titolo = pageTitles.filter((x) =>{
@@ -97,7 +99,7 @@ function Window (props){
 					<div className="w3-light-grey">
 						<Switch>
 							<Route exact path="/tesserati">
-								<Tesserati/>
+								<Tesserati info = {info}/>
 							</Route>
 							<Route exact path="/cambio-psw">
 								<CambioPsw/>
