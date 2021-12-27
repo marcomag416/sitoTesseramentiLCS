@@ -65,7 +65,7 @@ function Dashboard(props) {
                             blue = {certValidi / 20 * 100} green = {0} red = {(certTot - certValidi) / 20 * 100} 
                         />
                         <div className='w3-padding'>
-                            <h6>Certificati inseriti : {certTot} / 20</h6>
+                            <h6>Certificati inseriti : {certTot} / {gioTot}</h6>
                             <h6>Certificati non validi : {certTot - certValidi}</h6>
                         </div>
                     </div>
