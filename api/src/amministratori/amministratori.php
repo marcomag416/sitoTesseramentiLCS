@@ -77,7 +77,7 @@
             return array("status" => false, "msg" => "Password non valida");
         }
 
-        $sql = "select distinct id_amministratore as idamm from codici_ripristino where token = :token;";
+        $sql = file_get_contents(ROOTPATH."\src\sqlQueries\selectIdammCodiceRipristino.sql");
         $stm = $dbConnection -> prepare($sql);
         $stm->bindValue(":token", $_POST['token'], PDO::PARAM_STR);
         try{
@@ -88,7 +88,7 @@
         }
 
         if($stm->rowCount() != 1){
-            return array("status" => false, "msg" => "Autorizzazione negata");
+            return array("status" => false, "msg" => "Link non valido");
         }
         $row = $stm->fetch(PDO::FETCH_ASSOC);
         
@@ -96,13 +96,19 @@
         $sql = file_get_contents(ROOTPATH."\src\sqlQueries\updatePsw.sql");
         $stm = $dbConnection -> prepare($sql);
         $stm->bindValue(":idamm", $row['idamm'], PDO::PARAM_STR);
-        $stm->bindValue(":psw", $_POST['psw'], PDO::PARAM_STR);
+        $stm->bindValue(":psw", $psw, PDO::PARAM_STR);
         try{
             $stm->execute();
         }catch (\PDOException $e) {
             $errmsg = $e->getMessage();
             return array("status" => false, "msg" => "Errore sql : $errmsg");
         }
+
+        $sql = "delete from codici_ripristino where token = :token;";
+        $stm = $dbConnection -> prepare($sql);
+        $stm->bindValue(":token", $_POST['token'], PDO::PARAM_STR);
+        $stm->execute();
+
         return array("status" => true, "msg" => "Password aggiornata");
     }
 

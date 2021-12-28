@@ -1,0 +1,1 @@
+select distinct id_amministratore as idamm from codici_ripristino where token = :token and data_scadenza > CURRENT_TIMESTAMP();
