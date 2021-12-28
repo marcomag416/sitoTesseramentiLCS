@@ -28,6 +28,11 @@ if($uri[1] == "prova"){
 	exit();
 }
 
+if($uri[1] == "resetPsw"){
+	echo json_encode(resetPsw($dbConnection));
+	exit();
+}
+
 /*if(isset($_POST['token'])){
 	echo json_encode(array("status" => false, "msg" => $_POST['token']));
 	http_response_code(202);

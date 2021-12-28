@@ -69,7 +69,7 @@
     }
 
     function resetPsw($dbConnection){
-        if(!isset($_POST['token']) || !isset($_POST['mail']) || !isset($_POST['psw']) || $_POST['token'] == "" || $_POST['mail'] == ""){
+        if(!isset($_POST['token']) || !isset($_POST['psw']) || $_POST['token'] == "" ){
             return array("status" => false, "msg" => "Parametri mancanti");
         }
 
