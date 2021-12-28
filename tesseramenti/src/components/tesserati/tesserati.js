@@ -60,7 +60,7 @@ function Tesserati (props){
                         }
                     }
                     else{
-                        x.cm = 0;
+                        x.cm = 0; /* in attesa di copia cartacea */
                     }
                     
                 }
@@ -298,7 +298,7 @@ function StampaScadenza(scadenza){
 function IconaCertificatoMedico(cm) {
     switch (cm) {
         case 0:
-            return (<><span className="w3-badge w3-yellow" data-tip="Copia cartacea mancante" data-for="tltp">C</span></>);
+            return (<><span className="w3-badge w3-yellow" data-tip="In attesa di copia cartacea" data-for="tltp">A</span></>);
         case 1:
             return (<><span className="w3-badge w3-green" data-tip="Certificato valido" data-for="tltp">V</span></>);
         case 2:
