@@ -36,9 +36,9 @@ function CambioPsw(props){
     }
 
     return(
-        <div className='w3-container' style = {{height : "700px"}}>
+        <div className='w3-container' style = {{height : "88vh"}}>
             <div className='w3-container w3-white w3-margin-top'>
-                <div className="w3-container w3-content w3-padding" style = {{width : "50%"}}>
+                <div className="w3-container w3-content w3-padding" style = {{width : "50%", minWidth:"300px"}}>
                     <form onSubmit={(event) => submitForm(event)} >
                         <h3 className='w3-center'>Aggiorna password</h3>
                         <div className="w3-row-padding">

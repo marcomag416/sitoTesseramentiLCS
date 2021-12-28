@@ -101,7 +101,7 @@ function Tesserati (props){
     });
 
     return (
-        <div className="w3-container">
+        <div className="w3-container" >
             <ReactTooltip 
                 effect = "solid"
 				delayShow={100} 
@@ -142,8 +142,8 @@ function Tesserati (props){
                 </div>
                 {props.info.elInviato == 0 ?
                     <div className="w3-bar w3-right-align">
-                        <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm({m : 'g', value: null})} disabled = {tesserati.length >= 20}>Aggiungi giocatore</button>
-                        <button className="w3-button w3-blue w3-round w3-margin w3-mobile" onClick={() => setForm({m : 'd', value: null})} disabled = {dirigenti.length >= 4}>Aggiungi dirigente</button>
+                        <button className="w3-button w3-blue w3-round w3-margin w3-mobile no-mobile-margin" onClick={() => setForm({m : 'g', value: null})} disabled = {tesserati.length >= 20}>Aggiungi giocatore</button>
+                        <button className="w3-button w3-blue w3-round w3-margin w3-mobile no-mobile-margin" onClick={() => setForm({m : 'd', value: null})} disabled = {dirigenti.length >= 4}>Aggiungi dirigente</button>
                     </div>
                 : null }
             </tesseratiContext.Provider>

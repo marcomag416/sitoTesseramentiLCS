@@ -5,6 +5,7 @@ import { sessionContext } from '../context.js';
 import ProgressBar from '../elem/progressBar.js';
 import Alert from '../elem/alert.js';
 import Label from '../elem/label.js';
+import './dashboard.css';
 
 function Dashboard(props) {
     const [token, setToken, deleteToken] = useContext(sessionContext);
@@ -42,9 +43,9 @@ function Dashboard(props) {
 				place = "bottom" 
                 /*offset={{left : 200, top:10}}*/
 			/>
-            <div className='w3-container w3-white w3-margin'>
+            <div className='w3-row-padding w3-white w3-margin-top w3-mobile' >
 
-                <div className = "w3-container  w3-margin">
+                <div className = "w3-container  w3-margin contentholder">
                     <h4>Benvenuto, <b> {props.info.nome} </b> </h4>
                     <ul className = "w3-ul w3-margin-top">
                         <li className = "w3-border-0">Campionato : <b> {props.info.lega} </b> </li>
@@ -53,7 +54,7 @@ function Dashboard(props) {
                     </ul>
                 </div>
 
-                <div className='w3-padding-large w3-container'>
+                <div className='w3-padding-large w3-container contentholder'>
                     <div className='w3-container w3-half'>
                         <h4>Panoramica giocatori</h4>
                         <ProgressBar 
@@ -89,7 +90,7 @@ function Dashboard(props) {
                     </div>
                 </div>
                 
-                <div className='w3-container w3-padding-large w3-margin'>
+                <div className='w3-container w3-padding-large w3-margin contentholder'>
                     {props.info.elInviato == 1
                         ? <SezioneElencoInviato/>
                         : <SezioneInviaElenco invioOk = {invioOk} onClick = {inviaElenco}/> 
