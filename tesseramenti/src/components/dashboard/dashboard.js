@@ -11,7 +11,7 @@ function Dashboard(props) {
     const fetchDir = useFetch("/elencoDirigenti", {token : token}, null);
     const [msg, setMsg] = useState({mode : "", msg : ""});
 
-    const [certTot, certValidi, gioTot, gioValidi] = useMemo(() => calcolaStatGio(fetchGio), fetchGio);
+    const [certTot, certValidi, certAtt, gioTot, gioValidi] = useMemo(() => calcolaStatGio(fetchGio), fetchGio);
     const dirTot = useMemo(() => calcolaStatDir(fetchDir), fetchDir);
 
     var invioOk = false;
@@ -54,19 +54,20 @@ function Dashboard(props) {
                             blue = {gioValidi / 20 * 100} green = {0} red = {(gioTot - gioValidi) / 20 * 100} 
                         />
                         <div className='w3-padding'>
-                            <h6>Tesserati : {gioTot} / 20</h6>
-                            <h6>Giocatori completati : {gioValidi} / 20</h6>
+                            <h6>Tesserati: {gioTot} / 20</h6>
+                            <h6>Giocatori completati: {gioValidi} / 20</h6>
                         </div>
                     </div>
                     <div className = "w3-container w3-half">
                         <h4>Certificati medici</h4>
                         <ProgressBar 
                             style = {{width : "80%" }} 
-                            blue = {certValidi / 20 * 100} green = {0} red = {(certTot - certValidi) / 20 * 100} 
+                            blue = {certValidi / 20 * 100} green = {certAtt / 20 * 100} red = {(certTot - certValidi - certAtt) / 20 * 100} 
                         />
                         <div className='w3-padding'>
-                            <h6>Certificati inseriti : {certTot} / {gioTot}</h6>
-                            <h6>Certificati non validi : {certTot - certValidi}</h6>
+                            <h6>Certificati inseriti: {certTot} / {gioTot}</h6>
+                            <h6>In attesa: { certAtt } / {certTot}</h6>
+                            <h6>Validi: {certValidi} / {certTot}</h6>
                         </div>
                     </div>
                     <div className = "w3-container w3-half">
@@ -76,7 +77,7 @@ function Dashboard(props) {
                             blue = {dirTot / 4 * 100} green = {0} red = {0} 
                         />
                         <div className = "w3-padding">
-                            <h6>Tesserati : {dirTot} / 4</h6>
+                            <h6>Tesserati: {dirTot} / 4</h6>
                         </div>
                     </div>
                 </div>
@@ -134,7 +135,7 @@ function SezioneElencoInviato(props){
 }
 
 function calcolaStatGio(fetchGio) {
-    var certTot = 0, certValidi = 0, gioTot = 0, gioValidi = 0;
+    var certTot = 0, certValidi = 0, certAtt = 0, gioTot = 0, gioValidi = 0;
     if (fetchGio[0].status && fetchGio[0].vett != undefined) {
         const vett = fetchGio[0].vett;
         let scadenza;
@@ -144,7 +145,12 @@ function calcolaStatGio(fetchGio) {
                 certTot ++;
                 scadenza = Date.parse(new Date(x.scadenza));
                 if(scadenza > dataOggi){
-                    certValidi++;
+                    if(x.fisico == 1){
+                        certValidi++;
+                    }
+                    else{
+                        certAtt++;
+                    }
                 }
             }
             if(x.numero_maglia != null && x.ruolo != "" && x.taglia != ""){
@@ -156,7 +162,7 @@ function calcolaStatGio(fetchGio) {
     else {
         console.log("Errore caricamento giocatori");
     }
-    return [certTot, certValidi, gioTot, gioValidi];        
+    return [certTot, certValidi, certAtt, gioTot, gioValidi];        
 }
 
 function calcolaStatDir(fetchDir){
