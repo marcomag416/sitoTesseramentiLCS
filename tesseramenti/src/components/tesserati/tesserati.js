@@ -48,20 +48,21 @@ function Tesserati (props){
                 }
                 else{
                     scadenza = Date.parse(new Date(x.scadenza));
-                    if(scadenza > dataOggi + gg10){
-                        if(x.fisico == 1){
-                            x.cm = 0;  /* cartaceo */
-                        }
-                        else{
-                            x.cm = 1; /*valido*/
-                        }
-                    }
-                    else if(scadenza > dataOggi - gg10){
-                        x.cm = 2; /* in scadenza */
-                    }
-                    else if(scadenza < dataOggi){
+                    if(scadenza < dataOggi){
                         x.cm = 3; /* scaduto */
                     }
+                    if(x.fisico == 1){
+                        if(scadenza > dataOggi + gg10){
+                            x.cm = 1; /*valido*/
+                        }
+                        else if(scadenza > dataOggi - gg10){
+                            x.cm = 2; /* in scadenza */
+                        }
+                    }
+                    else{
+                        x.cm = 0;
+                    }
+                    
                 }
             });
             //console.log(vett.length, "giocatori caricati: ", vett);
