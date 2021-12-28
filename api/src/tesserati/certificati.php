@@ -1,6 +1,7 @@
 <?php
 
 function caricaFileCertificato($session, $user){
+    /* controllo preliminari sui dati caricati */
     if (!isset($_FILES['fileCertificato']) || !is_uploaded_file($_FILES['fileCertificato']['tmp_name'])) {
         return array("status" => false, "msg" => "Nessun file caricato");
     }
@@ -105,7 +106,7 @@ function uploadCertificatoID($session, $dbConnection){
         return array("status" => false, "msg" => "Id giocatore mancante");
     }
 
-    /* Recupero informazioni giocatore  */
+    /* Recupero informazioni giocatore  
     $sql = file_get_contents(ROOTPATH."\src\sqlQueries\selectGiocatoreById.sql");
 	$stm = $dbConnection -> prepare($sql);
 	$stm->bindValue(":idgiocatore", $_POST['idgiocatore'], PDO::PARAM_INT);
@@ -128,18 +129,18 @@ function uploadCertificatoID($session, $dbConnection){
     $user['cognome'] = $tmp['cognome'];
     $user['data_nascita'] = $tmp['data_nascita'];
 
-    /* Carico file certificato */
+    /* Carico file certificato 
     $fileStatus = caricaFileCertificato($session, $user);
 
     if(!$fileStatus['status']){
         return $fileStatus;
-    }
+    }*/
 
     /* Inserisco certificato nel database */
     $sql = file_get_contents(ROOTPATH."\src\sqlQueries\insertCertificatoFromId.sql");
 	$stm = $dbConnection -> prepare($sql);
     $stm->bindValue(":idgiocatore", $_POST['idgiocatore'], PDO::PARAM_INT);
-	$stm->bindValue(":nomefile", $fileStatus['filename'], PDO::PARAM_STR);
+	$stm->bindValue(":nomefile", /*$fileStatus['filename']*/"", PDO::PARAM_STR);
 	$stm->bindValue(":scadenza", $_POST['scadenza'], PDO::PARAM_STR);
     try{
 		$stm->execute();

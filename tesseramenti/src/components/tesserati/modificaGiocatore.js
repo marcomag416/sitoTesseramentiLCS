@@ -66,7 +66,7 @@ function ModificaGiocatore (props){
             console.log("Data di scadenza certificato mancante");
             return;
         }
-        const sendData = {scadenza : inputCert, fileCertificato : form.certificato.files[0], idgiocatore : props.giocatore.id};
+        const sendData = {scadenza : inputCert, /*fileCertificato : form.certificato.files[0],*/ idgiocatore : props.giocatore.id};
         setLoading(true);
         var result = await fetchPost('/uploadCertificatoId', token, sendData);
         if(result.status){
@@ -79,7 +79,7 @@ function ModificaGiocatore (props){
         }
         setLoading(false);
         setInputCert("");
-        form.certificato.value = "";
+        /*form.certificato.value = "";*/
     }
 
     const submitForm = async e =>{
@@ -217,11 +217,6 @@ function ModificaGiocatore (props){
                                     <input className="w3-input w3-border w3-round w3-light-grey" type="date" name="scadenza"  value={inputCert} onChange={(e) => setInputCert(e.target.value)} min={d.toISOString().slice(0, 10)} />
                                 </div>
                                 <div className="w3-third w3-margin-bottom">
-                                    <label><b>Carica certificato</b></label>
-                                    <input type="hidden" name="MAX_FILE_SIZE" value={MAX_FILE_SIZE}/>
-                                    <input className="w3-input" type="file" name="certificato"/>
-                                </div>
-                                <div className="w3-third w3-margin-bottom">
                                     <button className="w3-button w3-round w3-blue w3-right" onClick={(e) => inviaCertificato(e)} >Carica Certificato</button>
                                 </div>
                             </div>
@@ -280,13 +275,13 @@ function checkForm(form, setMsg){
 }
 
 function checkCertificato(form, setMsg){
-    if(form.certificato.files[0] == undefined){
+    /*if(form.certificato.files[0] == undefined){
         form.certificato.focus();
         setMsg("Seleziona un file");
         return false;
     }
 
-    /* controllo dimensione e tipo di file */
+    /* controllo dimensione e tipo di file 
     if(form.certificato.files[0].size > MAX_FILE_SIZE){
         form.certificato.focus();
         setMsg("Il file selezionato è troppo grande");
@@ -297,7 +292,7 @@ function checkCertificato(form, setMsg){
         form.certificato.focus();
         setMsg("Il file del certificato medico deve essere un'immagine o un PDF");
         return false;
-    }
+    }*/
 
     /* data scedenza certificato med */
     if(form.scadenza.value == "" || form.scadenza.value == null){

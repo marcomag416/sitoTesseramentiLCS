@@ -5,7 +5,7 @@ import Label from '../elem/label';
 import controllaCf from '../../functions/controlloCampi.js';
 import "./form.css";
 import { tesseratiContext } from './tesserati';
-import {MAX_FILE_SIZE, ALLOWED_FILE_TYPES} from '../../config/config.js'
+//import {MAX_FILE_SIZE, ALLOWED_FILE_TYPES} from '../../config/config.js'
 import LoadIcon from '../elem/loadIcon';
 
 function FormGiocatore (props){
@@ -66,7 +66,7 @@ function FormGiocatore (props){
             console.log("Data di scadenza certificato mancante");
             return;
         }
-        const sendData = {scadenza : inputCert, fileCertificato : cert.files[0], idgiocatore : idgiocatore};
+        const sendData = {scadenza : inputCert, /*fileCertificato : cert.files[0],*/ idgiocatore : idgiocatore};
         var result = await fetchPost('/uploadCertificatoId', token, sendData);
         if(result.status){
             console.log("Certificato caricato con successo");
@@ -86,7 +86,7 @@ function FormGiocatore (props){
             var  result = await fetchPost('/uploadGiocatore', token, inputVal);
             if(result.status){
                 console.log("Giocatore caricato con successo", result.idgiocatore);
-                if(e.target.certificato.files[0] != undefined){
+                if(e.target.scadenza.value != "" && e.target.scadenza.value != null){
                     setLabel({mode : "g", msg : "Giocatore aggiunto."});
                     await inviaCertificato(e.target.certificato, result.idgiocatore);
                 }
@@ -96,7 +96,7 @@ function FormGiocatore (props){
                 sessionStorage.removeItem("dataFormGiocatore");
                 setInputVal(defaultGioVal);
                 setInputCert("");
-                e.target.certificato.value = "";
+                /*e.target.certificato.value = "";*/
                 reloadTesserati();
             }
             else{
@@ -208,11 +208,6 @@ function FormGiocatore (props){
                                     <label><b>Scadenza certificato</b></label>
                                     <input className="w3-input w3-border w3-round w3-light-grey" type="date" name="scadenza"  value={inputCert} onChange={(e) => setInputCert(e.target.value)} min={d.toISOString().slice(0, 10)} />
                                 </div>
-                                <div className="w3-third w3-margin-bottom">
-                                    <label><b>Carica certificato</b></label>
-                                    <input type="hidden" name="MAX_FILE_SIZE" value={MAX_FILE_SIZE}/>
-                                    <input className="w3-input" type="file" name="certificato"/>
-                                </div>
                             </div>
                         </fieldset>
 
@@ -264,8 +259,8 @@ function checkForm(form, setMsg){
         return false;
     }
 
-    if(form.certificato.files[0] != undefined){
-        /* controllo dimensione e tipo di file */
+    /*if(form.certificato.files[0] != undefined){
+        /* controllo dimensione e tipo di file 
         if(form.certificato.files[0].size > MAX_FILE_SIZE){
             form.certificato.focus();
             setMsg("Il file selezionato è troppo grande");
@@ -276,14 +271,10 @@ function checkForm(form, setMsg){
             form.certificato.focus();
             setMsg("Il file del certificato medico deve essere un'immagine o un PDF");
             return false;
-        }
-
+        }*/
+    
+    if(form.scadenza.value != "" && form.scadenza.value != null){
         /* data scedenza certificato med */
-        if(form.scadenza.value == "" || form.scadenza.value == null){
-            form.scadenza.focus();
-            setMsg("Inserisci la data di scadenza del certificato medico");
-            return false;
-        }
         var d = Date.parse(new Date(form.scadenza.value));
         if(d < dataOggi){
             form.scadenza.focus();
@@ -296,3 +287,13 @@ function checkForm(form, setMsg){
 }
 
 export default memo(FormGiocatore);
+
+/*
+
+    <div className="w3-third w3-margin-bottom">
+        <label><b>Carica certificato</b></label>
+        <input type="hidden" name="MAX_FILE_SIZE" value={MAX_FILE_SIZE}/>
+        <input className="w3-input" type="file" name="certificato"/>
+    </div>
+                                
+*/
