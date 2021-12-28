@@ -1,4 +1,5 @@
 import { React, useContext, useState, useMemo } from 'react';
+import ReactTooltip from 'react-tooltip';
 import { useFetch, fetchPost } from '../../functions/useFetch.js';
 import { sessionContext } from '../context.js';
 import ProgressBar from '../elem/progressBar.js';
@@ -35,15 +36,21 @@ function Dashboard(props) {
 
     return (
         <div className="w3-container">
+            <ReactTooltip 
+                effect = "solid"
+				delayShow={100} 
+				place = "bottom" 
+                /*offset={{left : 200, top:10}}*/
+			/>
             <div className='w3-container w3-white w3-margin'>
 
                 <div className = "w3-container  w3-margin">
                     <h4>Benvenuto, <b> {props.info.nome} </b> </h4>
-                    <div className = "w3-padding">
-                        <h6>Campionato : <b> {props.info.lega} </b> </h6>
-                        <h6>Squadra : <b> {props.info.squadra} </b> </h6>
-                        <h6>Stagione : <b> {props.info.stagione} </b> </h6>
-                    </div>
+                    <ul className = "w3-ul w3-margin-top">
+                        <li className = "w3-border-0">Campionato : <b> {props.info.lega} </b> </li>
+                        <li className = "w3-border-0">Squadra : <b> {props.info.squadra} </b> </li>
+                        <li className = "w3-border-0">Stagione : <b> {props.info.stagione} </b> </li>
+                    </ul>
                 </div>
 
                 <div className='w3-padding-large w3-container'>
@@ -53,10 +60,10 @@ function Dashboard(props) {
                             style = {{width : "80%" }} 
                             blue = {gioValidi / 20 * 100} green = {0} red = {(gioTot - gioValidi) / 20 * 100} 
                         />
-                        <div className='w3-padding'>
-                            <h6>Tesserati: {gioTot} / 20</h6>
-                            <h6>Giocatori completati: {gioValidi} / 20</h6>
-                        </div>
+                        <ul className='w3-ul w3-margin-top'>
+                                <li className = "w3-border-0" data-tip="Numero totale di giocatori inseriti">Tesserati: <b>{gioTot} / 20</b></li>
+                                <li className = "w3-border-0" data-tip="Giocatori completi di tutte le informazioni (n.maglia, taglia, ecc..)">Giocatori completati: <b>{gioValidi} / 20</b></li>
+                        </ul>
                     </div>
                     <div className = "w3-container w3-half">
                         <h4>Certificati medici</h4>
@@ -64,11 +71,11 @@ function Dashboard(props) {
                             style = {{width : "80%" }} 
                             blue = {certValidi / 20 * 100} green = {certAtt / 20 * 100} red = {(certTot - certValidi - certAtt) / 20 * 100} 
                         />
-                        <div className='w3-padding'>
-                            <h6>Certificati inseriti: {certTot} / {gioTot}</h6>
-                            <h6>In attesa: { certAtt } / {certTot}</h6>
-                            <h6>Validi: {certValidi} / {certTot}</h6>
-                        </div>
+                        <ul className='w3-ul w3-margin-top'>
+                            <li className = "w3-border-0" data-tip="Certificati medici inseriti">Certificati inseriti: <b>{certTot} / {gioTot}</b></li>
+                            <li className = "w3-border-0" data-tip="In attesa di consegna della copia cartacea">In attesa: <b>{ certAtt } / {certTot}</b></li>
+                            <li className = "w3-border-0" data-tip="Certificati validi">Validi: <b>{certValidi} / {certTot}</b></li>
+                        </ul>
                     </div>
                     <div className = "w3-container w3-half">
                         <h4>Panoramica dirigenti</h4>
@@ -76,9 +83,9 @@ function Dashboard(props) {
                             style = {{width : "80%" }} 
                             blue = {dirTot / 4 * 100} green = {0} red = {0} 
                         />
-                        <div className = "w3-padding">
-                            <h6>Tesserati: {dirTot} / 4</h6>
-                        </div>
+                        <ul className = "w3-ul w3-margin-top">
+                            <li className = "w3-border-0" data-tip="Numero di dirigenti inseriti">Tesserati: <b>{dirTot} / 4</b></li>
+                        </ul>
                     </div>
                 </div>
                 

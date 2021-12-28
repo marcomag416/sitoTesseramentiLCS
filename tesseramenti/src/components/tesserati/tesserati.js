@@ -100,17 +100,10 @@ function Tesserati (props){
         ReactTooltip.rebuild();
     });
 
-    const hideTltp = (e) =>{
-        var id = setInterval(() => {
-            ReactTooltip.hide();
-            clearInterval(id);
-        }, 1500);
-    }
-
     return (
         <div className="w3-container">
             <ReactTooltip 
-                effetc = "solid"
+                effect = "solid"
 				delayShow={100} 
 				place = "right" 
 				id="tltp"
