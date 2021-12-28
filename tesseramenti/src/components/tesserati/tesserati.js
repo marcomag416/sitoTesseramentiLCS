@@ -7,6 +7,7 @@ import FormDirigente from './formDirigente.js';
 import {fetchPost, useFetch} from '../../functions/useFetch.js';
 import { sessionContext } from '../context';
 import LoadIcon from '../elem/loadIcon';
+import ReactTooltip from 'react-tooltip';
 
 //import { MDCDataTable } from '@material/data-table';
 /*const dataTable = new MDCDataTable(document.querySelector('.mdc-data-table'));*/
@@ -94,8 +95,25 @@ function Tesserati (props){
         setLoading(false);
     }, [fetchDir])
 
+    useEffect(() => {
+        ReactTooltip.rebuild();
+    });
+
+    const hideTltp = (e) =>{
+        var id = setInterval(() => {
+            ReactTooltip.hide();
+            clearInterval(id);
+        }, 1500);
+    }
+
     return (
         <div className="w3-container">
+            <ReactTooltip 
+                effetc = "solid"
+				delayShow={100} 
+				place = "right" 
+				id="tltp"
+			/>
             <tesseratiContext.Provider value={[reloadTesserati, setForm, props.info]}>
                 {props.info.elInviato == 0 ?
                     <>
@@ -145,7 +163,7 @@ function Tesserati (props){
 function Tabella(props) {
     const tesserati = props.tesserati;
     return (
-        <div className="w3-responsive tabella-scorrevole">
+        <div className="w3-responsive tabella-scorrevole" onScroll={() => {ReactTooltip.hide()}}>
             <table className="w3-table w3-bordered ">
                 <thead>
                     <tr >
@@ -161,7 +179,7 @@ function Tabella(props) {
                         <th></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody >
                     {tesserati.map((tesserato) => 
                         <Tesserato 
                             tesserato={tesserato} 
@@ -216,7 +234,7 @@ function Dirigente(dirigente) {
     const [reloadTesserati, setForm, info] = useContext(tesseratiContext);
     return (
         <tr className="w3-hover-light-grey testo-centrale">
-            <td className="w3-tooltip">{IconaTesserato(1)}</td>
+            <td>{IconaTesserato(1)}</td>
             <td>{dirigente.cf}</td>
             <td>{dirigente.nome}</td>
             <td>{dirigente.cognome}</td>
@@ -243,11 +261,11 @@ function Giocatore(giocatore) {
     const [reloadTesserati, setForm, info] = useContext(tesseratiContext);
     return (
         <tr className="w3-hover-light-grey testo-centrale">
-            <td className="w3-tooltip">{IconaTesserato(0)}</td>
+            <td>{IconaTesserato(0)}</td>
             <td>{giocatore.cf}</td>
             <td>{giocatore.nome}</td>
             <td>{giocatore.cognome}</td>
-            <td className="w3-tooltip">{IconaCertificatoMedico(giocatore.cm)}{StampaScadenza(giocatore.scadenza)}</td>
+            <td>{IconaCertificatoMedico(giocatore.cm)}{StampaScadenza(giocatore.scadenza)}</td>
             <td>{giocatore.taglia}</td>
             <td>{giocatore.numero_maglia}</td>
             <td>{giocatore.ruolo}</td>
@@ -279,42 +297,34 @@ function StampaScadenza(scadenza){
 function IconaCertificatoMedico(cm) {
     switch (cm) {
         case 0:
-            return (<><span className="w3-badge w3-green">C</span>{Tooltip("Certificato cartaceo")}</>);
+            return (<><span className="w3-badge w3-yellow" data-tip="Copia cartacea mancante" data-for="tltp">C</span></>);
         case 1:
-            return (<><span className="w3-badge w3-green">V</span>{Tooltip("Certificato valido") }</>);
+            return (<><span className="w3-badge w3-green" data-tip="Certificato valido" data-for="tltp">V</span></>);
         case 2:
-            return (<><span className="w3-badge w3-yellow">V</span>{Tooltip("Certificato in scadenza") }</>);
+            return (<><span className="w3-badge w3-yellow" data-tip="Certificato in scadenza" data-for="tltp">V</span></>);
         case 3:
-            return (<><span className="w3-badge w3-red">S</span>{Tooltip("Certificato scaduto")}</>);
+            return (<><span className="w3-badge w3-red" data-tip="Certificato scaduto" data-for="tltp">S</span></>);
         case 4:
-            return (<><span className="w3-badge w3-red">M</span>{Tooltip("Certificato mancante") }</>);
+            return (<><span className="w3-badge w3-red" data-tip="Certificato mancante" data-for="tltp">M</span></>);
         default:
-            return (<><span className="w3-badge w3-grey">D</span>{Tooltip("Certificato") }</>);
+            return (<><span className="w3-badge w3-grey" data-tip="Mancante" data-for="tltp">D</span></>);
     }
 }
 
 function IconaTesserato(t) {
     switch (t) {
         case 0:
-            return (<><i className="material-icons">sports_soccer</i>{Tooltip("Giocatore")}</>);
+            return (<><i className="material-icons" data-tip="Giocatore" data-for="tltp">sports_soccer</i></>);
         case 1:
-            return (<><i className="material-icons">person</i>{Tooltip("Dirigente")}</>);
+            return (<><i className="material-icons" data-tip="Dirigente" data-for="tltp">person</i></>);
     }
 }
 
-const Tooltip = (text) => {
+/*const Tooltip = (text) => {
     const dieTime = 1500;
     const def = < p style = {{ position: "absolute", left: "50px", bottom: "0px" }} className = "w3-text w3-tag w3-round w3-grey w3-text-white" > { text }</p >;
-    //const [txt, setTxt] = useState(def);
-    
-    /*useEffect(() => {
-        //setTxt(def);
-        let timer = setTimeout(function () { setTxt(<></>) }, dieTime);
-        return () => clearTimeout(timer);
-    }, []);*/
-
     return (def);
-}
+}*/
 
 async function deleteGiocatore(id, token, onSuccess){
     var  result = await fetchPost('/deleteGiocatore', token, {"idgiocatore" : id});
