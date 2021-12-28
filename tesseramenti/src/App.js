@@ -12,10 +12,10 @@ class App extends React.Component{
 		return (
 			<BrowserRouter>
 				<Switch>
-					<Route exact path="/psw-reset">
+					<Route path="/psw-reset/:token">
 						<PswReset/>
 					</Route>
-					<Route exact path="/recupero-psw">
+					<Route path="/recupero-psw">
 						<RecuperoPsw />
 					</Route>
 					<Route path="/">
