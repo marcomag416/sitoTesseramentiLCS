@@ -40,8 +40,18 @@ function Tesserati (props){
             let scadenza;
             const dataOggi = Date.parse(new Date);
             const gg10 = 864000000; /* millsec in 10 gg */
-            vett.forEach((x, index) => {
-                //x.id = index;
+            const nMaglia = new Set();
+            vett.forEach((x) => {
+                if(x.numero_maglia != null && nMaglia.has(x.numero_maglia)){
+                    x.tmaglia = 0;
+                    vett.filter((n) => {return n.numero_maglia === x.numero_maglia}).forEach(x => {
+                        x.tmaglia = 0;
+                    });
+                }
+                else{
+                    x.tmaglia = 1;
+                    nMaglia.add(x.numero_maglia)
+                }
                 x.t = 0; /* giocatore */
                 if(x.scadenza == null){
                     x.cm = 4; /* cert mancante */
@@ -103,7 +113,7 @@ function Tesserati (props){
     return (
         <div className="w3-container" >
             <ReactTooltip 
-                effect = "solid"
+                effect = "float"
 				delayShow={100} 
 				place = "right" 
 				id="tltp"
@@ -240,6 +250,7 @@ function Dirigente(dirigente) {
             <td>
                 {info.elInviato == 0 ?
                     <button className="w3-button w3-red w3-round w3-padding-small" 
+                        data-tip = "Rimuovi dirigente" data-for="tltp"
                         onClick={() => deleteDirigente(dirigente.id, token, reloadTesserati)}>
                             <i className="material-icons w3-large">delete</i>
                     </button>
@@ -260,13 +271,21 @@ function Giocatore(giocatore) {
             <td>{giocatore.nome}</td>
             <td>{giocatore.cognome}</td>
             <td>{IconaCertificatoMedico(giocatore.cm)}{StampaScadenza(giocatore.scadenza)}</td>
-            <td>{giocatore.taglia}</td>
-            <td>{giocatore.numero_maglia}</td>
+            <td data-tip = "Taglia della divisa" data-for="tltp">{giocatore.taglia}</td>
+            <td>{NumeroMaglia(giocatore)}</td>
             <td>{giocatore.ruolo}</td>
-            <td className="w3-center"><button className="w3-button w3-small w3-blue w3-round" onClick={() => setForm({m : "mg", value : giocatore})} >Modifica</button></td>
+            <td className="w3-center">
+                <button 
+                    data-tip = "Visualiiza/modifica i dati del giocatore" data-for="tltp"
+                    className="w3-button w3-padding-small w3-blue w3-round w3-margin-0" 
+                    onClick={() => setForm({m : "mg", value : giocatore})}>
+                        <i className="material-icons w3-large">edit</i>
+                </button>
+            </td>
             <td>
                 {info.elInviato == 0 ?
-                    <button className="w3-button w3-red w3-round w3-padding-small" 
+                    <button className="w3-button w3-red w3-round w3-padding-small w3-margin-0" 
+                        data-tip = "Rimuovi giocatore" data-for="tltp"
                         onClick={() => deleteGiocatore(giocatore.id, token, reloadTesserati)} >
                             <i className="material-icons w3-large">delete</i>
                     </button>
@@ -277,12 +296,21 @@ function Giocatore(giocatore) {
         )
 }
 
+function NumeroMaglia(x){
+    if(x.tmaglia){
+        return <td>{x.numero_maglia}</td>
+    }
+    else{
+        return <td className="w3-text-red" data-tip="Sono presenti più giocatori con questo stesso numero di maglia" data-for="tltp">{x.numero_maglia}</td>
+    }
+}
+
 function StampaScadenza(scadenza){
     if(scadenza == null){
         return(null);
     }
     return(
-        <font style ={{paddingLeft : '5px'}} >
+        <font style ={{paddingLeft : '5px'}} data-tip = "Scadenza certificato medico" data-for = "tltp">
             {scadenza.slice(8, 10)}/{scadenza.slice(5, 7)}/{scadenza.slice(0, 4)}
         </font>
     );

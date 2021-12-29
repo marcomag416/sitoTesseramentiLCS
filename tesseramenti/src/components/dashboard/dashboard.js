@@ -41,10 +41,9 @@ function Dashboard(props) {
     return (
         <div className="w3-container">
             <ReactTooltip 
-                effect = "solid"
+                effect = "float"
 				delayShow={100} 
-				place = "bottom" 
-                /*offset={{left : 200, top:10}}*/
+				place = "right" 
 			/>
             <div className='w3-row-padding w3-white w3-margin-top w3-mobile' >
 
