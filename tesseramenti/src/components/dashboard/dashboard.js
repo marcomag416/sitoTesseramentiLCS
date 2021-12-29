@@ -23,6 +23,9 @@ function Dashboard(props) {
 
     const inviaElenco = async e => {
         e.preventDefault();
+        if(!window.confirm("Sei sicuro di voler inviare l'elenco tesserati? Questa azione non è reversibile")){
+            return;
+        }
         setMsg({mode : "0", msg : ""});
         var resp = await fetchPost("/inviaElenco", token, []);
         if (resp.status){
@@ -144,6 +147,7 @@ function SezioneElencoInviato(props){
 
 function calcolaStatGio(fetchGio) {
     var certTot = 0, certValidi = 0, certAtt = 0, gioTot = 0, gioValidi = 0;
+    const nMaglia = new Set();
     if (fetchGio[0].status && fetchGio[0].vett != undefined) {
         const vett = fetchGio[0].vett;
         let scadenza;
@@ -161,8 +165,11 @@ function calcolaStatGio(fetchGio) {
                     }
                 }
             }
-            if(x.numero_maglia != null && x.ruolo != "" && x.taglia != ""){
-                gioValidi++;
+            if(x.numero_maglia != null && !nMaglia.has(x.numero_maglia)){
+                nMaglia.add(x.numero_maglia);
+                if(x.ruolo != "" && x.taglia != ""){
+                    gioValidi++;
+                }
             }
         });
         gioTot = vett.length;
