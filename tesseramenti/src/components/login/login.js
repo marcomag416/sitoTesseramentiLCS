@@ -14,7 +14,7 @@ class Login extends React.Component {
     }
     render() {
         return (
-            <div className="w3-conteiner" style={{ padding: "20px", paddingTop : "8%" }} >
+            <div className="w3-container" style={{ padding: "20px", paddingTop : "8%" }} >
                 <div className="w3-card-4 w3-content w3-container" style={{width:"25%", minWidth:"300px"}}>
 
                     <div className="w3-center"><br/>
