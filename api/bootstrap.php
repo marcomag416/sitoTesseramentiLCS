@@ -1,5 +1,7 @@
 <?php
 require_once 'src\system\databaseConnector.php';
+define('ROOTPATH', __DIR__);
+define('MAX_FILE_SIZE', 4194304); /* 4MB */
 
 
 define("DB_HOST", "localhost");

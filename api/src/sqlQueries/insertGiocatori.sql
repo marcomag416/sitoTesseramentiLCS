@@ -1,0 +1,3 @@
+INSERT into giocatori (cf, nome, cognome, classe, data_nascita, luogo_nascita, ruolo, taglia, numero_maglia, id_squadra) values (:cf, :nome, :cognome, :classe, :data_nascita , :luogo_nascita, :ruolo, :taglia, :numero, :idsquadra);
+insert into g_tesserati (id_stagione, id_giocatore) select :idstagione, 
+(select max(gio.id) from giocatori gio where gio.cf = :cf and gio.nome = :nome and gio.cognome = :cognome and gio.data_nascita = :data_nascita and gio.id_squadra = :idsquadra GROUP by gio.cf);

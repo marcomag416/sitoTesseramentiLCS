@@ -1,8 +1,6 @@
 import React from 'react';
 import { fetch } from '../../functions/useFetch.js';
-import { API_BASE } from '../../config/config.js';
 import { NavLink } from 'react-router-dom';
-//import ReactDOM from 'react-dom';
 
 class Login extends React.Component {
     constructor(props) {
@@ -16,12 +14,11 @@ class Login extends React.Component {
     }
     render() {
         return (
-            <div className="w3-conteiner" style={{ padding: "20px", paddingTop : "8%" }} >
+            <div className="w3-container" style={{ padding: "20px", paddingTop : "8%" }} >
                 <div className="w3-card-4 w3-content w3-container" style={{width:"25%", minWidth:"300px"}}>
 
                     <div className="w3-center"><br/>
-                        <img src="logoMolecup.png" alt="Logo" style={{ width: "30%" , maxWidth:"150px"}} className="w3-circle w3-margin-top"/>
-                        <img src="logoMolecup.png" alt="Logo" style={{ width: "30%" , maxWidth: "150px" }} className="w3-circle w3-margin-top"/>
+                        <img src="logoLcs.jpg" alt="Logo lega calcio studenti" style={{ width: "40%" , maxWidth:"200px"}} className="w3-circle w3-margin-top"/>
                     </div>
 
                     <form className="w3-container" onSubmit={(event) => this.submitLogin(event)} >
@@ -60,7 +57,6 @@ class Login extends React.Component {
         const target = event.target;
         let value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
-
 
         this.setState({
             [name]: value,

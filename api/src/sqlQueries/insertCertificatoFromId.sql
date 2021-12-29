@@ -1,0 +1,1 @@
+insert into certificati_med (scadenza, file, fisico, id_giocatore) values (:scadenza, :nomefile, 0, :idgiocatore);

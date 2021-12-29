@@ -1,0 +1,1 @@
+SELECT * FROM `giocatori` gio, squadre sq WHERE gio.id in (select g_tesserati.id_giocatore from g_tesserati where g_tesserati.id_stagione = :idstagione) and sq.id = gio.id_squadra;

@@ -1,9 +1,10 @@
 <?php
 
 function sessionCheck($token, $dbConnection){
-	$stm = $dbConnection -> prepare("select amm.id, amm.mail, sq.nome as squadra, stag.nome as stagione, leghe.nome as lega  from amministratori as amm, sessioni as sess, squadre as sq, stagioni as stag, leghe where amm.id_squadra = sq.id and amm.id_stagione = stag.id and sq.id_lega = leghe.id and stag.scadenza > CURRENT_DATE and sess.id_amministratore = amm.id and (sess.ultimo_accesso + ?) > CURRENT_TIMESTAMP and sess.token = ? order by gio.id");
-	$stm->bindValue(1, 2000000);
-	$stm->bindValue(2, $token);
+	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\selectSessionInfo.sql");
+	$stm = $dbConnection -> prepare($sql);
+	$stm->bindValue(":scadenzaSess", 2000000);
+	$stm->bindValue(":token", $token);
 	$stm->execute();
 
 	if($stm->rowCount() == 1){
@@ -11,9 +12,13 @@ function sessionCheck($token, $dbConnection){
 		$return['mail'] = $utente['mail'];
 		$return['id'] = $utente['id'];
 		$return['squadra'] = $utente['squadra'];
+		$return['idsquadra'] = $utente['idsquadra'];
 		$return['stagione'] = $utente['stagione'];
+		$return['idstagione'] = $utente['idstagione'];
 	    $return['lega'] = $utente['lega'];
 		$return['status'] = true;
+
+		$return['elInviato'] = controlloInvioElenco($utente['idsquadra'], $utente['idstagione'], $dbConnection);
 	}
 	else{
 		$return['status'] = false;
@@ -26,9 +31,35 @@ function leggiToken(){
 	$input = json_decode($rest_json, true);
 
 	if (empty($input['token'])){
-		return false;
+		if(isset($_POST['token'])){
+			return $_POST['token'];
+		}
+		else{
+			return false;
+		}
 	}
 	return $input['token'];
+}
+
+function deleteSession($token, $dbConnection){
+	$sql = "delete FROM `sessioni` WHERE `sessioni`.`token` = ?;";
+	$stm = $dbConnection -> prepare($sql);
+	$stm -> bindValue(1, $token);
+	$stm ->execute();
+}
+
+function controlloInvioElenco($idsquadra, $idstagione, $dbConnection){
+	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\controlloElencoInviato.sql");
+	$stm = $dbConnection -> prepare($sql);
+	$stm->bindValue(":idsquadra", $idsquadra);
+	$stm->bindValue(":idstagione", $idstagione);
+	$stm->execute();
+
+	if($stm->rowCount() == 1){
+		$ele = $stm->fetch(PDO::FETCH_ASSOC);
+		return $ele['elencoInviato'];
+	}
+	return 0;
 }
 
 ?>

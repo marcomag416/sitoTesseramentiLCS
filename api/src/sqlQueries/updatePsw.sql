@@ -1,0 +1,1 @@
+update amministratori set psw = :psw where id = :idamm;

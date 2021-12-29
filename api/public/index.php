@@ -8,23 +8,56 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 require_once "../bootstrap.php";
 require_once "../src/system/sessionCheck.php";
 require_once "../src/tesserati/tesserati.php";
+require_once "../src/tesserati/certificati.php";
+require_once "../src/dirigenti/dirigenti.php";
+require_once "../src/amministratori/amministratori.php";
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode( '/', $uri );
 
 //print_r ($uri);
+
 if($uri[1] == 'login'){
 	require("../src/login/login.php");
 	exit();
 }
 
-http_response_code(200);
-/*LOGGED IN CONTROLS*/
-/*$token = leggiToken();
-if($token == false){
-	echo json_encode(array("status" => false, "msg" => "Token non trovato"));
+if($uri[1] == "prova"){
+	echo date("Europe");
+	echo " | Connectivity test ok";
 	exit();
 }
+
+if($uri[1] == "resetPsw"){
+	echo json_encode(resetPsw($dbConnection));
+	exit();
+}
+
+if($uri[1] == "recoverPsw"){
+	echo json_encode(array("status" => true, "msg" => "Codice di recuper generato con successo"));
+	exit();
+}
+
+/*if(isset($_POST['token'])){
+	echo json_encode(array("status" => false, "msg" => $_POST['token']));
+	http_response_code(202);
+	exit();
+}*/
+http_response_code(200);
+/*LOGGED IN CONTROLS*/
+//$token = '$2y$10$AvFoIBsxOY2aBspfAzD2tuYfkwCAod3xU0CGDN4nlyecpf6XQVdMG';
+$token = leggiToken();
+if($token == false){
+	echo json_encode(array("status" => false, "msg" => "Token mancante"));
+	//http_response_code(400);
+	exit();
+}
+
+if($uri[1] == 'deleteSession'){
+	deleteSession($token, $dbConnection);
+	exit();
+}
+
 
 $session = sessionCheck($token, $dbConnection);
 
@@ -36,13 +69,55 @@ if($uri[1] == 'sessionCheck'){
 if($session['status'] == false){
 	echo json_encode(array("status" => false, "msg" =>"Sessione scaduta"));
 	exit();
-}*/
+}
 /*LOGGED IN FUNCTIONS*/
 
 if($uri[1] == 'elencoTesserati'){
 	//echo json_encode(leggiTesserati($session['squadra'], $session['stagione'], $dbConnection));
-	echo json_encode(leggiTesserati('$2y$10$ABD8ZfnaBUknAY4I7RwHp.AsBVCkIauSCFqyeXDeIw89p36C2CFaO', $dbConnection));
+	echo json_encode(leggiTesserati($token, $dbConnection));
 	exit();
+}
+
+if($uri[1] == 'uploadGiocatore'){
+	echo json_encode(uploadGiocatore($session, $dbConnection));
+	exit();
+}
+
+if($uri[1] == 'deleteGiocatore'){
+	echo json_encode(deleteGiocatore($session, $dbConnection));
+	exit();
+}
+
+if($uri[1] == 'uploadCertificatoDati'){
+	echo json_encode(uploadCertificatoDati($session, $dbConnection));
+}
+
+if($uri[1] == 'uploadCertificatoId'){
+	echo json_encode(uploadCertificatoId($session, $dbConnection));
+}
+
+if($uri[1] == 'updateGiocatore'){
+	echo json_encode(updateGiocatore($session, $dbConnection));
+}
+
+if($uri[1] == 'deleteDirigente'){
+	echo json_encode(deleteDirigente($session, $dbConnection));
+}
+
+if($uri[1] == 'elencoDirigenti'){
+	echo json_encode(leggiDirigenti($token, $dbConnection));
+}
+
+if($uri[1] == 'uploadDirigente'){
+	echo json_encode(uploadDirigente($session, $dbConnection));
+}
+
+if($uri[1] == 'updatePassword'){
+	echo json_encode(updatePsw($session, $dbConnection));
+}
+
+if($uri[1] == 'inviaElenco'){
+	echo json_encode(inviaElenco($session, $dbConnection));
 }
 
 ?>
