@@ -44,7 +44,7 @@ function PswReset(props) {
                         : <FormReset formData = {formData} handleInputChange = {handleInputChange} submit = {submitForm}/>
                     }
                     <LoadIcon show={err.err == "loading"}/>
-                    <Label onClose = {(prev) => setErr({msg : "", err : "0"})} msg = {err.msg} mode = {err.err} />
+                    <Label onClose = {() => setErr({msg : "", err : "0"})} msg = {err.msg} mode = {err.err} />
                 </div>
             </div>
         </div>

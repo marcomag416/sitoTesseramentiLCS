@@ -33,6 +33,11 @@ if($uri[1] == "resetPsw"){
 	exit();
 }
 
+if($uri[1] == "recoverPsw"){
+	echo json_encode(array("status" => true, "msg" => "Codice di recuper generato con successo"));
+	exit();
+}
+
 /*if(isset($_POST['token'])){
 	echo json_encode(array("status" => false, "msg" => $_POST['token']));
 	http_response_code(202);
