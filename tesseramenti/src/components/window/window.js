@@ -94,7 +94,7 @@ function Window (props){
 					<Topbar
 						switchSidebar={() => setSidebar(!sidebar)}
 						sidebarOn={sidebar}
-						title={titolo != null ? titolo.title : "Not found"}
+						title={titolo != null ? titolo.title : "Pagina non trovata"}
 					/>
 					<div className="w3-light-grey">
 						<Switch>
