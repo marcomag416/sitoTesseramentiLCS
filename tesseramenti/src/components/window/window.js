@@ -89,12 +89,14 @@ function Window (props){
 				<Sidebar
 					hideSidebar={() => setSidebar(false)}
 					display={sidebar}
+					info={info}
 				/>
 				<div className="w3-main full-height" style={sidebar ? { marginLeft: "180px" } : { margiLeft: "0px" }} >
 					<Topbar
 						switchSidebar={() => setSidebar(!sidebar)}
 						sidebarOn={sidebar}
 						title={titolo != null ? titolo.title : "Pagina non trovata"}
+						info={info}
 					/>
 					<div className="w3-light-grey">
 						<Switch>
