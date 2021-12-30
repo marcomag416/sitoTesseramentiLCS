@@ -57,7 +57,7 @@
         $sql = file_get_contents(ROOTPATH."/src/sqlQueries/insertCodiceRipristino.sql");
         $stm = $dbConnection -> prepare($sql);
         $stm->bindValue(":idamm", $idamm, PDO::PARAM_STR);
-        $stm->bindValue(":psw", $token, PDO::PARAM_STR);
+        $stm->bindValue(":token", $token, PDO::PARAM_STR);
         $stm->bindValue(":scadenza", date("Y-m-d h:i:s", $d), PDO::PARAM_STR);
         try{
             $stm->execute();
@@ -144,7 +144,9 @@
         $to = $mail;
         $headers[] = 'MIME-Version: 1.0';
         $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+        $headers[] = 'X-Mailer: PHP/' . phpversion();
         $headers[] = 'From: LCS staff <noreply@legacalciostudenti.com>';
+        $headers[] = 'Reply-To: <info@legacalciostudenti.com>';
         $subject = "Ripristino password";
         $message = file_get_contents(ROOTPATH."/src/mailMessages/recuperoPassword.html");
         $message = str_replace(":link", $link, $message);
