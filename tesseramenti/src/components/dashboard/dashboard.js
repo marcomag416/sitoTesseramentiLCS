@@ -117,10 +117,6 @@ function SezioneInviaElenco(props){
         <div>
             <h4>Invia elenco tesserati</h4>
             <p>Inviando l'elenco tesserati le informazioni relative a giocatori e dirigenti non potranno più essere modificate. Sarai comunque in grado di aggiungere nuovi certificati medici e visualizzare quelli esistenti.</p>
-            <Alert 
-                mode = {"info"} 
-                msg = {"L'elenco tesserati deve essere inviato entro il 20/01/2022."}
-            />
             {props.invioOk ? null : 
                 <Alert 
                     mode={"alert"} 
