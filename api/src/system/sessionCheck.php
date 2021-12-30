@@ -3,7 +3,7 @@
 function sessionCheck($token, $dbConnection){
 	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\selectSessionInfo.sql");
 	$stm = $dbConnection -> prepare($sql);
-	$stm->bindValue(":scadenzaSess", 2000000);
+	//$stm->bindValue(":scadenzaSess", 2000000);
 	$stm->bindValue(":token", $token);
 	$stm->execute();
 
