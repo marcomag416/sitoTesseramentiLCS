@@ -51,6 +51,8 @@
     function creaCodiceRipristino($idamm, $delay,  $dbConnection){
         $raw_token = $idamm.strval(time()).random_bytes(32);
         $token = password_hash($raw_token, PASSWORD_DEFAULT);
+        $token = str_replace("\\", ".", $token);
+        $token = str_replace("/", ".", $token);
 
         $d=strtotime("+$delay Days");
 
