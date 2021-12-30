@@ -19,7 +19,7 @@
         }
 
         $psw =  password_hash($_POST['psw'], PASSWORD_DEFAULT);
-        $sql = file_get_contents(ROOTPATH."\src\sqlQueries\updatePsw.sql");
+        $sql = file_get_contents(ROOTPATH."/src/sqlQueries/updatePsw.sql");
         $stm = $dbConnection -> prepare($sql);
         $stm->bindValue(":idamm", $session['id'], PDO::PARAM_STR);
         $stm->bindValue(":psw", $psw, PDO::PARAM_STR);
@@ -34,7 +34,7 @@
     }
 
     function inviaElenco($session, $dbConnection){
-        $sql = file_get_contents(ROOTPATH."\src\sqlQueries\inviaElencoTesserati.sql");
+        $sql = file_get_contents(ROOTPATH."/src/sqlQueries/inviaElencoTesserati.sql");
         $stm = $dbConnection -> prepare($sql);
         $stm->bindParam(":idsquadra", $session['idsquadra']);
         $stm->bindParam(":idstagione", $session['idstagione']);
@@ -54,7 +54,7 @@
 
         $d=strtotime("+$delay Days");
 
-        $sql = file_get_contents(ROOTPATH."\src\sqlQueries\insertCodiceRipristino.sql");
+        $sql = file_get_contents(ROOTPATH."/src/sqlQueries/insertCodiceRipristino.sql");
         $stm = $dbConnection -> prepare($sql);
         $stm->bindValue(":idamm", $idamm, PDO::PARAM_STR);
         $stm->bindValue(":psw", $token, PDO::PARAM_STR);
@@ -77,7 +77,7 @@
             return array("status" => false, "msg" => "Password non valida");
         }
 
-        $sql = file_get_contents(ROOTPATH."\src\sqlQueries\selectIdammCodiceRipristino.sql");
+        $sql = file_get_contents(ROOTPATH."/src/sqlQueries/selectIdammCodiceRipristino.sql");
         $stm = $dbConnection -> prepare($sql);
         $stm->bindValue(":token", $_POST['token'], PDO::PARAM_STR);
         try{
@@ -93,7 +93,7 @@
         $row = $stm->fetch(PDO::FETCH_ASSOC);
         
         $psw =  password_hash($_POST['psw'], PASSWORD_DEFAULT);
-        $sql = file_get_contents(ROOTPATH."\src\sqlQueries\updatePsw.sql");
+        $sql = file_get_contents(ROOTPATH."/src/sqlQueries/updatePsw.sql");
         $stm = $dbConnection -> prepare($sql);
         $stm->bindValue(":idamm", $row['idamm'], PDO::PARAM_STR);
         $stm->bindValue(":psw", $psw, PDO::PARAM_STR);

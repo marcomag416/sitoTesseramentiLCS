@@ -1,8 +1,8 @@
 <?php
-require_once ROOTPATH.'\src\tesserati\tesserati.php';
+require_once ROOTPATH.'/src/tesserati/tesserati.php';
 
 function contaDirigenti($session, $dbConnection){
-	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\contDirigenti.sql");
+	$sql = file_get_contents(ROOTPATH."/src/sqlQueries/contDirigenti.sql");
 	$stm = $dbConnection -> prepare($sql);
 	$stm->bindValue(":idsquadra", $session['idsquadra'], PDO::PARAM_INT);
 	$stm->bindValue(":idstagione", $session['idstagione'], PDO::PARAM_INT);
@@ -22,7 +22,7 @@ function deleteDirigente($session, $dbConnection){
 	if(!isset($_POST['iddirigente'])){
 		return array("status" => false, "msg" => "id dirigente non trovato");
 	}
-	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\moveDirigenteToBin.sql");
+	$sql = file_get_contents(ROOTPATH."/src/sqlQueries/moveDirigenteToBin.sql");
 	$stm = $dbConnection -> prepare($sql);
 	$stm->bindValue(":iddirigente", $_POST['iddirigente'], PDO::PARAM_STR);
 	$stm->bindValue(":idsquadra", $session['idsquadra'], PDO::PARAM_STR);
@@ -31,7 +31,7 @@ function deleteDirigente($session, $dbConnection){
 }
 
 function leggiDirigenti($token, $dbConnection){
-	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\selectDirigenti.sql");
+	$sql = file_get_contents(ROOTPATH."/src/sqlQueries/selectDirigenti.sql");
 	$stm = $dbConnection -> prepare($sql);
 	$stm->bindValue(":token", $token, PDO::PARAM_STR);
 	$stm->execute();
@@ -71,7 +71,7 @@ function uploadDirigente($session, $dbConnection){
 	$_POST['cognome'] = ucwords(strtolower($_POST['cognome']));
 
 
-	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\insertDirigente.sql");
+	$sql = file_get_contents(ROOTPATH."/src/sqlQueries/insertDirigente.sql");
 	$stm = $dbConnection -> prepare($sql);
 	$stm->bindValue(":idsquadra", $session['idsquadra'], PDO::PARAM_INT);
 	$stm->bindValue(":idstagione", $session['idstagione'], PDO::PARAM_INT);

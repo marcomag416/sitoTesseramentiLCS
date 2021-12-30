@@ -1,6 +1,6 @@
 <?php
 function contaTesserati($session, $dbConnection){
-	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\contGiocatori.sql");
+	$sql = file_get_contents(ROOTPATH."/src/sqlQueries/contGiocatori.sql");
 	$stm = $dbConnection -> prepare($sql);
 	$stm->bindValue(":idsquadra", $session['idsquadra'], PDO::PARAM_INT);
 	$stm->bindValue(":idstagione", $session['idstagione'], PDO::PARAM_INT);
@@ -14,7 +14,7 @@ function contaTesserati($session, $dbConnection){
 }
 
 function leggiTesserati($token, $dbConnection){
-	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\selectGiocatori.sql");
+	$sql = file_get_contents(ROOTPATH."/src/sqlQueries/selectGiocatori.sql");
 	$stm = $dbConnection -> prepare($sql);
 	$stm->bindValue(":token", $token, PDO::PARAM_STR);
 	$stm->execute();
@@ -40,7 +40,7 @@ function deleteGiocatore($session, $dbConnection){
 	if($session['elInviato']){
 		return array("status" => false, "msg" => "impossibile modificare un elenco tesserati inviato");
 	}
-	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\moveGiocatoreToBin.sql");
+	$sql = file_get_contents(ROOTPATH."/src/sqlQueries/moveGiocatoreToBin.sql");
 	$stm = $dbConnection -> prepare($sql);
 	$stm->bindValue(":idgiocatore", $_POST['idgiocatore'], PDO::PARAM_STR);
 	$stm->bindValue(":idsquadra", $session['idsquadra'], PDO::PARAM_STR);
@@ -117,7 +117,7 @@ function updateGiocatore($session, $dbConnection){
 		return array("status" => false, "msg" => "Classe non valida");
 	}
 
-	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\updateGiocatore.sql");
+	$sql = file_get_contents(ROOTPATH."/src/sqlQueries/updateGiocatore.sql");
 	$stm = $dbConnection -> prepare($sql);
 	$stm->bindValue(":idgiocatore", $_POST['idgiocatore'], PDO::PARAM_INT);
 	$stm->bindValue(":idsquadra", $session['idsquadra'], PDO::PARAM_INT);
@@ -197,7 +197,7 @@ function uploadGiocatore($session, $dbConnection){
 	}
 
 
-	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\insertGiocatori.sql");
+	$sql = file_get_contents(ROOTPATH."/src/sqlQueries/insertGiocatori.sql");
 	$stm = $dbConnection -> prepare($sql);
 	$stm->bindValue(":idsquadra", $session['idsquadra'], PDO::PARAM_INT);
 	$stm->bindValue(":idstagione", $session['idstagione'], PDO::PARAM_INT);

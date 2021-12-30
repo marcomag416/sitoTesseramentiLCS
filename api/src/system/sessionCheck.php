@@ -1,7 +1,7 @@
 <?php
 
 function sessionCheck($token, $dbConnection){
-	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\selectSessionInfo.sql");
+	$sql = file_get_contents(ROOTPATH."/src/sqlQueries/selectSessionInfo.sql");
 	$stm = $dbConnection -> prepare($sql);
 	//$stm->bindValue(":scadenzaSess", 2000000);
 	$stm->bindValue(":token", $token);
@@ -49,7 +49,7 @@ function deleteSession($token, $dbConnection){
 }
 
 function controlloInvioElenco($idsquadra, $idstagione, $dbConnection){
-	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\controlloElencoInviato.sql");
+	$sql = file_get_contents(ROOTPATH."/src/sqlQueries/controlloElencoInviato.sql");
 	$stm = $dbConnection -> prepare($sql);
 	$stm->bindValue(":idsquadra", $idsquadra);
 	$stm->bindValue(":idstagione", $idstagione);

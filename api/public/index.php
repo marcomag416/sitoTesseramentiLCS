@@ -47,7 +47,7 @@ if($cmd == "recoverPsw"){
 http_response_code(200);
 /*LOGGED IN CONTROLS*/
 $token = leggiToken();
-$token = '$2y$10$Pm9njMM9wb23t5hYsQsyEeoAQVcOu24vgqqafMNEDIC2ZlPHp.cQS';
+//$token = '$2y$10$Pm9njMM9wb23t5hYsQsyEeoAQVcOu24vgqqafMNEDIC2ZlPHp.cQS';
 if($token == false){
 	echo json_encode(array("status" => false, "msg" => "Token mancante"));
 	//http_response_code(400);
@@ -101,7 +101,7 @@ if($cmd == 'updateGiocatore'){
 	echo json_encode(updateGiocatore($session, $dbConnection));
 }
 
-if($uri[1] == 'deleteDirigente'){
+if($cmd == 'deleteDirigente'){
 	echo json_encode(deleteDirigente($session, $dbConnection));
 }
 

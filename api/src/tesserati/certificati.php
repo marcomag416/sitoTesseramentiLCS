@@ -81,7 +81,7 @@ function uploadCertificatoDati($session, $dbConnection){
     }
 
     /* Inserisco certificato nel database */
-    $sql = file_get_contents(ROOTPATH."\src\sqlQueries\insertCertificatoFromData.sql");
+    $sql = file_get_contents(ROOTPATH."/src/sqlQueries/insertCertificatoFromData.sql");
 	$stm = $dbConnection -> prepare($sql);
 	$stm->bindValue(":cf", $user['cf'], PDO::PARAM_STR);
     $stm->bindValue(":nome", $user['nome'], PDO::PARAM_STR);
@@ -137,7 +137,7 @@ function uploadCertificatoID($session, $dbConnection){
     }*/
 
     /* Inserisco certificato nel database */
-    $sql = file_get_contents(ROOTPATH."\src\sqlQueries\insertCertificatoFromId.sql");
+    $sql = file_get_contents(ROOTPATH."/src/sqlQueries/insertCertificatoFromId.sql");
 	$stm = $dbConnection -> prepare($sql);
     $stm->bindValue(":idgiocatore", $_POST['idgiocatore'], PDO::PARAM_INT);
 	$stm->bindValue(":nomefile", /*$fileStatus['filename']*/"", PDO::PARAM_STR);
