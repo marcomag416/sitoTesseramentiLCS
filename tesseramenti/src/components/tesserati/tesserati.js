@@ -16,7 +16,7 @@ export const tesseratiContext = createContext();
 
 function Tesserati (props){
     const [form, setForm] = useState({m : 0, value : null});
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
     const [token, setToken, deleteToken] = useContext(sessionContext);
     const [reload, setReload] = useState(true);
@@ -30,6 +30,7 @@ function Tesserati (props){
         }, []);
     
     const reloadTesserati = () =>{
+        setLoading(true);
         setReload(!reload);
     }
 
@@ -80,11 +81,12 @@ function Tesserati (props){
             if(vett.length >= 20 && form.m == "g"){
                 setForm({m : "0", value : null});
             }
+            setLoading(false);
+            console.log("Elenco giocatori aggiornato");
         }
         else {
             console.log("Errore caricamento giocatori");
         }        
-        setLoading(false);
     }, [fetchGio]);
 
     useEffect(() =>{
@@ -99,12 +101,13 @@ function Tesserati (props){
             if(vett.length >= 4 && form.m == "d"){
                 setForm({m : "0", value : null});
             }
+            setLoading(false);
+            console.log("Elenco dirigenti aggiornato");
         }
         else{
             console.log("Errore caricamento dirigenti")
         }
-        setLoading(false);
-    }, [fetchDir])
+    }, [fetchDir]);
 
     useEffect(() => {
         ReactTooltip.rebuild();
@@ -166,8 +169,10 @@ function Tesserati (props){
 
 function Tabella(props) {
     const tesserati = props.tesserati;
+    const [loading, setLoading] = useState(false);
     return (
         <div className="w3-responsive tabella-scorrevole" onScroll={() => {ReactTooltip.hide()}}>
+            <LoadIcon show={loading}/>
             <table className="w3-table w3-bordered ">
                 <thead>
                     <tr >
@@ -189,6 +194,7 @@ function Tabella(props) {
                             tesserato={tesserato} 
                             search={props.search} 
                             key={getId(tesserato)} 
+                            setLoading={setLoading}
                         /> 
                     )}
                 </tbody>
@@ -225,15 +231,15 @@ function Tesserato(props) {
     }
     switch (tesserato.t) {
         case 0:
-            return (Giocatore(tesserato));
+            return (Giocatore(tesserato, props.setLoading));
         case 1:
-            return (Dirigente(tesserato));
+            return (Dirigente(tesserato, props.setLoading));
         default:
             return null;
     }
 }
 
-function Dirigente(dirigente) {
+function Dirigente(dirigente, setLoading) {
     const [token, setToken, deleteToken] = useContext(sessionContext);
     const [reloadTesserati, setForm, info] = useContext(tesseratiContext);
     return (
@@ -251,7 +257,7 @@ function Dirigente(dirigente) {
                 {info.elInviato == 0 ?
                     <button className="w3-button w3-red w3-round w3-padding-small" 
                         data-tip = "Rimuovi dirigente" data-for="tltp"
-                        onClick={() => deleteDirigente(dirigente.id, token, reloadTesserati)}>
+                        onClick={() => deleteDirigente(dirigente.id, token, reloadTesserati, setLoading)}>
                             <i className="material-icons w3-large">delete</i>
                     </button>
                     :null
@@ -261,7 +267,7 @@ function Dirigente(dirigente) {
     )
 }
 
-function Giocatore(giocatore) {
+function Giocatore(giocatore, setLoading) {
     const [token, setToken, deleteToken] = useContext(sessionContext);
     const [reloadTesserati, setForm, info] = useContext(tesseratiContext);
     return (
@@ -272,7 +278,7 @@ function Giocatore(giocatore) {
             <td>{giocatore.cognome}</td>
             <td>{IconaCertificatoMedico(giocatore.cm)}{StampaScadenza(giocatore.scadenza)}</td>
             <td data-tip = "Taglia della divisa" data-for="tltp">{giocatore.taglia}</td>
-            <td>{NumeroMaglia(giocatore)}</td>
+            {NumeroMaglia(giocatore)}
             <td>{giocatore.ruolo}</td>
             <td className="w3-center">
                 <button 
@@ -286,7 +292,7 @@ function Giocatore(giocatore) {
                 {info.elInviato == 0 ?
                     <button className="w3-button w3-red w3-round w3-padding-small w3-margin-0" 
                         data-tip = "Rimuovi giocatore" data-for="tltp"
-                        onClick={() => deleteGiocatore(giocatore.id, token, reloadTesserati)} >
+                        onClick={() => deleteGiocatore(giocatore.id, token, reloadTesserati, setLoading)} >
                             <i className="material-icons w3-large">delete</i>
                     </button>
                     : null
@@ -348,26 +354,31 @@ function IconaTesserato(t) {
     return (def);
 }*/
 
-async function deleteGiocatore(id, token, onSuccess){
+async function deleteGiocatore(id, token, onSuccess, setLoading){
+    setLoading(true);
     var  result = await fetchPost('/deleteGiocatore', token, {"idgiocatore" : id});
     if(result.status){
         console.log("Giocatore eliminato", id);
-        onSuccess();
+        await onSuccess();
     }
     else{
         console.log("Errore eliminazione giocatore:", result);
     }
+    setLoading(false);
 }
 
-async function deleteDirigente(id, token, onSuccess){
+async function deleteDirigente(id, token, onSuccess, setLoading){
+    setLoading(true);
     var  result = await fetchPost('/deleteDirigente', token, {"iddirigente" : id});
+    setLoading(true);
     if(result.status){
         console.log("Dirigente eliminato", id);
-        onSuccess();
+        await onSuccess();
     }
     else{
         console.log("Errore eliminazione dirigente:", result);
     }
+    setLoading(false);
 }
 
 

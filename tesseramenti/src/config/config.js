@@ -1,10 +1,10 @@
-export const API_BASE = "http://localhost";
+//export const API_BASE = "http://localhost/api";
 
-//export const API_BASE = "http://192.168.1.80";
+//export const API_BASE = "http://192.168.1.80/api";
 
-//export const API_BASE = "http://192.168.43.37";
+//export const API_BASE = "http://192.168.43.37/api";
 
-//export const API_BASE = "http://apptesseramenti.legacalciostudenti.com/api";
+export const API_BASE = "http://apptesseramenti.legacalciostudenti.com/api";
 
 /*export const MAX_FILE_SIZE = 4194304;
 
