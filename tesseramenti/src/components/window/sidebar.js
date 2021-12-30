@@ -20,9 +20,9 @@ function Sidebar(props){
         <div> 
             <div className="w3-sidebar w3-light-grey w3-bar-block w3-card w3-animate-left z-index" style={displayStyle} id="mySidebar">
                 <div className="w3-container w3-bar-item w3-teal">
-                    <span className="w3-button w3-xlarge w3-hide-large material-icons w3-display-topright"
+                    <span className="w3-button w3-xlarge w3-hide-large material-icons w3-display-topright w3-transparent"
                         onClick={() => props.hideSidebar()}>close</span>
-                    <h3 className="">LCS</h3>
+                    <h4 className="">{props.info.lega} Lcs</h4>
                 </div>
                 <NavLink className="w3-bar-item w3-button" activeClassName="w3-border-right w3-dark-grey w3-border-red" exact to="/">Dashboard</NavLink>
                 <NavLink className="w3-bar-item w3-button" activeClassName="w3-border-right w3-dark-grey w3-border-red" exact to="/tesserati">Tesserati</NavLink>
