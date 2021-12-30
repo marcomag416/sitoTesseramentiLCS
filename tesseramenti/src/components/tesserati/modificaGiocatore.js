@@ -60,6 +60,7 @@ function ModificaGiocatore (props){
 
     const inviaCertificato = async e =>{
         e.preventDefault();
+        setLabel({mode : "0", msg : ""});
         const form = document.forms.modificaGio;
         //console.log("Invio form certificato", form);
         if(!checkCertificato(form, (txt) => {setLabel({mode : "r", msg : txt})} )){
