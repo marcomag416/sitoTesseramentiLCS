@@ -35,7 +35,7 @@ if($cmd == "resetPsw"){
 }
 
 if($cmd == "recoverPsw"){
-	echo json_encode(array("status" => true, "msg" => "Codice di recuper generato con successo"));
+	echo json_encode(recoverPsw($dbConnection));
 	exit();
 }
 

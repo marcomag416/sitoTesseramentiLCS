@@ -118,4 +118,42 @@
         }
         return true;
     }
+
+    function recoverPsw($dbConnection){
+        if(!isset($_POST['mail']) || $_POST['mail'] == ""){
+            return array("status" => false, "msg" => "mail di recupero non trovata");
+        }
+        return inviaMailRipristino($_POST['mail'], $dbConnection);
+    }
+
+    function inviaMailRipristino($mail, $dbConnection){
+        $sql = "SELECT distinct id as idamm FROM `amministratori` WHERE mail = :mail;";
+        $stm = $dbConnection -> prepare($sql);
+        $stm->bindValue(":mail", $mail, PDO::PARAM_STR);
+        $stm->execute();
+        $amm = $stm->fetch(PDO::FETCH_ASSOC);
+
+        if($stm -> rowCount() != 1){
+            return array("status" => false, "msg" => "Mail non registrata");
+        }
+
+        $codice = creaCodiceRipristino($amm['idamm'], 1, $dbConnection);
+
+        $link = "http://apptesseramenti.legacalciostudenti.com/psw-reset/$codice";
+
+        $to = $mail;
+        $headers[] = 'MIME-Version: 1.0';
+        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+        $headers[] = 'From: LCS staff <noreply@legacalciostudenti.com>';
+        $subject = "Ripristino password";
+        $message = file_get_contents(ROOTPATH."/src/mailMessages/recuperoPassword.html");
+        $message = str_replace(":link", $link, $message);
+        $message = wordwrap($message, 70, "\r\n");
+        if(!mail($to, $subject, $message, implode("\r\n", $headers))){
+            return array("status" => false, "msg" => "Errore invio mail");
+        }
+        else{
+            return array("status" => true, "msg" => "Mail inviata con successo");
+        }
+    }
 ?>
