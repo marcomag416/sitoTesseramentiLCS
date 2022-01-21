@@ -36,6 +36,11 @@ function Tesserati (props){
 
     useEffect(() => {
         setLoading(true);
+        if(fetchGio[0].msg === "Nessun giocatore trovato"){
+            console.log("Nessun giocatore trovato");
+            setLoading(false);
+            return;
+        }
         if (fetchGio[0].status && fetchGio[0].vett != undefined) {
             const vett = fetchGio[0].vett;
             let scadenza;
@@ -91,6 +96,11 @@ function Tesserati (props){
 
     useEffect(() =>{
         setLoading(true);
+        if(fetchDir[0].msg === "Nessun dirigente trovato"){
+            console.log("Nessun dirigente trovato");
+            setLoading(false);
+            return;
+        }
         if (fetchDir[0].status && fetchDir[0].vett != undefined) {
             const vett = fetchDir[0].vett;
             vett.forEach((x) => {
