@@ -1,0 +1,1 @@
+SELECT sq.nome FROM `elenchi_inviati` el left join squadre sq on sq.id = el.id_squadra where el.id_stagione = 3;
