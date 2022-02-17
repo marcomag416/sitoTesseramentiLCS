@@ -6,12 +6,14 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /public/index.php [L]
 </IfModule>
 
-<folder /uploads/*>
-order deny,allow
-deny from all
-</folder>
+Options -Indexes
 
-<folder /src/*>
-order deny,allow
-deny from all
-</folder>
+<Files bootstrap.php>
+   Order deny,allow
+   Deny from all
+</Files>
+
+<Files password-hash.php>
+   Order deny,allow
+   Deny from all
+</Files>
