@@ -16,6 +16,8 @@ function sessionCheck($token, $dbConnection){
 		$return['stagione'] = $utente['stagione'];
 		$return['idstagione'] = $utente['idstagione'];
 	    $return['lega'] = $utente['lega'];
+		$return['idlega'] = $utente['idlega'];
+		$return['super'] = $utente['super'];
 		$return['status'] = true;
 
 		$return['elInviato'] = controlloInvioElenco($utente['idsquadra'], $utente['idstagione'], $dbConnection);

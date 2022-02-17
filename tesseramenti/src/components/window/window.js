@@ -42,9 +42,11 @@ function Window (props){
 						id: result.data.id,
 						nome: result.data.mail,
 						squadra: result.data.squadra,
+						idsquadra: result.data.idsquadra,
 						stagione: result.data.stagione,
 						lega: result.data.lega,
-						elInviato: result.data.elInviato
+						elInviato: result.data.elInviato,
+						super: result.data.super
 					});
 					console.log("fetched info :", info);
 					setLoading(false);

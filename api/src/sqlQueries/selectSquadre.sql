@@ -1,0 +1,1 @@
+SELECT * FROM squadre sq where id_lega = :idlega order by nome;

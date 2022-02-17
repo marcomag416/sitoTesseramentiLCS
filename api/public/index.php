@@ -135,4 +135,12 @@ if($cmd == 'inviaElenco'){
 	echo json_encode(inviaElenco($session, $dbConnection));
 }
 
+if($cmd == 'cambiaSquadra'){
+	echo json_encode(cambiaSquadra($session, $dbConnection));
+}
+
+if($cmd == 'elencoSquadre'){
+	echo json_encode(elencoSquadre($session, $dbConnection));
+}
+
 ?>

@@ -160,4 +160,44 @@
             return array("status" => true, "msg" => "Mail inviata con successo");
         }
     }
+
+    function cambiaSquadra($session, $dbConnection){
+        if($session['super'] != 1 || !isset($_POST['idsquadra']) || $_POST['idsquadra'] == null){
+            return array("status" => false, "msg" => "Bad request - richiesta non valida");
+        }
+
+        $sql = file_get_contents(ROOTPATH."/src/sqlQueries/updateIdSquadre.sql");
+        $stm = $dbConnection -> prepare($sql);
+        $stm->bindValue(":idamm", $session['id'], PDO::PARAM_INT);
+        $stm->bindValue(":idsquadra", $_POST['idsquadra'], PDO::PARAM_INT);
+        try{
+            $stm->execute();
+        }catch (\PDOException $e) {
+            $errmsg = $e->getMessage();
+            return array("status" => false, "msg" => "Errore generico");
+        }
+        return array("status" => true, "msg" => "Squadra cambiata correttamente");
+    }
+
+    function elencoSquadre($session, $dbConnection){
+        if($session['super'] != 1){
+            return array("status" => false, "msg" => "Acesso non autorizzato");
+        }
+
+        $sql = file_get_contents(ROOTPATH."/src/sqlQueries/selectSquadre.sql");
+        $stm = $dbConnection -> prepare($sql);
+        $stm->bindValue(":idlega", $session['idlega'], PDO::PARAM_INT);
+        try{
+            $stm->execute();
+        }catch (\PDOException $e) {
+            $errmsg = $e->getMessage();
+            return array("status" => false, "msg" => "Errore generico");
+        }
+
+        $cont = 0;
+        while( $row = $stm->fetch(PDO::FETCH_ASSOC)){
+            $result[$cont++] = $row;
+        }
+        return array("status" => true, "vett" => $result);
+    }
 ?>
