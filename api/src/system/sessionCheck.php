@@ -1,9 +1,9 @@
 <?php
 
 function sessionCheck($token, $dbConnection){
-	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\selectSessionInfo.sql");
+	$sql = file_get_contents(ROOTPATH."/src/sqlQueries/selectSessionInfo.sql");
 	$stm = $dbConnection -> prepare($sql);
-	$stm->bindValue(":scadenzaSess", 2000000);
+	//$stm->bindValue(":scadenzaSess", 2000000);
 	$stm->bindValue(":token", $token);
 	$stm->execute();
 
@@ -16,6 +16,8 @@ function sessionCheck($token, $dbConnection){
 		$return['stagione'] = $utente['stagione'];
 		$return['idstagione'] = $utente['idstagione'];
 	    $return['lega'] = $utente['lega'];
+		$return['idlega'] = $utente['idlega'];
+		$return['super'] = $utente['super'];
 		$return['status'] = true;
 
 		$return['elInviato'] = controlloInvioElenco($utente['idsquadra'], $utente['idstagione'], $dbConnection);
@@ -49,7 +51,7 @@ function deleteSession($token, $dbConnection){
 }
 
 function controlloInvioElenco($idsquadra, $idstagione, $dbConnection){
-	$sql = file_get_contents(ROOTPATH."\src\sqlQueries\controlloElencoInviato.sql");
+	$sql = file_get_contents(ROOTPATH."/src/sqlQueries/controlloElencoInviato.sql");
 	$stm = $dbConnection -> prepare($sql);
 	$stm->bindValue(":idsquadra", $idsquadra);
 	$stm->bindValue(":idstagione", $idstagione);

@@ -42,9 +42,11 @@ function Window (props){
 						id: result.data.id,
 						nome: result.data.mail,
 						squadra: result.data.squadra,
+						idsquadra: result.data.idsquadra,
 						stagione: result.data.stagione,
 						lega: result.data.lega,
-						elInviato: result.data.elInviato
+						elInviato: result.data.elInviato,
+						super: result.data.super
 					});
 					console.log("fetched info :", info);
 					setLoading(false);
@@ -89,12 +91,14 @@ function Window (props){
 				<Sidebar
 					hideSidebar={() => setSidebar(false)}
 					display={sidebar}
+					info={info}
 				/>
 				<div className="w3-main full-height" style={sidebar ? { marginLeft: "180px" } : { margiLeft: "0px" }} >
 					<Topbar
 						switchSidebar={() => setSidebar(!sidebar)}
 						sidebarOn={sidebar}
 						title={titolo != null ? titolo.title : "Pagina non trovata"}
+						info={info}
 					/>
 					<div className="w3-light-grey">
 						<Switch>

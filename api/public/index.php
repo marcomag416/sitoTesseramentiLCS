@@ -14,27 +14,42 @@ require_once "../src/amministratori/amministratori.php";
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode( '/', $uri );
+$cmd = $uri[2];
 
 //print_r ($uri);
 
-if($uri[1] == 'login'){
+if($cmd == 'login'){
 	require("../src/login/login.php");
 	exit();
 }
 
-if($uri[1] == "prova"){
+if($cmd == "prova"){
 	echo date("Europe");
 	echo " | Connectivity test ok";
 	exit();
 }
 
-if($uri[1] == "resetPsw"){
+/*if($cmd == "ideapadz510"){
+	$sql = "SELECT amm.id as id, amm.mail as mail FROM amministratori amm WHERE amm.id_stagione = :idstag and amm.psw = :pswprov;";
+	$stm = $dbConnection -> prepare($sql);
+	$stm->bindValue(":idstag", 3, PDO::PARAM_INT);
+	$stm->bindValue(":pswprov", "psw2", PDO::PARAM_STR);
+	$stm->execute();
+	while( $row = $stm->fetch(PDO::FETCH_ASSOC)){
+		$code = creaCodiceRipristino($row['id'], 11, $dbConnection);
+		$link = "http://apptesseramenti.legacalciostudenti.com/psw-reset/$code";
+		echo ($row['mail']."  ".$link."\n");
+	}
+	exit();
+}*/
+
+if($cmd == "resetPsw"){
 	echo json_encode(resetPsw($dbConnection));
 	exit();
 }
 
-if($uri[1] == "recoverPsw"){
-	echo json_encode(array("status" => true, "msg" => "Codice di recuper generato con successo"));
+if($cmd == "recoverPsw"){
+	echo json_encode(recoverPsw($dbConnection));
 	exit();
 }
 
@@ -45,15 +60,15 @@ if($uri[1] == "recoverPsw"){
 }*/
 http_response_code(200);
 /*LOGGED IN CONTROLS*/
-//$token = '$2y$10$AvFoIBsxOY2aBspfAzD2tuYfkwCAod3xU0CGDN4nlyecpf6XQVdMG';
 $token = leggiToken();
+//$token = '$2y$10$Pm9njMM9wb23t5hYsQsyEeoAQVcOu24vgqqafMNEDIC2ZlPHp.cQS';
 if($token == false){
 	echo json_encode(array("status" => false, "msg" => "Token mancante"));
 	//http_response_code(400);
 	exit();
 }
 
-if($uri[1] == 'deleteSession'){
+if($cmd == 'deleteSession'){
 	deleteSession($token, $dbConnection);
 	exit();
 }
@@ -61,7 +76,7 @@ if($uri[1] == 'deleteSession'){
 
 $session = sessionCheck($token, $dbConnection);
 
-if($uri[1] == 'sessionCheck'){
+if($cmd == 'sessionCheck'){
 	echo json_encode($session);
 	exit();
 }
@@ -72,52 +87,60 @@ if($session['status'] == false){
 }
 /*LOGGED IN FUNCTIONS*/
 
-if($uri[1] == 'elencoTesserati'){
+if($cmd == 'elencoTesserati'){
 	//echo json_encode(leggiTesserati($session['squadra'], $session['stagione'], $dbConnection));
 	echo json_encode(leggiTesserati($token, $dbConnection));
 	exit();
 }
 
-if($uri[1] == 'uploadGiocatore'){
+if($cmd == 'uploadGiocatore'){
 	echo json_encode(uploadGiocatore($session, $dbConnection));
 	exit();
 }
 
-if($uri[1] == 'deleteGiocatore'){
+if($cmd == 'deleteGiocatore'){
 	echo json_encode(deleteGiocatore($session, $dbConnection));
 	exit();
 }
 
-if($uri[1] == 'uploadCertificatoDati'){
+if($cmd == 'uploadCertificatoDati'){
 	echo json_encode(uploadCertificatoDati($session, $dbConnection));
 }
 
-if($uri[1] == 'uploadCertificatoId'){
+if($cmd == 'uploadCertificatoId'){
 	echo json_encode(uploadCertificatoId($session, $dbConnection));
 }
 
-if($uri[1] == 'updateGiocatore'){
+if($cmd == 'updateGiocatore'){
 	echo json_encode(updateGiocatore($session, $dbConnection));
 }
 
-if($uri[1] == 'deleteDirigente'){
+if($cmd == 'deleteDirigente'){
 	echo json_encode(deleteDirigente($session, $dbConnection));
 }
 
-if($uri[1] == 'elencoDirigenti'){
+if($cmd == 'elencoDirigenti'){
 	echo json_encode(leggiDirigenti($token, $dbConnection));
 }
 
-if($uri[1] == 'uploadDirigente'){
+if($cmd == 'uploadDirigente'){
 	echo json_encode(uploadDirigente($session, $dbConnection));
 }
 
-if($uri[1] == 'updatePassword'){
+if($cmd == 'updatePassword'){
 	echo json_encode(updatePsw($session, $dbConnection));
 }
 
-if($uri[1] == 'inviaElenco'){
+if($cmd == 'inviaElenco'){
 	echo json_encode(inviaElenco($session, $dbConnection));
+}
+
+if($cmd == 'cambiaSquadra'){
+	echo json_encode(cambiaSquadra($session, $dbConnection));
+}
+
+if($cmd == 'elencoSquadre'){
+	echo json_encode(elencoSquadre($session, $dbConnection));
 }
 
 ?>

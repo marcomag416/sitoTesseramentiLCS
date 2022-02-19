@@ -17,7 +17,7 @@ function Alert(props){
     }
 
     return (
-        <div class= {modeStyle + "w3-panel w3-leftbar"} >
+        <div className= {modeStyle + "w3-panel w3-leftbar"} >
             <p>{props.msg}</p>
         </div>
     );

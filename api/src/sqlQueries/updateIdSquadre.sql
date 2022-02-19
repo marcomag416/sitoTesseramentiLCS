@@ -1,0 +1,1 @@
+UPDATE `amministratori` SET `id_squadra` = :idsquadra WHERE `amministratori`.`id` = :idamm;

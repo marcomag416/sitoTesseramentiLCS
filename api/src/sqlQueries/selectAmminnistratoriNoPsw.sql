@@ -1,0 +1,1 @@
+SELECT amm.id, amm.mail, sq.nome FROM amministratori amm inner join squadre sq on sq.id = amm.id_squadra WHERE amm.psw = 'psw';

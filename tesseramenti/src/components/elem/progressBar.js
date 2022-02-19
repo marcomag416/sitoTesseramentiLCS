@@ -9,14 +9,16 @@ function ProgressBar(props){
     const lay1 = props.blue / (props.blue + props.green) * 100;
 
     useEffect(() => {
-        var id = setInterval(() => {
-            if(rate < 1)
-                setRate(rate + 0.02);
-        }, 4);
-        return () => {
-            clearInterval(id);
+        if(props.green != 0 || props.red != 0 ||props.blue != 0){
+            var id = setInterval(() => {
+                if(rate < 1)
+                    setRate(rate + 0.02);
+            }, 4);
+            return () => {
+                clearInterval(id);
+            }
         }
-    })
+    });
 
     return (
         <div className="holdbar w3-light-grey w3-round" style = {props.style}>
