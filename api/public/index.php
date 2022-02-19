@@ -29,11 +29,11 @@ if($cmd == "prova"){
 	exit();
 }
 
-if($cmd == "ideapadz510"){
+/*if($cmd == "ideapadz510"){
 	$sql = "SELECT amm.id as id, amm.mail as mail FROM amministratori amm WHERE amm.id_stagione = :idstag and amm.psw = :pswprov;";
 	$stm = $dbConnection -> prepare($sql);
 	$stm->bindValue(":idstag", 3, PDO::PARAM_INT);
-	$stm->bindValue(":pswprov", "psw", PDO::PARAM_STR);
+	$stm->bindValue(":pswprov", "psw2", PDO::PARAM_STR);
 	$stm->execute();
 	while( $row = $stm->fetch(PDO::FETCH_ASSOC)){
 		$code = creaCodiceRipristino($row['id'], 11, $dbConnection);
@@ -41,7 +41,7 @@ if($cmd == "ideapadz510"){
 		echo ($row['mail']."  ".$link."\n");
 	}
 	exit();
-}
+}*/
 
 if($cmd == "resetPsw"){
 	echo json_encode(resetPsw($dbConnection));
