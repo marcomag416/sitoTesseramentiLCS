@@ -9,6 +9,8 @@ function caricaFileCertificato($session, $user){
     if(!isset($_POST['scadenza']) || $_POST['scadenza'] == ""){
 		return array("status" => false, "msg" => "Scadenza certificato mancante");
 	}
+    $_POST['scadenza'] = str_replace("/", "-", $_POST['scadenza']);
+	$_POST['scadenza'] = str_replace("\\", "-", $_POST['scadenza']);
 
     if ($_FILES['fileCertificato']['size'] > MAX_FILE_SIZE) {
         return array("status" => false, "msg" => "File di dimensione troppo grande");

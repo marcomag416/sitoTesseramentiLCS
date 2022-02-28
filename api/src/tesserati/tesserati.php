@@ -109,6 +109,8 @@ function updateGiocatore($session, $dbConnection){
 		return array("status" => false, "msg" => "Ruolo giocatore non valido");
 	}
 
+	$_POST['data_nascita'] = str_replace("/", "-", $_POST['data_nascita']);
+	$_POST['data_nascita'] = str_replace("\\", "-", $_POST['data_nascita']);
 	if(!ControlloData($_POST['data_nascita'])){
 		return array("status" => false, "msg" => "Data di nascita non valida");
 	}
