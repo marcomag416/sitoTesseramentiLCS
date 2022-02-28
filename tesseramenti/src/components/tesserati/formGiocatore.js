@@ -155,7 +155,7 @@ function FormGiocatore (props){
                             <div className="w3-row-padding">
                                 <div className="w3-third w3-margin-bottom">
                                     <label><b>Data di nascita*</b></label>
-                                    <input className="w3-input w3-border w3-round w3-light-grey" type="date" name="data_nascita"  value={getInputValue("data_nascita")} onChange={handleInputChange} max={d10y.toISOString().slice(0, 10)} required/>
+                                    <input className="w3-input w3-border w3-round w3-light-grey" type="date" name="data_nascita"  value={getInputValue("data_nascita")} onChange={handleInputChange} max={d10y.toISOString().slice(0, 10)} placeholder="yyyy-mm-dd" required/>
                                 </div>
                                 <div className="w3-third w3-margin-bottom">
                                     <label><b>Comune di nascita*</b></label>
@@ -206,7 +206,7 @@ function FormGiocatore (props){
                             <div className="w3-row-padding">
                                 <div className="w3-third w3-margin-bottom">
                                     <label><b>Scadenza certificato</b></label>
-                                    <input className="w3-input w3-border w3-round w3-light-grey" type="date" name="scadenza"  value={inputCert} onChange={(e) => setInputCert(e.target.value)} min={d.toISOString().slice(0, 10)} />
+                                    <input className="w3-input w3-border w3-round w3-light-grey" type="date" name="scadenza"  value={inputCert} onChange={(e) => setInputCert(e.target.value)} min={d.toISOString().slice(0, 10)} placeholder="yyyy-mm-dd"/>
                                 </div>
                             </div>
                         </fieldset>
