@@ -16,7 +16,7 @@ function ModificaGiocatore (props){
     const [inputCert, setInputCert] = useState("");
     const[label, setLabel] = useState({mode : "0", msg : ""});
     const [loading, setLoading] = useState(false);
-    const disabledFields = ["cf", "nome", "cognome", "luogo_nascita", "data_nascita", "classe"];
+    const disabledFields = ["cf"/*, "nome", "cognome", "luogo_nascita", "data_nascita", "classe"*/];
 
     var displayStyle = useMemo(() =>{
         if (props.display) {
@@ -107,7 +107,7 @@ function ModificaGiocatore (props){
         const target = event.target;
         const value = target.value;
         const name = target.name;
-        console.log(disabledFields);
+        //console.log(disabledFields);
         if(disabledFields.every((value) => {return value != name})){
             setInputVal((prev) => ({...prev, [name]: value}));
         }
@@ -127,7 +127,7 @@ function ModificaGiocatore (props){
 
     var disabled = false;
     var disabledClass = "";
-    if(props.info.elInviato == 1){
+    if(props.info.elInviato == 1 && props.info.super != 1){
         disabled = true;
         disabledClass = " w3-disabled";
     }
@@ -153,22 +153,22 @@ function ModificaGiocatore (props){
                                 </div>
                                 <div className="w3-third w3-margin-bottom">
                                     <label><b>Nome</b></label>
-                                    <input className="w3-input w3-border w3-round w3-light-grey w3-disabled" type="text"  name="nome"  value={getInputValue("nome")} onChange={handleInputChange} placeholder="es. Mario" disabled/>
+                                    <input className={"w3-input w3-border w3-round w3-light-grey"+disabledClass} type="text"  name="nome"  value={getInputValue("nome")} onChange={handleInputChange} placeholder="es. Mario" disabled = {disabled}/>
                                 </div>
                                 <div className="w3-third w3-margin-bottom">
                                     <label><b>Cognome</b></label>
-                                    <input className="w3-input w3-border w3-round w3-light-grey w3-disabled" type="text" name="cognome"  value={getInputValue("cognome")} onChange={handleInputChange}  placeholder="es. Rossi" disabled/>
+                                    <input className={"w3-input w3-border w3-round w3-light-grey"+disabledClass} type="text" name="cognome"  value={getInputValue("cognome")} onChange={handleInputChange}  placeholder="es. Rossi" disabled = {disabled}/>
                                 </div>
                             </div>
 
                             <div className="w3-row-padding">
                                 <div className="w3-third w3-margin-bottom">
                                     <label><b>Data di nascita</b></label>
-                                    <input className="w3-input w3-border w3-round w3-light-grey w3-disabled" type="date" name="data_nascita"  value={getInputValue("data_nascita")} onChange={handleInputChange} max={d10y.toISOString().slice(0, 10)} disabled/>
+                                    <input className={"w3-input w3-border w3-round w3-light-grey"+disabledClass} type="date" name="data_nascita"  value={getInputValue("data_nascita")} onChange={handleInputChange} max={d10y.toISOString().slice(0, 10)} disabled = {disabled}/>
                                 </div>
                                 <div className="w3-third w3-margin-bottom">
                                     <label><b>Comune di nascita</b></label>
-                                    <input className="w3-input w3-border w3-round w3-light-grey w3-disabled" type="text" name="luogo_nascita"  value={getInputValue("luogo_nascita")} onChange={handleInputChange} placeholder="es. Torino" disabled/>
+                                    <input className={"w3-input w3-border w3-round w3-light-grey"+disabledClass} type="text" name="luogo_nascita"  value={getInputValue("luogo_nascita")} onChange={handleInputChange} placeholder="es. Torino" disabled = {disabled}/>
                                 </div>
                             </div>
                         </fieldset>
@@ -179,7 +179,7 @@ function ModificaGiocatore (props){
                             <div className="w3-row-padding">
                                 <div className="w3-quarter w3-margin-bottom">
                                     <label><b>Classe</b></label>
-                                    <input className="w3-input w3-border w3-round w3-light-grey w3-disabled" type="text" name="classe"  value={getInputValue("classe")} onChange={handleInputChange} placeholder="es. 4A" disabled/>
+                                    <input className={"w3-input w3-border w3-round w3-light-grey"+disabledClass} type="text" name="classe"  value={getInputValue("classe")} onChange={handleInputChange} placeholder="es. 4A" disabled = {disabled}/>
                                 </div>
                                 <div className="w3-quarter w3-margin-bottom">
                                     <label><b>Numero maglia</b></label>

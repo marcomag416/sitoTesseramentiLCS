@@ -163,7 +163,7 @@ function Tesserati (props){
                         />
                     </div>
                 </div>
-                {props.info.elInviato == 0 ?
+                {(props.info.elInviato == 0 || props.info.super == 1) ?
                     <div className="w3-bar w3-right-align">
                         <button className="w3-button w3-blue w3-round w3-margin w3-mobile no-mobile-margin" onClick={() => setForm({m : 'g', value: null})} disabled = {tesserati.length >= 20}>Aggiungi giocatore</button>
                         <button className="w3-button w3-blue w3-round w3-margin w3-mobile no-mobile-margin" onClick={() => setForm({m : 'd', value: null})} disabled = {dirigenti.length >= 4}>Aggiungi dirigente</button>
@@ -264,7 +264,7 @@ function Dirigente(dirigente, setLoading) {
             <td></td>
             <td></td>
             <td>
-                {info.elInviato == 0 ?
+                {(info.elInviato == 0 || info.super == 1) ?
                     <button className="w3-button w3-red w3-round w3-padding-small" 
                         data-tip = "Rimuovi dirigente" data-for="tltp"
                         onClick={() => deleteDirigente(dirigente.id, token, reloadTesserati, setLoading)}>
@@ -299,7 +299,7 @@ function Giocatore(giocatore, setLoading) {
                 </button>
             </td>
             <td>
-                {info.elInviato == 0 ?
+                {(info.elInviato == 0 || info.super == 1) ?
                     <button className="w3-button w3-red w3-round w3-padding-small w3-margin-0" 
                         data-tip = "Rimuovi giocatore" data-for="tltp"
                         onClick={() => deleteGiocatore(giocatore.id, token, reloadTesserati, setLoading)} >
