@@ -52,7 +52,7 @@ function Window (props){
 					setLoading(false);
 				}
 				else {
-					//console.log(result.data.status, this.getToken());
+					console.log(result.data.status, this.getToken());
 					deleteToken();
 				}
 			})
@@ -60,6 +60,7 @@ function Window (props){
 				console.log("Errore connessione con il server");
 				deleteToken();
 				if (error.message) {
+					console.log(error);
 					console.log(error.message);
 				}
 				if (error.response) {

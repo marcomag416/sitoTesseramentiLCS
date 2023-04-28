@@ -4,7 +4,9 @@
 
 //export const API_BASE = "http://192.168.43.37/api";
 
-export const API_BASE = "http://apptesseramenti.legacalciostudenti.com/api";
+//export const API_BASE = "http://apptesseramenti.legacalciostudenti.com/api";
+
+export const API_BASE = "https://apitesseramenti.tesseramenti.molecup.com";
 
 /*export const MAX_FILE_SIZE = 4194304;
 

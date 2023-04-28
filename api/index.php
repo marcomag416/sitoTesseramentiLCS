@@ -5,21 +5,27 @@ header("Access-Control-Allow-Methods: OPTIONS,GET,POST,DELETE");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-require_once "../bootstrap.php";
-require_once "../src/system/sessionCheck.php";
-require_once "../src/tesserati/tesserati.php";
-require_once "../src/tesserati/certificati.php";
-require_once "../src/dirigenti/dirigenti.php";
-require_once "../src/amministratori/amministratori.php";
+require_once "./bootstrap.php";
+require_once "./src/system/sessionCheck.php";
+require_once "./src/tesserati/tesserati.php";
+require_once "./src/tesserati/certificati.php";
+require_once "./src/dirigenti/dirigenti.php";
+require_once "./src/amministratori/amministratori.php";
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = explode( '/', $uri );
-$cmd = $uri[2];
+$cmd = $uri[1];
+/* $uritest = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+echo $uritest;
+echo $cmd;
+exit(); */
+
+http_response_code(200);
 
 //print_r ($uri);
 
 if($cmd == 'login'){
-	require("../src/login/login.php");
+	require("./src/login/login.php");
 	exit();
 }
 
@@ -30,16 +36,40 @@ if($cmd == "prova"){
 }
 
 /*if($cmd == "ideapadz510"){
+	$filelog = fopen("log_attivazione.txt", "a");
+	$logtxt = "-------------\nSessione attivazione account: ".date("Europe")."\n\n";
+	fwrite($filelog, $logtxt);
 	$sql = "SELECT amm.id as id, amm.mail as mail FROM amministratori amm WHERE amm.id_stagione = :idstag and amm.psw = :pswprov;";
 	$stm = $dbConnection -> prepare($sql);
-	$stm->bindValue(":idstag", 3, PDO::PARAM_INT);
-	$stm->bindValue(":pswprov", "psw2", PDO::PARAM_STR);
+	$stm->bindValue(":idstag", 4, PDO::PARAM_INT);
+	$stm->bindValue(":pswprov", "attpsw", PDO::PARAM_STR);
 	$stm->execute();
 	while( $row = $stm->fetch(PDO::FETCH_ASSOC)){
-		$code = creaCodiceRipristino($row['id'], 11, $dbConnection);
-		$link = "http://apptesseramenti.legacalciostudenti.com/psw-reset/$code";
+		$code = creaCodiceRipristino($row['id'], 15, $dbConnection);
+		$link = "https://tesseramenti.molecup.com/psw-reset/$code";
 		echo ($row['mail']."  ".$link."\n");
+		fwrite($filelog, $row['mail']."  ".$link."\n");
+		$to = $row['mail'];
+        $headers[] = 'MIME-Version: 1.0';
+        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+        $headers[] = 'X-Mailer: PHP/' . phpversion();
+        $headers[] = 'From: LCS staff <noreply@legacalciostudenti.com>';
+        $headers[] = 'Reply-To: <gastoneemprin03@gmail.com>';
+        $subject = "Attivazione account";
+        $message = file_get_contents(ROOTPATH."/src/mailMessages/attivazioneAccount.html");
+        $message = str_replace(":link", $link, $message);
+        $message = wordwrap($message, 70, "\r\n");
+        if(mail($to, $subject, $message, implode("\r\n", $headers))){
+            echo "Mail di attivazione inviata con  successo a $to\n";
+			fwrite($filelog, "Mail di attivazione inviata con  successo a $to\n");
+        }
+        else{
+            echo "--ERRORE invio mail di attivazione a $to\n";
+			fwrite($filelog, "--ERRORE invio mail di attivazione a $to\n");
+        }
 	}
+	fwrite($filelog, "\n");
+	fclose($filelog);
 	exit();
 }*/
 

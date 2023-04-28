@@ -10,11 +10,13 @@ require_once "../../bootstrap.php";*/
 $rest_json = file_get_contents("php://input");
 $input = json_decode($rest_json, true);
 
+
+http_response_code(200);
+
 if (empty($input['mail']) && empty($input['psw'])){
-	http_response_code(200);
 	die();
 }
-http_response_code(200);
+
 
 $stm = $dbConnection -> prepare("SELECT id, psw FROM `amministratori` WHERE mail = ?");
 $stm->bindParam(1, $input['mail']);

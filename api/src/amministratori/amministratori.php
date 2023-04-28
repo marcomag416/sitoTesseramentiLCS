@@ -141,14 +141,14 @@
 
         $codice = creaCodiceRipristino($amm['idamm'], 1, $dbConnection);
 
-        $link = "http://apptesseramenti.legacalciostudenti.com/psw-reset/$codice";
+        $link = "https://tesseramenti.molecup.com/psw-reset/$codice";
 
         $to = $mail;
         $headers[] = 'MIME-Version: 1.0';
         $headers[] = 'Content-type: text/html; charset=iso-8859-1';
         $headers[] = 'X-Mailer: PHP/' . phpversion();
         $headers[] = 'From: LCS staff <noreply@legacalciostudenti.com>';
-        $headers[] = 'Reply-To: <info@legacalciostudenti.com>';
+        $headers[] = 'Reply-To: <gastoneemprin03@gmail.com>';
         $subject = "Ripristino password";
         $message = file_get_contents(ROOTPATH."/src/mailMessages/recuperoPassword.html");
         $message = str_replace(":link", $link, $message);

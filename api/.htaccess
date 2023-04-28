@@ -1,14 +1,21 @@
 <IfModule mod_rewrite.c>
-RewriteEngine On
-RewriteBase /
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /public/index.php [L]
+   RewriteEngine On
+   RewriteBase /
+   RewriteCond %{REQUEST_URI} !(api) [NC]
+   RewriteCond %{REQUEST_FILENAME} !-f
+   RewriteCond %{REQUEST_FILENAME} !-d
+   RewriteCond %{REQUEST_URI} !/api
+   RewriteRule . /index.php [L]
 </IfModule>
 
 Options -Indexes
 
 <Files bootstrap.php>
+   Order deny,allow
+   Deny from all
+</Files>
+
+<Files log_attivazione.txt>
    Order deny,allow
    Deny from all
 </Files>
